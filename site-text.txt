@@ -1,0 +1,152 @@
+# ============================================================
+# SITE TEXT · jigarrajpura.com
+# ============================================================
+# Edit the wording on the About page here, then click "Commit changes".
+# The site updates about a minute later.
+#
+# Rules:
+# - Change only the text UNDER each [label]. Keep the [label] lines exactly as they are.
+# - A text can run over several lines; they are joined into one paragraph.
+# - Links and bold are allowed:  <a href="https://...">words</a>   <b>words</b>
+# - In [facts], separate the tags with a vertical bar:  first | second
+# - Lines starting with # are notes and are ignored.
+# - To go back to the original wording for something, delete its text (keep the [label]).
+# ============================================================
+
+# ---------- TOP OF THE ABOUT PAGE ----------
+
+[eyebrow]
+Portfolio · Health economics, outcomes research and real-world evidence
+
+[bio]
+I’m a health economics and outcomes research leader with more than 15 years across pharmaceutical companies and consulting firms. I build evidence strategies that carry medicines from clinical development through launch, market access and lifecycle management: today in global oncology, and before that across rare disease, cardiovascular, renal, diabetes and obesity, and CAR-T cell therapy. I enjoy turning complex systems into tools people actually use.
+
+[facts]
+15+ years in HEOR and RWE | Greater Philadelphia, USA
+
+
+# ---------- DISCLAIMER BOX UNDER YOUR NAME ----------
+
+[disclaimer-summary]
+Personal site, built with AI. Not affiliated with any employer or university.
+
+[disclaimer-1-title]
+A personal site
+
+[disclaimer-1-text]
+This is my personal website. It is not sponsored by, affiliated with or endorsed by Genmab, by any former employer, or by any university I attended, and nothing on it draws on their work, products or confidential information. All views, interpretations and opinions are my own.
+
+[disclaimer-2-title]
+Built with AI
+
+[disclaimer-2-text]
+The projects were developed with the help of AI tools, including Anthropic’s Claude. I review what goes on the site and cite public sources, but AI-assisted work can still contain errors, omissions or “hallucinated” details that look plausible and are wrong. Please check anything you intend to rely on against the original source.
+
+[disclaimer-3-title]
+Dated guidance
+
+[disclaimer-3-text]
+The skills, tools and guides are based on published, matter-of-fact guidance: regulatory and HTA documents, methods guidance and product help pages, as they stood when each page was written (status October 2026 unless stated). Guidance, policies and software change. Where a source has been updated since, a page may be out of date, and an error may simply reflect a document that has moved on.
+
+[disclaimer-4-title]
+Not advice
+
+[disclaimer-4-text]
+Nothing here is medical, regulatory, reimbursement, legal or investment advice, or a recommendation about any medicine. Hypothetical examples, such as Drug X in Project 05, are illustrative only. Use the site for learning and discussion, and base real decisions on current official documents and qualified advice. Corrections are welcome via <a href="https://www.linkedin.com/in/jigarrajpura" target="_blank" rel="noopener">LinkedIn</a>.
+
+
+# ---------- SHORT DISCLAIMER AT THE BOTTOM OF EVERY OTHER PAGE ----------
+
+[page-footer-note]
+Personal project, not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist; check the cited sources before relying on anything here. Not medical, regulatory or reimbursement advice.
+
+
+# ---------- ESSAY CARD ----------
+
+[essay-title]
+US HEOR to Global HEOR Mindset
+
+[essay-text]
+A warm note on what changes when you move from a US to a global HEOR seat: the shifts that take longest to feel natural, what you already bring to each, and gentle habits for your first 90 days.
+
+
+# ---------- PROJECT CARDS ----------
+
+[projects-note]
+The projects are best viewed on a laptop or monitor, where the wide, landscape layouts have room to work.
+
+[project-01-label]
+Project 01 · Interactive atlas
+
+[project-01-title]
+Regulatory and Reimbursement Pathways
+
+[project-01-text]
+How a new cancer medicine reaches patients in 21 markets, one card per market.
+
+[project-02-label]
+Project 02 · Guide
+
+[project-02-title]
+Build a protocol-writing skill in ChatGPT
+
+[project-02-text]
+An illustrated nine-step guide to turning an HEOR task into a reusable skill.
+
+[project-03-label]
+Project 03 · Deep dives
+
+[project-03-title]
+Market access, step by step
+
+[project-03-text]
+Each market opened up: who decides, what happens, where RWE comes in.
+
+[project-04-label]
+Project 04 · Quizzes
+
+[project-04-title]
+Test yourself
+
+[project-04-text]
+Quizzes on market access and AI skills, each answer linked to its source card.
+
+[project-05-label]
+Project 05 · Launch engine
+
+[project-05-title]
+Launch sequence strategy
+
+[project-05-text]
+How reference pricing, funding clocks and evidence maturity shape where a cancer drug launches first.
+
+[project-06-label]
+Project 06 · Guide
+
+[project-06-title]
+Build a targeted literature review skill in Claude
+
+[project-06-text]
+A reusable review workflow with a human checkpoint at every stage, built from the evidence on where AI fails.
+
+
+# ---------- IN THE COMMUNITY ----------
+
+[community-1-label]
+Volunteer · Bucks County
+
+[community-1-title]
+Youth Aid Panel member
+
+[community-1-text]
+Bucks County Youth Aid Panels, the county’s diversion program for first-time juvenile offenders, administered by the Bucks County Juvenile Court.
+
+[community-2-label]
+Volunteer · Warwick Township
+
+[community-2-title]
+Tree Committee member
+
+[community-2-text]
+Warwick Township’s Tree Committee, one of the township’s volunteer boards and commissions in Bucks County, Pennsylvania.
+
