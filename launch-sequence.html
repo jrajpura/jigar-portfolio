@@ -1,0 +1,1549 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Launch sequence strategy · Jigar Rajpura, PhD</title><meta name="description" content="Launch sequence strategy for cancer medicines: how reference pricing, funding clocks and evidence maturity connect across 14 markets, and an engine that recommends where to launch first and next. By Jigar Rajpura, PhD."><meta name="author" content="Jigar Rajpura"><meta property="og:type" content="website"><meta property="og:title" content="Launch sequence strategy · Jigar Rajpura, PhD"><meta property="og:description" content="Launch sequence strategy for cancer medicines: how reference pricing, funding clocks and evidence maturity connect across 14 markets, and an engine that recommends where to launch first and next. By Jigar Rajpura, PhD."><meta name="twitter:card" content="summary"><meta name="theme-color" content="#F3F3F1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231D2433'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='30' fill='%23F3F3F1'%3EJR%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: portfolio header, two tabs. Part 1 = decision flow, reference mesh, clocks, precedents. Part 2 = controls left, results right. */
+:root {
+  --paper: #F3F3F1; --surface: #FFFFFF; --ink: #1D2433; --ink-2: #434B5C; --muted: #6C7282; --rule: #DADBD8;
+  --navy: #2B4A6F; --navy-bg: #E3EAF2; --navy-line: #AFC0D4; --ox: #7A1F2B; --ox-ink: #6E1C27; --ox-bg: #F3E4E5; --ox-line: #D7AEB3;
+  --strip: #EEEBE0; --gold: #6B5A1E; --good: #2F6B45;
+  --f-display: 'Spectral', Georgia, 'Times New Roman', serif; --f-body: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+h1, h2, h3, h4, p { margin: 0; }
+a { color: var(--navy); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; padding-block: 10px; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 600; font-size: 17px; text-decoration: none; color: var(--ink); }
+.brand span { color: var(--muted); font-weight: 400; }
+.tabs { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.tabs button { font: 600 14.5px/1.2 var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 13px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+@media (max-width: 640px) { .tabs { margin-left: 0; width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .tabs::-webkit-scrollbar { display: none; } .tabs button { white-space: nowrap; font-size: 13px; padding: 7px 10px; flex: none; } }
+a.btn { text-decoration: none; display: inline-block; }
+main { padding-block: 24px 64px; display: flex; flex-direction: column; gap: 30px; }
+.eyebrow { font-size: 13.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.eyebrow b { color: var(--ox-ink); }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); line-height: 1.08; text-wrap: balance; }
+.lede { font-size: 17px; line-height: 1.6; color: var(--ink-2); max-width: 78ch; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.sec { display: flex; flex-direction: column; gap: 14px; }
+.sec > h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(21px, 2vw, 26px); border-top: 2px solid var(--ink); padding-top: 10px; }
+.sec > p { color: var(--ink-2); max-width: 80ch; }
+.k3 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ox-ink); }
+.note { font-size: 14px; color: var(--muted); }
+.callout { background: var(--strip); border-radius: 4px; padding: 13px 18px; font-size: 16px; line-height: 1.5; }
+.callout b { color: var(--gold); }
+[hidden] { display: none !important; }
+
+/* ---------- Part 1: decision flow ---------- */
+.flow { display: flex; flex-direction: column; gap: 0; }
+.fstep { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 0 22px; position: relative; padding-bottom: 26px; }
+.fstep:not(:last-child)::after { content: ""; position: absolute; left: 109px; top: 0; bottom: 0; width: 2px; background: var(--navy-line); z-index: 0; }
+.fnode { position: relative; z-index: 1; align-self: start; background: var(--ink); color: var(--paper); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+.fnode small { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #C9CEDA; }
+.fnode b { font-family: var(--f-display); font-weight: 500; font-size: 19px; line-height: 1.2; }
+.fnode.start { background: var(--navy); }
+.fnode.end { background: var(--ox); }
+.fbody { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 10px; }
+.br { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 11px 14px; display: flex; flex-direction: column; gap: 5px; }
+.br.alt { border-top-color: var(--ox); }
+.br h3 { font-size: 16.5px; }
+.br p, .br li { font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+.br ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 3px; }
+.waves { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+.wave { position: relative; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 11px 14px; display: flex; flex-direction: column; gap: 5px; }
+.wave:not(:last-child)::after { content: "→"; position: absolute; right: -24px; top: 40%; color: var(--ox); font-weight: 700; font-size: 20px; }
+.wave .k3 { color: var(--navy); }
+.wave h3 { font-size: 16.5px; }
+.wave p { font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: 12.5px; font-weight: 700; border-radius: 4px; padding: 1px 7px; background: var(--navy-bg); color: var(--navy); }
+@media (max-width: 900px) { .waves { grid-template-columns: 1fr; gap: 26px; } .wave:not(:last-child)::after { content: "↓"; right: auto; left: 50%; top: auto; bottom: -25px; } }
+@media (max-width: 700px) { .fstep { grid-template-columns: 1fr; gap: 10px; } .fstep:not(:last-child)::after { display: none; } }
+.tw { color: var(--ink); font-weight: 600; }
+
+/* ---------- Part 1: mesh ---------- */
+.mesh { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; align-items: stretch; }
+@media (max-width: 900px) { .mesh { grid-template-columns: 1fr; } }
+.meshfig { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 8px; display: flex; align-items: center; }
+.meshfig svg { width: 100%; height: auto; display: block; }
+.nd { cursor: pointer; }
+.nd circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.nd text { font: 700 13px var(--f-body); fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.nd .deg { font: 600 10.5px var(--f-body); fill: var(--muted); }
+.nd.on circle { fill: var(--ink); } .nd.on text { fill: var(--paper); } .nd.on .deg { fill: var(--muted); }
+.nd.out circle { stroke: var(--ox); stroke-width: 3; } .nd.in circle { stroke: var(--navy); stroke-width: 3; }
+.nd:focus-visible { outline: none; } .nd:focus-visible circle { stroke-width: 4; }
+.ed { stroke: var(--rule); stroke-width: 1.2; fill: none; }
+.ed.mfn { stroke-dasharray: 4 3; }
+.ed.out { stroke: var(--ox); stroke-width: 2.4; } .ed.in { stroke: var(--navy); stroke-width: 2.4; }
+.ed.dim { opacity: .25; }
+.meshpanel { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-height: 100%; }
+.meshpanel h3 { font-family: var(--f-display); font-weight: 500; font-size: 22px; }
+.meshpanel p { font-size: 15px; color: var(--ink-2); line-height: 1.5; }
+.leg { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; color: var(--ink-2); }
+.leg i { display: inline-block; width: 20px; height: 0; border-top: 3px solid var(--ox); vertical-align: middle; margin-right: 6px; }
+.leg .legn { display: inline-grid; place-items: center; width: 20px; height: 20px; border: 1.5px solid var(--ink); border-radius: 50%; font-size: 11px; margin-right: 6px; vertical-align: middle; }
+.leg i.in { border-color: var(--navy); } .leg i.mfn { border-top: 2px dashed var(--muted); }
+.mrow { display: flex; flex-wrap: wrap; gap: 5px; }
+.mrow span { font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+.mrow .o { background: var(--ox-bg); color: var(--ox-ink); } .mrow .i { background: var(--navy-bg); color: var(--navy); }
+
+/* ---------- Part 1: clocks + precedents ---------- */
+.clocks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.clocks > .clk:nth-child(4n+1):nth-last-child(2), .clocks > .clk:nth-child(4n+2):last-child { grid-column: span 2; }
+@media (max-width: 1100px) { .clocks { grid-template-columns: repeat(2, minmax(0, 1fr)); } .clocks > .clk { grid-column: auto !important; } }
+@media (max-width: 620px) { .clocks { grid-template-columns: 1fr; } }
+.clk { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--navy); border-radius: 4px; padding: 10px 13px; display: flex; flex-direction: column; gap: 3px; }
+.clk b { font-size: 15.5px; }
+.clk p { font-size: 14.5px; color: var(--ink-2); line-height: 1.4; }
+.clk .fast { color: var(--good); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
+.clk .slow { color: var(--ox-ink); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
+.prec { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1000px) { .prec { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .prec { grid-template-columns: 1fr; } }
+.pc { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 15px; display: flex; flex-direction: column; gap: 6px; }
+.pc .big { font-family: var(--f-display); font-size: 30px; line-height: 1; color: var(--ox-ink); font-variant-numeric: tabular-nums; }
+.pc h3 { font-size: 16px; }
+.pc p { font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+.pc .src { font-size: 13px; margin-top: auto; }
+.thumbs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; counter-reset: t; }
+@media (max-width: 760px) { .thumbs { grid-template-columns: 1fr; } }
+.thumbs li { counter-increment: t; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.thumbs li::before { content: counter(t); font-family: var(--f-display); font-size: 22px; color: var(--ox-ink); line-height: 1.1; }
+.thumbs b { color: var(--ink); }
+.srcs { border-top: 1px solid var(--rule); padding-top: 12px; }
+.srcs h2 { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.srcs ul { margin: 0; padding-left: 18px; columns: 2 380px; column-gap: 32px; font-size: 14.5px; }
+.srcs li { break-inside: avoid; margin-bottom: 3px; }
+
+/* ---------- Part 2: game ---------- */
+.game { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 1050px) { .game { grid-template-columns: 1fr; } }
+.ctl { display: flex; flex-direction: column; gap: 14px; }
+.box { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 13px 15px; display: flex; flex-direction: column; gap: 9px; }
+.box h3 { font-size: 15px; font-weight: 700; }
+.box .q { font-size: 14px; color: var(--ink-2); line-height: 1.4; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.seg button { font: 600 14px/1.25 var(--f-body); text-align: left; color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 4px; padding: 8px 10px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.seg3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.seg button small { font-weight: 400; color: var(--muted); font-size: 12.5px; }
+.seg button[aria-pressed="true"] { border-color: var(--navy); background: var(--navy-bg); }
+.tog { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+.tog input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--navy); flex: none; }
+.tog b { color: var(--ink); }
+.order { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.order li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 8px; align-items: center; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 6px 5px 9px; }
+.order li.off { opacity: .55; }
+.order li.off .nm { text-decoration: line-through; }
+.order .pos { font-family: var(--f-display); font-size: 17px; color: var(--ox-ink); font-variant-numeric: tabular-nums; }
+.order .nm { font-weight: 600; font-size: 14.5px; }
+.order .nm small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.order .bt { display: flex; gap: 3px; }
+.order .bt button { font: 600 13px/1 var(--f-body); width: 30px; height: 30px; border: 1px solid var(--rule); background: var(--surface); border-radius: 4px; cursor: pointer; color: var(--ink); }
+.order .bt button:disabled { opacity: .3; cursor: default; }
+.order .bt button.hold { width: auto; padding: 0 8px; font-size: 12px; }
+.order .bt button.hold[aria-pressed="true"] { background: var(--ox-bg); border-color: var(--ox-line); color: var(--ox-ink); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.presets button, .btn { font: 600 13.5px/1.2 var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+.btn.p { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.res { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.hero { background: var(--ink); color: var(--paper); border-radius: 4px; padding: 16px 20px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 24px; align-items: end; }
+.hero .k3 { color: #C9CEDA; }
+.hero .tot { font-family: var(--f-display); font-size: clamp(40px, 5vw, 58px); line-height: 1; font-variant-numeric: tabular-nums; }
+.hero .sub { font-size: 14.5px; color: #C9CEDA; }
+.hero .dl { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hero .dl.up { color: #9BD3AE; } .hero .dl.down { color: #F1A9B3; }
+@media (max-width: 560px) { .hero { grid-template-columns: 1fr; } }
+.cmp { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.cmp th, .cmp td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); }
+.cmp th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.cmp td.n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.cmp tr.me td { background: var(--navy-bg); font-weight: 700; }
+.cmp td button { font: 600 12.5px var(--f-body); border: 1px solid var(--rule); background: var(--surface); border-radius: 4px; padding: 2px 8px; cursor: pointer; color: var(--ink); }
+.chart { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+.chart h3 { font-size: 15px; font-weight: 700; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.scroll { overflow-x: auto; }
+.ax { font: 500 11.5px var(--f-body); fill: var(--muted); }
+.lb { font: 600 12.5px var(--f-body); fill: var(--ink); }
+.vl { font: 600 12px var(--f-body); fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+.gl { stroke: var(--rule); stroke-width: 1; }
+.hit { fill: transparent; cursor: default; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.4; border-radius: 4px; padding: 8px 10px; max-width: 290px; z-index: 4; box-shadow: 0 6px 18px -8px rgba(0,0,0,.5); }
+.tip b { color: #fff; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.log li { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 10px; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
+.log li span { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 13px; }
+.log li b { color: var(--ink); }
+.log li.neg b { color: var(--ox-ink); } .log li.pos b { color: var(--good); }
+.wif { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 8px; }
+.wif li { background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; color: var(--ink-2); }
+.wif li b { font-size: 16px; font-variant-numeric: tabular-nums; }
+.wif li b.up { color: var(--good); } .wif li b.down { color: var(--ox-ink); }
+.saved { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; }
+.saved li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--rule); padding-bottom: 3px; color: var(--ink-2); }
+.saved li b { color: var(--ink); font-variant-numeric: tabular-nums; }
+details.how { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 14px; }
+details.how summary { cursor: pointer; font-weight: 700; }
+details.how .in { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; font-size: 13.5px; min-width: 640px; width: 100%; }
+.tbl th, .tbl td { padding: 5px 8px; border-bottom: 1px solid var(--rule); text-align: left; }
+.tbl th { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tbl td.n { text-align: right; font-variant-numeric: tabular-nums; }
+.disc { font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 10px; }
+@media (prefers-reduced-motion: no-preference) { .hero .tot { transition: color .2s; } }
+
+/* ---------- Part 2: launch engine ---------- */
+.eng { display: grid; grid-template-columns: 390px minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 1050px) { .eng { grid-template-columns: 1fr; } }
+.inp { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 1051px) { .inp { position: sticky; top: 70px; max-height: calc(100vh - 86px); overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; } }
+.inp { scrollbar-color: var(--rule) transparent; }
+.inp::-webkit-scrollbar { width: 6px; }
+.inp::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+.inp::-webkit-scrollbar-track { background: transparent; }
+#mt td:nth-child(1), #mt td:nth-child(5) { white-space: nowrap; }
+.ig { margin: 0; min-width: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 15px 14px; display: flex; flex-direction: column; gap: 9px; }
+.ig legend { float: left; width: 100%; padding: 0; font-weight: 700; font-size: 15.5px; display: flex; align-items: baseline; gap: 8px; }
+.ig legend + * { clear: both; }
+.ig .qn { font-family: var(--f-display); font-size: 21px; color: var(--ox-ink); line-height: 1; }
+.fld { display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; color: var(--ink-2); line-height: 1.3; }
+.fld input { font: 600 15.5px var(--f-body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 4px; padding: 7px 9px; width: 100%; box-sizing: border-box; font-variant-numeric: tabular-nums; }
+.fld input:focus { outline: 2px solid var(--navy); outline-offset: 1px; border-color: var(--navy); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; align-items: end; }
+.qp { display: flex; flex-wrap: wrap; gap: 6px; }
+.qp button { font: 600 12.5px/1.2 var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.qp button[aria-pressed="true"] { background: var(--navy-bg); border-color: var(--navy); }
+.dv { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.dv b { color: var(--ink-2); }
+.hero .cbox { text-align: right; max-width: 300px; }
+.hero .cbox .big { font-family: var(--f-display); font-size: 34px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.hero .cbox .sub { font-size: 13.5px; }
+@media (max-width: 560px) { .hero .cbox { text-align: left; max-width: none; } }
+.tot.busy { opacity: .45; }
+.box .lead { font-size: 15.5px; line-height: 1.5; color: var(--ink); }
+.seq { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.sq { background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.sq.held { border-style: dashed; }
+.sqh { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; }
+.sqh .pos { font-family: var(--f-display); font-size: 21px; color: var(--ox-ink); line-height: 1; }
+.sqh b { font-size: 15.5px; }
+.sqh small { display: block; color: var(--muted); font-size: 13px; }
+.sqh .amt { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 64px; text-align: right; }
+.cf { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; border: 1px solid var(--rule); color: var(--muted); background: var(--surface); }
+.cf.hi { background: #E4F0E8; color: var(--good); border-color: #B9D6C3; }
+.cf.mid { background: #F2EDDC; color: var(--gold); border-color: #DCCF9F; }
+.cf.lo { background: var(--ox-bg); color: var(--ox-ink); border-color: var(--ox-line); }
+.why { margin: 0; padding-left: 52px; display: flex; flex-direction: column; gap: 3px; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+.why .cfl { list-style: none; margin-left: -16px; font-size: 13px; color: var(--muted); }
+.why .cfl:empty { display: none; }
+@media (max-width: 560px) { .sqh { grid-template-columns: 22px minmax(0, 1fr) auto; } .sqh .cf { grid-row: 2; grid-column: 2 / -1; justify-self: start; } .why { padding-left: 20px; } }
+.ovg { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 8px; }
+.ovg label { display: flex; flex-direction: column; gap: 3px; font-size: 13px; font-weight: 600; color: var(--ink); }
+.ovg select { font: 500 13.5px var(--f-body); padding: 5px 6px; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); color: var(--ink); width: 100%; }
+.ovr b.up { color: var(--good); } .ovr b.down { color: var(--ox-ink); }
+
+/* ---------- Part 2: engine v2 additions ---------- */
+.arch { display: flex; flex-wrap: wrap; gap: 6px; }
+.arch button, .qp button { font: 600 12.5px/1.2 var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 10px; cursor: pointer; }
+.arch button[aria-pressed="true"] { background: var(--navy-bg); border-color: var(--navy); }
+#archReset { background: transparent; border-style: dashed; color: var(--muted); }
+.fld select { font: 600 14.5px var(--f-body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 4px; padding: 7px 8px; width: 100%; }
+.hero .busy { font-size: 13px; color: #C9CEDA; margin-top: 4px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.toolbar textarea { flex: 1 1 100%; font: 13px/1.4 var(--f-body); border: 1px solid var(--rule); border-radius: 4px; padding: 8px; background: var(--surface); color: var(--ink); }
+.leadind { font-size: 14.5px; color: var(--ink-2); background: var(--navy-bg); border-radius: 4px; padding: 8px 12px; }
+.leadind .cfl { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.tips { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+.tips li { border-left: 3px solid var(--gold); padding-left: 10px; }
+.tips li.q { border: 0; padding: 0; color: var(--muted); }
+.tips b { color: var(--ink); }
+.mkt input[type="number"] { width: 84px; font: 500 13.5px var(--f-body); padding: 3px 5px; border: 1px solid var(--rule); border-radius: 3px; background: var(--paper); color: var(--ink); font-variant-numeric: tabular-nums; }
+.mkt input:disabled { opacity: .5; }
+.valt td { vertical-align: top; font-size: 13.5px; line-height: 1.45; }
+.valt td.vr { font-weight: 700; white-space: nowrap; }
+.valt td.vr.ok { color: var(--good); } .valt td.vr.no { color: var(--ox-ink); }
+.quiz { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.quiz p { color: var(--ink); }
+.qo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
+@media (max-width: 560px) { .qo { grid-template-columns: 1fr; } }
+.valt td.vr.part { color: var(--gold); }
+.qo button { font: 500 14px/1.35 var(--f-body); text-align: left; color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 4px; padding: 7px 10px; cursor: pointer; }
+.qo button.right { border-color: var(--good); background: #E4F0E8; }
+.qo button.wrong { border-color: var(--ox-line); background: var(--ox-bg); }
+.qo button:disabled { cursor: default; }
+.qx { font-size: 14px; color: var(--ink-2); margin-top: 6px; }
+@media print {
+  .bar, #p1, .head .lede, .inp, #p2 details, .toolbar, .tip, #p2 > .sec > p { display: none !important; }
+  #p2 { display: block !important; }
+  .eng { display: block; }
+  .hero { background: #fff; color: #000; border: 1px solid #999; }
+  .hero .k3, .hero .sub, .hero .busy { color: #333; }
+  .sq, .box, .chart { break-inside: avoid; }
+}
+
+/* ---------- Part 2: views and sequence builder ---------- */
+.mode { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mode button { font: 600 14.5px var(--f-body); color: var(--ink); background: var(--surface); border: 1.5px solid var(--rule); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.mode button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mode .guidelink { margin-left: auto; font-weight: 600; font-size: 14.5px; }
+.view { display: flex; flex-direction: column; gap: 16px; }
+.sbp { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.sbp .k3 { margin-right: 4px; }
+.sbp button { font: 600 13px/1.2 var(--f-body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 6px; padding: 6px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
+.sbp button small { font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sbp button[aria-pressed="true"] { border-color: var(--navy); background: var(--navy-bg); }
+.order.sb li { grid-template-columns: 24px minmax(0, 1fr) auto; }
+.order.sb .bt { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.order.sb select { font: 500 13px var(--f-body); padding: 5px 6px; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); max-width: 210px; }
+@media (max-width: 640px) { .order.sb li { grid-template-columns: 24px minmax(0, 1fr); } .order.sb .bt { grid-column: 1 / -1; justify-content: flex-start; } .order.sb select { max-width: none; flex: 1 1 160px; } .sbset { grid-template-columns: 1fr; } }
+#sbT td.up { color: var(--good); font-weight: 700; } #sbT td.down { color: var(--ox-ink); font-weight: 700; }
+#sbCmp .big { font-size: 30px; }
+
+/* ---------- Guide page ---------- */
+.guide { display: flex; flex-direction: column; gap: 22px; padding-top: 22px; }
+.ghead { display: flex; flex-direction: column; gap: 10px; max-width: 860px; }
+.ghead h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(32px, 4vw, 44px); line-height: 1.1; }
+.ghead .lede { font-size: 17.5px; color: var(--ink-2); line-height: 1.55; }
+.glay { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 900px) { .glay { grid-template-columns: 1fr; } }
+.gtoc { position: sticky; top: 76px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 900px) { .gtoc { position: static; } }
+.gtoc ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; }
+.gtoc button { display: inline; font: 500 14.5px/1.35 var(--f-body); color: var(--navy); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+.gtoc button:hover { text-decoration: underline; }
+.gbody { display: flex; flex-direction: column; gap: 30px; max-width: 780px; }
+.gbody section { display: flex; flex-direction: column; gap: 10px; scroll-margin-top: 80px; }
+.gbody h2 { font-family: var(--f-display); font-weight: 500; font-size: 27px; line-height: 1.2; border-top: 1px solid var(--ink); padding-top: 12px; }
+.gbody h3 { font-size: 16.5px; font-weight: 700; margin-top: 4px; }
+.gbody p { font-size: 16px; line-height: 1.6; color: var(--ink-2); }
+.gbody b { color: var(--ink); }
+.gsteps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.gterms { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 15px; line-height: 1.5; }
+.gterms dt { font-weight: 700; color: var(--ink); }
+.gterms dd { margin: 0; color: var(--ink-2); }
+@media (max-width: 560px) { .gterms { grid-template-columns: 1fr; } .gterms dd { margin-bottom: 6px; } }
+
+/* ---------- Layout: fill wide screens ---------- */
+.head { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr); gap: 20px 40px; align-items: start; }
+.hmain { display: flex; flex-direction: column; gap: 10px; }
+.head .lede { max-width: none; }
+@media (max-width: 960px) { .head { grid-template-columns: 1fr; } }
+.pnav { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
+.pnav .k3 { margin-bottom: 4px; }
+.pnav button { text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule); padding: 8px 0; cursor: pointer; display: flex; flex-direction: column; gap: 2px; font: inherit; color: var(--ink); }
+.pnav button b { font-size: 15px; }
+.pnav button span { font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+.pnav button[aria-current="page"] b { color: var(--ox-ink); }
+.pnav button[aria-current="page"] b::after { content: " · you are here"; font-weight: 500; color: var(--muted); font-size: 12.5px; }
+.pnav button:hover b { text-decoration: underline; }
+.pfacts { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 13px; color: var(--muted); padding-top: 8px; }
+.pfacts b { font-family: var(--f-display); font-size: 21px; font-weight: 500; color: var(--ink); margin-right: 4px; }
+.shead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 10px 40px; align-items: start; }
+.shead .sl { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.shead .sr { display: flex; flex-direction: column; gap: 8px; color: var(--ink-2); }
+.shead .sr p { max-width: none; }
+@media (max-width: 900px) { .shead { grid-template-columns: 1fr; } }
+.mrank { display: flex; flex-direction: column; gap: 3px; border-top: 1px solid var(--rule); padding-top: 10px; margin-top: 2px; }
+.mrank .note { margin-bottom: 4px; }
+.mrl { display: grid; grid-template-columns: 1fr; gap: 3px 18px; }
+@media (max-width: 1300px) { .mrl { grid-template-columns: 1fr 1fr; } .mr { grid-template-columns: 96px minmax(0, 1fr) 18px; } }
+@media (max-width: 900px) { .mrl { grid-template-columns: 1fr; } }
+.mr { display: grid; grid-template-columns: 112px minmax(0, 1fr) 22px; gap: 8px; align-items: center; background: none; border: 0; padding: 2px 0; cursor: pointer; font: 500 13.5px var(--f-body); color: var(--ink-2); text-align: left; }
+.mr i { display: block; height: 10px; background: var(--strip); border-radius: 2px; }
+.mr em { display: block; height: 100%; background: var(--navy-line); border-radius: 2px; }
+.mr b { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.mr.on span, .mr.on b { color: var(--ink); font-weight: 700; }
+.mr.on em { background: var(--navy); }
+.mr:hover span { text-decoration: underline; }
+.gwrap { display: grid; grid-template-columns: 236px minmax(0, 1fr) 280px; grid-template-areas: "head head rail" "toc body rail"; gap: 24px 32px; align-items: start; }
+.gwrap .ghead { grid-area: head; max-width: none; }
+.gwrap .gtoc { grid-area: toc; }
+.gwrap .gbody { grid-area: body; max-width: none; }
+.grail { grid-area: rail; position: sticky; top: 76px; background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.grail h3 { font-size: 14.5px; font-weight: 700; margin-top: 4px; }
+.grail ol, .grail ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.grail p { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.grail .btn { margin-top: 6px; align-self: flex-start; }
+@media (max-width: 1200px) { .gwrap { grid-template-columns: 236px minmax(0, 1fr); grid-template-areas: "head head" "toc body"; } .grail { display: none; } }
+@media (max-width: 900px) { .gwrap { grid-template-columns: 1fr; grid-template-areas: "head" "toc" "body"; } }
+.eyebrow a { color: inherit; }
+</style>
+
+</head><body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="index.html">Jigar Rajpura <span>· Portfolio</span></a>
+  <div class="tabs" role="tablist" aria-label="Project parts">
+    <button type="button" role="tab" id="t1" aria-selected="true" aria-controls="p1">Part 1 · The access mesh</button>
+    <button type="button" role="tab" id="t2" aria-selected="false" aria-controls="p2">Part 2 · Launch engine</button>
+    <button type="button" role="tab" id="t3" aria-selected="false" aria-controls="p3">How to use the engine</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div class="head">
+    <div class="hmain">
+      <p class="eyebrow"><a href="index.html">Portfolio</a> · <b>Project 05</b> · Cancer medicines · October 2026</p>
+      <h1>Launch sequence strategy</h1>
+      <p class="lede">Prices travel. Once a cancer medicine has a price in one country, other countries use it to cap, floor or negotiate their own. So the order in which a company launches decides not only when patients get the drug, but what it earns everywhere. Part 1 shows how the access rules connect, from the moment Phase 3 reads out. Part 2 is an engine: enter the drug’s epidemiology, comparator, PFS and OS, safety and price, and it recommends where to launch first and next, and why.</p>
+    </div>
+    <nav class="pnav" aria-label="In this project">
+      <span class="k3">In this project</span>
+      <button type="button" data-go="t1" data-nav="t1"><b>Part 1 · The access mesh</b><span>Reference pricing, funding clocks and precedents, from Phase 3 readout.</span></button>
+      <button type="button" data-go="t2" data-nav="t2"><b>Part 2 · Launch engine</b><span>A recommended sequence for your drug, or build your own.</span></button>
+      <button type="button" data-go="t3" data-nav="t3"><b>How to use the engine</b><span>A ten-minute guide to inputs, results and the builder.</span></button>
+      <div class="pfacts"><span><b>14</b> markets</span><span><b>5</b> drug inputs</span><span><b>200</b> robustness draws</span></div>
+    </nav>
+  </div>
+
+  <!-- ==================== PART 1 ==================== -->
+  <section id="p1" role="tabpanel" aria-labelledby="t1" class="sec" style="gap:30px">
+
+    <section class="sec">
+      <div class="shead"><div class="sl"><h2>From Phase 3 readout to a launch sequence</h2></div><div class="sr"><p>Three decisions sit between a positive Phase 3 and the first patient in each country. Each one changes what the next one can achieve.</p></div></div>
+      <div class="flow">
+        <div class="fstep">
+          <div class="fnode start"><small>Starting point</small><b>Phase 3 reads out</b></div>
+          <div class="fbody"><div class="branches">
+            <div class="br"><span class="k3">Interim analysis 1</span><h3>Primary endpoint met, survival immature</h3><p>Often PFS or response is mature; overall survival (OS) is still early. The licence is reachable now.</p></div>
+            <div class="br alt"><span class="k3">Interim analysis 2</span><h3>OS more mature, months later</h3><p>A clearer survival estimate, which most HTA bodies weigh most heavily, at the cost of a later start.</p></div>
+            <div class="br"><span class="k3">Pipeline</span><h3>More than one indication planned</h3><p>Typically a smaller, high-need population and a larger, broader one, reading out at different times.</p></div>
+          </div></div>
+        </div>
+        <div class="fstep">
+          <div class="fnode"><small>Before deciding</small><b>What does the drug bring versus standard of care?</b></div>
+          <div class="fbody"><div class="branches">
+            <div class="br"><span class="k3">Added benefit</span><h3>The benefit rating unlocks the price rules</h3><ul>
+              <li>Germany: a minor or non-quantifiable added benefit means a price no higher than the comparator’s.</li>
+              <li>France: ASMR I–III brings the European price guarantee; ASMR IV–V does not.</li>
+              <li>Brazil: proven therapeutic gain (category 1) can price up to the lowest of 14 countries; no added benefit (category 2) is capped at the comparator’s treatment cost.</li></ul></div>
+            <div class="br alt"><span class="k3">The comparator</span><h3>Its price is the starting point</h3><ul>
+              <li>Japan prices most new drugs from a comparator’s price plus premiums (innovativeness 70–120%, usefulness 5–60%), or from a cost build-up.</li>
+              <li>Against generics, the comparator-based caps in Germany and Brazil sit far below a brand price, so a small gain is costly.</li>
+              <li>Against a branded drug, parity is easier to defend, but the incumbent defends its share.</li></ul></div>
+            <div class="br"><span class="k3">Population size</span><h3>Volume changes how hard payers push</h3><ul>
+              <li>Germany treats an orphan drug’s added benefit as proven until sales pass €30M a year.</li>
+              <li>France needs a CEESP efficiency opinion once ASMR I–III is claimed and sales reach €20M a year.</li>
+              <li>Japan’s cost-effectiveness review for high budget impact has trimmed oncology prices by about 0.2–15%; orphans get priority review automatically.</li></ul></div>
+          </div></div>
+        </div>
+        <div class="fstep">
+          <div class="fnode"><small>Decision 1</small><b>Which data cut do we file on?</b></div>
+          <div class="fbody"><div class="branches">
+            <div class="br"><span class="k3">File on IA1</span><h3>Earlier licence, weaker HTA position</h3><ul>
+              <li>Regulators have early routes: FDA priority review and accelerated approval, EMA conditional MA (Project 01, US and EU cards).</li>
+              <li>Germany: OS, symptoms, quality of life and side effects carry the rating; PFS alone rarely earns added benefit.</li>
+              <li>England: immature data with plausible cost-effectiveness lead to the Cancer Drugs Fund, then re-appraisal.</li>
+              <li>Canada pairs time-limited recommendations with temporary access for NOC/c products.</li></ul></div>
+            <div class="br alt"><span class="k3">Wait for IA2</span><h3>Later licence, stronger benefit ratings</h3><ul>
+              <li>More mature OS supports a higher German benefit category and a better French ASMR, which drives price and the liste en sus.</li>
+              <li>Fewer managed-access conditions, but every month of waiting is a month without sales anywhere.</li>
+              <li>The JCA PICOs still need an answer for every comparator; more mature data make indirect comparisons more robust.</li></ul></div>
+            <div class="br"><span class="k3">Split by market</span><h3>Early where speed pays, later where survival sets price</h3><p>File early with the regulator whose market prices freely and pays from approval, and bring mature survival data to the HTA bodies that rate on it. Since January 2025 the EU joint clinical assessment narrows this for EU markets: its report is completed within 30 days of authorisation, and national bodies must give it due consideration, so a later data cut usually reaches them through reassessment rather than a later launch. The engine in Part 2 makes this call market by market.</p></div>
+          </div></div>
+        </div>
+        <div class="fstep">
+          <div class="fnode"><small>Decision 2</small><b>Which indication goes first?</b></div>
+          <div class="fbody"><div class="branches">
+            <div class="br"><span class="k3">What payers say</span><h3>The first indication sets the price</h3><p>In interviews across nine OECD countries, payers named the highest price as the defining feature of first indications, which were mostly smaller populations. No example was found of a price rising after a new indication (Mills and Kanavos, 2023).</p></div>
+            <div class="br alt"><span class="k3">What happens at the second</span><h3>Each system handles it differently</h3><ul>
+              <li>France, Spain, Belgium, Canada: the price is renegotiated as a weighted average.</li>
+              <li>England, Switzerland: different discounts per indication.</li>
+              <li>Italy: a mandatory discount scaled to the extra population.</li>
+              <li>Germany: each new indication is a new AMNOG cycle. United States: one free price.</li></ul></div>
+          </div></div>
+        </div>
+        <div class="fstep">
+          <div class="fnode"><small>Decision 3</small><b>Where do we launch, and in what order?</b></div>
+          <div class="fbody">
+            <div class="waves">
+              <div class="wave"><span class="k3">Wave 1 · price setters</span><h3>Markets others look at, that pay early</h3><p>The US prices freely and covers from approval. Germany pays the company price from launch, with the negotiated price from month 7. Their prices then sit in other countries’ baskets.</p><div class="chips"><span class="chip">US</span><span class="chip">DE</span><span class="chip">UK</span></div></div>
+              <div class="wave"><span class="k3">Wave 2 · referencing markets</span><h3>Launch once their reference prices exist</h3><p>Japan checks the average of US, UK, German and French prices. France’s price guarantee looks at Germany, Spain, Italy and the UK. Canada caps at the highest of 11. Switzerland compares nine countries.</p><div class="chips"><span class="chip">JP</span><span class="chip">FR</span><span class="chip">CA</span><span class="chip">CH</span></div></div>
+              <div class="wave"><span class="k3">Wave 3 · low visible prices</span><h3>Later, or behind a confidential deal</h3><p>Markets whose published prices are low and widely referenced pull others down, so companies often launch them later or protect the list price with confidential discounts. Brazil caps at the lowest of 14 countries.</p><div class="chips"><span class="chip">IT</span><span class="chip">ES</span><span class="chip">BR</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="fstep">
+          <div class="fnode end"><small>Outcome</small><b>Five-year sales</b></div>
+          <div class="fbody"><div class="callout"><b>The trade-off.</b> Five-year sales come from how early each market starts paying, multiplied by how high the price holds once other countries look at it. Launching a low-price market early adds volume there but can lower prices in every market that references it. Waiting protects price but loses time, and in the US a lower price abroad can now also lower the US price (most-favoured-nation pricing).</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="shead"><div class="sl"><h2>The access mesh: who looks at whose price</h2></div><div class="sr"><p>Each arrow points from a market to a market whose price it uses. Select a market to see what it looks at (oxblood) and who looks at it (navy). The rules come from the sourced Project 01 cards and the Reference pricing page.</p></div></div>
+      <div class="mesh">
+        <div class="meshfig"><svg id="meshSvg" viewBox="0 0 640 500" role="img" aria-label="Network of reference pricing links between fourteen markets"></svg></div>
+        <div class="meshpanel" id="meshPanel" aria-live="polite"></div>
+      </div>
+      <div class="leg"><span><i></i>Looks at (references)</span><span><i class="in"></i>Looked at by</span><span><i class="mfn"></i>US most-favoured-nation links (2025 order and company deals)</span><span><b class="legn">9</b>Number in a circle: how many other markets use that market’s price; bigger circles are used more</span></div>
+    </section>
+
+    <section class="sec">
+      <div class="shead"><div class="sl"><h2>The clocks: how soon each market pays</h2></div><div class="sr"><p>Speed matters as much as price. A market that pays from launch earns from day one; a market with a long funding clock adds little in the first five years however high its price. All figures come from the Project 01 cards.</p><p class="note">Across Europe, EFPIA’s 2025 W.A.I.T. survey found an average of 597 days from EU approval to availability for medicines approved in 2021–24, and 655 days for oncology medicines.</p></div></div>
+      <div class="clocks">
+        <div class="clk"><span class="fast">From approval</span><b>United States</b><p>Medicare covers medically accepted indications from approval; the company sets the launch price.</p></div>
+        <div class="clk"><span class="fast">From launch</span><b>Germany</b><p>Sickness funds pay the company’s price from launch; the negotiated price applies from month 7.</p></div>
+        <div class="clk"><span class="fast">About 60 days</span><b>Japan</b><p>NHI listing usually within 60 days of approval (90 at most); listings four times a year.</p></div>
+        <div class="clk"><span class="fast">At licence + 90 days</span><b>United Kingdom</b><p>Aligned pathway: NICE guidance publishes with the licence; positive guidance funded within 90 days.</p></div>
+        <div class="clk"><span class="fast">60-day benchmark</span><b>Switzerland</b><p>Specialty List benchmark 60 days after MA, met for 43% of files in 2024; case-by-case payment before that.</p></div>
+        <div class="clk"><span class="slow">About 7 months</span><b>Italy</b><p>Non-generic negotiations averaged about 7 months; until then the drug can be sold unreimbursed (class Cnn).</p></div>
+        <div class="clk"><span class="slow">180-day target, longer in practice</span><b>France</b><p>Real timelines run well past the legal target; early access (AP) bridges the gap for many cancer drugs.</p></div>
+        <div class="clk"><span class="slow">National, then regional</span><b>Spain</b><p>About 70% of innovative medicines reached patients before the funding decision through special-situation access.</p></div>
+        <div class="clk"><span class="slow">More than 1.5 years</span><b>Canada</b><p>Average time from approval to public funding; pre-NOC filing and Ontario’s FAST pilot shorten it.</p></div>
+        <div class="clk"><span class="slow">Up to 180 days</span><b>Belgium</b><p>The Minister decides on the CRM proposal within 180 days; confidential MEA conventions are routine for oncology.</p></div>
+        <div class="clk"><span class="slow">150-day target</span><b>South Korea</b><p>The parallel pilot targets 150 days from approval to listing; early rounds ran longer. Risk-sharing agreements are usual for oncology.</p></div>
+        <div class="clk"><span class="slow">The lock</span><b>Netherlands</b><p>Drugs costing €20M a year, or €10M with €50,000 per patient, wait in the lock until Zorginstituut advises and a price is agreed.</p></div>
+        <div class="clk"><span class="slow">Three cycles a year</span><b>Australia</b><p>PBAC meets in March, July and November; a positive recommendation is not a listing, and price talks can still fail.</p></div>
+        <div class="clk"><span class="slow">Two routes</span><b>Brazil</b><p>CMED price within 90 days of registration; Conitec 180 + 90 days for the public system; ANS 120 + 60 days for cancer in private plans.</p></div>
+      </div>
+
+    </section>
+
+    <section class="sec">
+      <h2>What companies have actually done</h2>
+      <div class="prec">
+        <div class="pc"><span class="big">73 vs 13</span><h3>Launches follow expected price and volume</h3><p>In 25 markets in the 1990s, the chance of launch rose with expected price and volume. Low prices spill over through referencing and parallel trade, so firms accepted delay or no launch: 73 new drugs launched in the US, 66 in Germany and 64 in the UK, against 13 in Japan and 26 in Portugal.</p><a class="src" href="https://www.nber.org/papers/w9874" target="_blank" rel="noopener">Danzon, Wang and Wang, Health Economics 2005 (NBER w9874)</a></div>
+        <div class="pc"><span class="big">Belgium</span><h3>Submissions held back to keep a price out of baskets</h3><p>Companies systematically delayed Belgian dossiers so its price would not feed other countries’ calculations. Across seven EU countries, 11 products were not launched to avoid expected low prices.</p><a class="src" href="https://www.lse.ac.uk/business/consulting/assets/documents/the-impact-of-external-reference-pricing-within-and-across-countries.pdf" target="_blank" rel="noopener">LSE, impact of external reference pricing (2017)</a></div>
+        <div class="pc"><span class="big">10 opt-outs</span><h3>Germany: leaving rather than accept a low price</h3><p>Among 139 medicines assessed from 2011 to June 2016, there were 10 opt-outs and 12 supply terminations; 21 of the 22 had been rated “no added benefit”.</p><a class="src" href="https://healtheconomicsreview.biomedcentral.com/articles/10.1186/s13561-018-0209-3" target="_blank" rel="noopener">Staab et al., Health Economics Review 2018</a></div>
+        <div class="pc"><span class="big">Niche first</span><h3>Multi-indication drugs launch the high-value use first</h3><p>Payers see the first indication as the price-setting one; current systems still reward launching niche indications first. Some later indications were withheld in France, Italy and Belgium when price talks failed.</p><a class="src" href="https://ideas.repec.org/a/spr/pharmo/v7y2023i4d10.1007_s41669-023-00406-1.html" target="_blank" rel="noopener">Mills and Kanavos, PharmacoEconomics Open 2023</a></div>
+        <div class="pc"><span class="big">−37.8%</span><h3>US most-favoured-nation pricing reshapes Europe</h3><p>In the year after the May 2025 US order, launches fell 37.8% in 11 EU states facing both MFN and the JCA, against 10.5% in the US. Insmed held back a European launch approved in November 2025 while awaiting MFN clarity.</p><a class="src" href="https://euperspectives.eu/2026/08/us-pricing-eu-assessment-push-new-drugs-out-of-europe-says-researcher/" target="_blank" rel="noopener">EU Perspectives, Aug 2026 (King’s College study); BioSpace, Apr 2026</a></div>
+        <div class="pc"><span class="big">Japan 2026</span><h3>Germany now counts only after AMNOG</h3><p>Japan’s reference basket is the US, UK, Germany and France. Since the FY2026 reform, only Germany’s post-AMNOG negotiated price counts, so a German free launch price no longer lifts Japan’s comparison. Japanese industry asked in June 2026 to ease the foreign price adjustment because of MFN.</p><a class="src" href="https://www.windrosecg.com/posts/japan-fy2026-reforms" target="_blank" rel="noopener">Windrose CG on the FY2026 reform; PharmaJapan, Jun 2026</a></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>Rules of thumb</h2>
+      <ol class="thumbs">
+        <li><span><b>Set high, visible prices first</b> in markets that pay early and that others reference: typically the US, Germany and the UK.</span></li>
+        <li><span><b>Launch referencing markets after their baskets are filled</b> with your best prices. Japan wants US, UK, French and (negotiated) German prices; France’s guarantee wants German and UK prices above Spain and Italy.</span></li>
+        <li><span><b>Hold back or shield low visible prices.</b> Confidential discounts keep the list price high; a later launch keeps a low price out of baskets while it matters most.</span></li>
+        <li><span><b>Lead with the indication that earns the highest price.</b> In most systems a later, broader indication lowers the price; it rarely raises it. Over a short horizon a much larger indication can still win on volume.</span></li>
+        <li><span><b>Weigh IA1 against IA2 market by market.</b> Survival-driven HTA bodies reward waiting; markets that pay from approval reward speed.</span></li>
+        <li><span><b>Model the US as part of the mesh.</b> With most-favoured-nation pricing, a low price abroad can now lower the US price too.</span></li>
+      </ol>
+    </section>
+
+    <section class="srcs" aria-label="Sources">
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.nber.org/papers/w9874" target="_blank" rel="noopener">Danzon, Wang, Wang: price regulation and launch delay (NBER w9874; Health Economics 2005)</a></li>
+        <li><a href="https://www.lse.ac.uk/business/consulting/assets/documents/the-impact-of-external-reference-pricing-within-and-across-countries.pdf" target="_blank" rel="noopener">LSE: the impact of external reference pricing within and across countries (2017)</a></li>
+        <li><a href="https://healtheconomicsreview.biomedcentral.com/articles/10.1186/s13561-018-0209-3" target="_blank" rel="noopener">Staab et al.: “market withdrawals” in Germany after AMNOG (2018)</a></li>
+        <li><a href="https://ideas.repec.org/a/spr/pharmo/v7y2023i4d10.1007_s41669-023-00406-1.html" target="_blank" rel="noopener">Mills and Kanavos: payer perspectives on multi-indication oncology products (2023)</a></li>
+        <li><a href="https://euperspectives.eu/2026/08/us-pricing-eu-assessment-push-new-drugs-out-of-europe-says-researcher/" target="_blank" rel="noopener">EU Perspectives: US pricing and EU assessment push new drugs out of Europe (Aug 2026)</a></li>
+        <li><a href="https://www.biospace.com/business/trumps-mfn-pricing-expected-to-delay-more-european-drug-launches" target="_blank" rel="noopener">BioSpace: MFN pricing expected to delay more European launches (Apr 2026)</a></li>
+        <li><a href="https://www.windrosecg.com/posts/japan-fy2026-reforms" target="_blank" rel="noopener">Windrose CG: Japan’s FY2026 drug pricing reform</a></li>
+        <li><a href="https://pj.jiho.jp/article/255613" target="_blank" rel="noopener">PharmaJapan: FPMAJ asks to ease foreign price adjustment (Jun 2026)</a></li>
+        <li><a href="https://www.efpia.eu/media/mnfdwzax/efpia-patients-wait-indicator-2025.pdf" target="_blank" rel="noopener">EFPIA Patients W.A.I.T. Indicator 2025</a></li>
+        <li>Market rules and clocks: the sourced Project 01 cards (US, EU, Germany, France, UK, Italy, Spain, Japan, Canada, Switzerland, Brazil) and the Reference pricing page.</li>
+      </ul>
+    </section>
+  </section>
+
+<!-- ==================== PART 2 ==================== -->
+  <section id="p2" role="tabpanel" aria-labelledby="t2" class="sec" hidden>
+    <section class="sec">
+      <div class="shead"><div class="sl"><h2>Launch sequence engine</h2><p><a class="btn p" href="#guide" data-go="t3">New here? Read how to use the engine →</a></p></div><div class="sr"><p>Enter what you know about the drug: how many patients it can treat, what it replaces, its PFS and OS results at each analysis, its safety and the price you have in mind. The engine tries every market at approval, at later months, on IA2 data or held back, chooses which indication to lead with, and keeps the plan worth the most over the horizon you pick. It explains each step, shows what would change each decision, and reruns the plan under 200 sets of varied assumptions to show how often each choice holds up.</p></div></div>
+    </section>
+    <div class="eng">
+      <div class="inp">
+        <fieldset class="ig"><legend>Start from an archetype</legend>
+          <div class="arch" id="arch"><button type="button" data-a="adc">PFS-driven, against chemotherapy</button><button type="button" data-a="io">Combination, mature OS</button><button type="button" data-a="rare">Rare, biomarker-selected</button><button type="button" id="archReset">Reset all</button></div>
+          <p class="dv" id="archNote"></p>
+        </fieldset>
+        <fieldset class="ig"><legend><span class="qn">1</span>Epidemiology</legend>
+          <label class="fld"><span>New eligible patients a year in the US, first indication</span><input type="number" id="iN" min="100" max="60000" step="100" inputmode="numeric"></label>
+          <div class="qp" data-for="iN" aria-label="Population presets"><button type="button" data-v="600">Rare · 600</button><button type="button" data-v="3000">Moderate · 3,000</button><button type="button" data-v="10500">Common · 10,500</button></div>
+          <label class="fld"><span>Scale other markets by 2022 cancer</span><select id="iBasis"><option value="deaths">deaths (closer to advanced disease)</option><option value="cases">new cases</option></select></label>
+          <p class="dv" id="dN"></p>
+        </fieldset>
+        <fieldset class="ig"><legend><span class="qn">2</span>Standard of care</legend>
+          <div class="seg" id="iSoc"><button type="button" data-v="generic">Generics<small>Well established, low cost</small></button><button type="button" data-v="brand">Branded drugs<small>Brand price; incumbent defends its share</small></button></div>
+          <label class="fld"><span>Annual cost of standard of care in the US ($k per patient)</span><input type="number" id="iC" min="1" max="500" step="1" inputmode="decimal"></label>
+        </fieldset>
+        <fieldset class="ig"><legend><span class="qn">3</span>Efficacy versus standard of care</legend>
+          <div class="two">
+            <label class="fld"><span>PFS hazard ratio</span><input type="number" id="iPfs" min="0.2" max="1.2" step="0.01" inputmode="decimal"></label>
+            <label class="fld"><span>Months from IA1 to IA2</span><input type="number" id="iT2" min="3" max="48" step="1" inputmode="numeric"></label>
+            <label class="fld"><span>OS hazard ratio at IA1</span><input type="number" id="iHr1" min="0.3" max="1.2" step="0.01" inputmode="decimal"></label>
+            <label class="fld"><span>Deaths at IA1</span><input type="number" id="iD1" min="10" max="3000" step="10" inputmode="numeric"></label>
+            <label class="fld"><span>Expected OS hazard ratio at IA2</span><input type="number" id="iHr2" min="0.3" max="1.2" step="0.01" inputmode="decimal"></label>
+            <label class="fld"><span>Deaths at IA2</span><input type="number" id="iD2" min="10" max="4000" step="10" inputmode="numeric"></label>
+          </div>
+          <p class="dv" id="dE"></p>
+        </fieldset>
+        <fieldset class="ig"><legend><span class="qn">4</span>Safety</legend>
+          <div class="seg seg3" id="iSaf"><button type="button" data-v="sup">Superior<small>Fewer or milder side effects</small></button><button type="button" data-v="sim">Similar<small>No meaningful difference</small></button><button type="button" data-v="worse">Worse<small>Harder to manage</small></button></div>
+        </fieldset>
+        <fieldset class="ig"><legend><span class="qn">5</span>Price</legend>
+          <label class="fld"><span>US list price per patient-year ($k)</span><input type="number" id="iP" min="10" max="900" step="5" inputmode="numeric"></label>
+          <div class="qp" data-for="iP" aria-label="Price presets"><button type="button" data-v="336">Premium · 336</button><button type="button" data-v="240">Brand-like · 240</button><button type="button" data-v="132">Between brand and generic · 132</button></div>
+          <p class="dv" id="dP"></p>
+        </fieldset>
+        <fieldset class="ig"><legend>Access rules</legend>
+          <label class="fld"><span>EU evidence after the joint clinical assessment</span><select id="iJca"><option value="fixed">Fixed at the JCA (IA1) for EU markets</option><option value="update">Can be updated nationally with IA2</option></select></label>
+          <label class="tog"><input type="checkbox" id="iRe"><span><b>Reassessment after launch.</b> Germany reassesses on IA2 data (a time-limited decision or new evidence); England funds immature OS through the Cancer Drugs Fund until re-appraisal.</span></label>
+          <label class="tog"><input type="checkbox" id="iMfn"><span><b>US most-favoured-nation pricing.</b> Half of US volume is priced at the lowest purchasing-power-adjusted price among the other launched markets.</span></label>
+          <label class="tog"><input type="checkbox" id="iSec"><span><b>A second, broader indication</b> follows 18 months after the first in each market, with three times the patients and three-quarters of the added benefit. The engine chooses which to lead with.</span></label>
+        </fieldset>
+        <fieldset class="ig"><legend>Horizon and costs</legend>
+          <div class="two">
+            <label class="fld"><span>Horizon</span><select id="iHz"><option value="5">5 years</option><option value="10">10 years</option></select></label>
+            <label class="fld"><span>Discount rate (% a year)</span><input type="number" id="iDisc" min="0" max="20" step="1" inputmode="numeric"></label>
+            <label class="fld"><span>Launch cost per market ($m)</span><input type="number" id="iLc" min="0" max="200" step="1" inputmode="numeric"></label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="res">
+        <div class="mode" role="group" aria-label="Choose a view">
+          <button type="button" data-mode="rec" aria-pressed="true">Recommended plan</button>
+          <button type="button" data-mode="own" aria-pressed="false">Build your own sequence</button>
+          <a class="guidelink" href="#guide" data-go="t3">How to use the engine →</a>
+        </div>
+        <div id="recView" class="view">
+          <div class="hero" aria-live="polite">
+            <div><span class="k3" id="totK">Recommended plan · five-year value</span><div class="tot" id="tot">–</div><div class="sub" id="totSub"></div><div class="busy" id="engBusy" hidden>Searching…</div></div>
+            <div class="cbox" id="cAll"></div>
+          </div>
+          <div class="toolbar"><button type="button" class="btn" id="btnSum">Copy summary</button><button type="button" class="btn" id="btnLink">Copy scenario link</button><button type="button" class="btn" id="btnPrint">Print</button><span class="note" id="shareMsg" role="status"></span><textarea id="shareOut" rows="6" hidden aria-label="Text to copy"></textarea></div>
+          <div class="box"><h3>Where to launch, and in what order</h3><p class="lead" id="headline"></p><p class="leadind" id="lead" hidden></p><div><button type="button" class="btn" id="toOwn">Try your own sequence against this →</button></div></div>
+          <div class="box"><h3>What would change the plan</h3><p class="q">Each input is moved on its own, with everything else fixed, to find where a market’s decision flips.</p><ul class="tips" id="tips"></ul></div>
+          <div class="box"><h3>Market by market: why</h3><ol class="seq" id="seq"></ol></div>
+          <div class="chart"><h3>Launch timeline</h3>
+            <div class="legend"><span><i style="background:var(--muted);height:2px"></i>Waiting after approval</span><span><i style="background:var(--navy-line)"></i>Partial access before funding</span><span><i style="background:var(--navy)"></i>Full funded access</span><span><i style="background:var(--ox);width:4px"></i>Second indication</span><span><i style="background:var(--gold);width:8px"></i>Reassessment</span><span><i style="background:var(--strip);border:1px solid var(--rule)"></i>Horizon</span></div>
+            <div class="scroll"><svg id="tl"></svg></div>
+          </div>
+          <div class="chart"><h3>Net sales by market</h3><svg id="bars"></svg></div>
+          <div class="box"><h3>What your inputs mean in each market</h3><div class="tbl"><table id="mt"></table></div><p class="q">Germany’s column shows the IQWiG-style category. Elsewhere the benefit score is each payer or HTA body’s weight on OS times the OS score and the OS credit for statistical maturity, plus the rest on the PFS score, plus a safety adjustment.</p></div>
+          <div class="box"><h3>What the mesh did to your prices</h3><ul class="log" id="log"></ul></div>
+        </div>
+        <div id="ownView" class="view" hidden>
+          <div class="hero" aria-live="polite">
+            <div><span class="k3">Your sequence · value</span><div class="tot" id="sbTot">–</div><div class="sub" id="sbSub"></div></div>
+            <div class="cbox" id="sbCmp"></div>
+          </div>
+          <div class="box"><h3>Build your sequence</h3>
+            <p class="q">Markets launch in the order listed. Each one launches no earlier than its approval (plus any wait you choose) and no earlier than the market above it, plus the months between launches. Move markets with the arrows, choose when each launches, or hold it out of the plan. Everything recalculates at once.</p>
+            <div class="sbp" id="sbPresets" aria-label="Start from"></div>
+            <div class="two sbset"><label class="fld"><span>Months between launches</span><select id="sbGap"><option value="0">0 (same month allowed)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label><label class="fld"><span>Lead indication</span><select id="sbFirst"><option value="A">A: later-line, biomarker-selected</option><option value="B">B: earlier-line, three times the patients</option></select></label></div>
+            <ol class="order sb" id="sbList"></ol>
+          </div>
+          <div class="box"><h3>Your sequence against the recommendation</h3><div class="tbl"><table id="sbT"></table></div></div>
+          <div class="chart"><h3>Your launch timeline</h3>
+            <div class="legend"><span><i style="background:var(--muted);height:2px"></i>Waiting after approval</span><span><i style="background:var(--navy-line)"></i>Partial access before funding</span><span><i style="background:var(--navy)"></i>Full funded access</span><span><i style="background:var(--ox);width:4px"></i>Second indication</span><span><i style="background:var(--gold);width:8px"></i>Reassessment</span></div>
+            <div class="scroll"><svg id="tlOwn"></svg></div>
+          </div>
+          <div class="box"><h3>What the mesh did to your prices</h3><ul class="log" id="logOwn"></ul></div>
+        </div>
+        <details class="how"><summary>Market assumptions (editable)</summary><div class="in">
+          <p>Change any market’s numbers, or leave a market out. Patient ratios come from 2022 cancer deaths and new cases (WCRF country tables); Brazil’s reach is private-plan members, about 53 million people (ANS, late 2025), roughly a quarter of the population. Price levels, approval months and funding delays are illustrative.</p>
+          <div class="tbl"><table id="mkt" class="mkt"></table></div>
+          <div><button type="button" class="btn" id="mktReset">Reset market assumptions</button></div>
+        </div></details>
+        <details class="how" id="val"><summary>Checks against what companies have done</summary><div class="in">
+          <p>Each check runs the engine on a profile and tests whether it reproduces a pattern documented in the Part 1 precedents. These are qualitative checks of direction, not a back-test against real launches.</p>
+          <div class="tbl"><table id="valT" class="valt"><thead><tr><th>Precedent and pattern</th><th>Profile</th><th>What the engine did</th><th>Result</th></tr></thead><tbody><tr><td colspan="4">Running…</td></tr></tbody></table></div>
+        </div></details>
+        <details class="how"><summary>Test yourself</summary><div class="in"><ol class="quiz" id="quiz"></ol></div></details>
+        <details class="how"><summary>How the engine works, and what it leaves out</summary><div class="in">
+          <p><b>Patients and uptake.</b> Other markets’ patients scale from the US figure by each country’s 2022 cancer deaths (or new cases) relative to the US, times the share the launch can reach. Peak share of eligible patients is 5% plus 30% times the average of the PFS and OS scores, times 1.25 for superior safety or 0.7 for worse, times 0.85 against a branded incumbent. Uptake peaks two years after launch; patients stay on treatment nine months. The second indication peaks at 60% of the first’s share.</p>
+          <p><b>Germany.</b> The OS hazard ratio’s 95% confidence interval comes from the number of deaths (standard error of log HR ≈ 2/√deaths for 1:1 randomisation). IQWiG’s thresholds for all-cause mortality set the category: upper limit below 0.85 major, below 0.95 considerable, below 1.00 minor. Superior safety moves the rating up one step and worse safety down one. PFS alone earns no German benefit. A minor or unproven benefit caps the price at the comparator’s cost, except under orphan-type rules, where added benefit is deemed proven.</p>
+          <p><b>Other markets.</b> The PFS score is (1 − HR) ÷ 0.45 and the OS score (1 − HR) ÷ 0.30, both capped at 1.25. OS counts in full once it is statistically convincing (log HR at least 2.5 standard errors from zero) and not at all below one standard error. Each market weights OS differently (US 0.35, Japan and Brazil 0.5, Korea 0.55, UK, Canada, Switzerland and Australia 0.6, Italy, Spain and Belgium 0.65, Netherlands 0.75, France 0.8). Safety adds 0.25 or subtracts 0.3.</p>
+          <p><b>Which data each market sees.</b> A market sees IA2 data if it launches at least two months after IA2 reads out. When EU evidence is fixed at the joint clinical assessment, EU markets (Germany, France, Italy, Spain, the Netherlands, Belgium) are assessed on IA1 data whenever they launch, because the JCA report is completed within 30 days of authorisation and national bodies must give it due consideration. With reassessment on, Germany reassesses on IA2 data at the later of 12 months after launch and IA2 plus two months, with the new price six months later; England funds immature OS through the Cancer Drugs Fund at a price halfway between IA1 and IA2 value until re-appraisal six months after IA2 data are ready.</p>
+          <p><b>Prices.</b> Each market has a brand price level per patient-year (US $240k, Switzerland $150k, Germany $140k, Japan and France $125k, Canada and the Netherlands $120k, UK and Belgium $115k, Australia $110k, Italy $80k, Spain and Korea $70k, Brazil $55k). The comparator costs your standard-of-care figure scaled to each market. A value-based market pays the comparator’s cost plus the benefit score times a premium of one brand level over a cheap comparator, or half a brand level over a branded one, and never more than your ask. Orphan-type populations (under 1,500 US patients) earn 1.5 times the premium. In the US, a list price above value cuts uptake by (value ÷ price)<sup>1.5</sup>.</p>
+          <p><b>Reference rules</b> (from the Project 01 cards unless noted). Japan: within 25% of the average of US, UK, French and post-AMNOG German prices; an upward move needs at least two prices and is capped at twice Japan’s own price (MHLW). France: ASMR I–III earns early access and the guarantee of not falling below the lowest of Germany, Spain, Italy and the UK; otherwise no liste en sus. Canada: list capped at the highest PMPRB11 price set (nine of the eleven are in the engine). Switzerland: half its value-based price, half the average of its basket (Belgium, France, Germany, the Netherlands and the UK of its nine; Interpharma). Brazil: proven gain prices up to the lowest of its references, otherwise the comparator’s cost. Netherlands: maximum price is the average of Belgium, France and the UK (Norway, the fourth, is not in the engine; Taylor Wessing), and the lock holds drugs costing €20M a year, or €10M with €50,000 per patient, until a price is agreed. Korea: small-population cancer drugs listed in at least three A7 countries skip economic evaluation and price at the lowest A7 price (Frontiers in Pharmacology, 2024). The UK, Italy, Spain, Canada, Australia, Korea, the Netherlands and Belgium keep net prices confidential, so others see the list.</p>
+          <p><b>The search.</b> For each market the engine tries launching at approval; three, six, nine, 12, 18 or 24 months later; when IA2 data are ready; one month after each other market’s price is set; or not at all. It also tries leaving out the second indication in each market whose price would fall, and leading with either indication (leading with B moves every approval six months later). It changes one choice at a time, keeps any change worth more than 0.2% of value, and repeats until nothing improves.</p>
+          <p><b>Robustness.</b> The engine redraws its assumptions 200 times: patients overall (±20%) and by market (±15%), peak uptake (±20%), brand price levels (±12%), the value premium (±15%), funding delays (±30%), each market’s OS weight (±0.1), the US uptake penalty (exponent 1.2 to 1.8), and the IA2 hazard ratio from its predictive distribution given IA1 (log HR variance 4/d₁ − 4/d₂). Each decision is compared with its best alternative of another kind. This shows how sensitive the plan is to the model’s assumptions; it is not a probability that the plan is right.</p>
+          <p><b>What it leaves out.</b> France can also re-evaluate ASMR on new data. Competitors, loss of exclusivity, supply, launch-team capacity and patient need are not modelled. Price levels, approval months and funding delays are illustrative; real decisions need each market’s epidemiology, comparator prices and payer research.</p>
+        </div></details>
+      </div>
+    </div>
+    <p class="disc">Drug X and every number in Part 2 are hypothetical. The access rules follow the sourced Project 01 cards in simplified form. Personal project: not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist; check the cited sources before relying on anything here. Not medical, regulatory, reimbursement or investment advice. <a href="index.html#about">Full disclaimer on the portfolio home page</a>.</p>
+  </section>
+  <!-- ==================== GUIDE ==================== -->
+  <section id="p3" role="tabpanel" aria-labelledby="t3" class="guide" hidden>
+    <div class="gwrap">
+      <div class="ghead">
+      <p class="eyebrow"><a href="index.html">Portfolio</a> · <b>Project 05</b> · Guide</p>
+      <h1>How to use the launch engine</h1>
+      <p class="lede">The launch engine turns what you know about a cancer drug into a recommended launch sequence across 14 markets. It explains every step, shows which inputs would change the plan, and lets you build and test your own sequence. This guide takes about ten minutes to read.</p>
+      <p><a class="btn p" href="#engine" data-go="t2">Open the engine →</a></p>
+    </div>
+      <nav class="gtoc" aria-label="Guide sections">
+        <span class="k3">On this page</span>
+        <ol>
+          <li><button type="button" data-to="g-what">What the engine does</button></li>
+          <li><button type="button" data-to="g-quick">Quick start</button></li>
+          <li><button type="button" data-to="g-drug">Describe the drug</button></li>
+          <li><button type="button" data-to="g-rules">Set the access rules</button></li>
+          <li><button type="button" data-to="g-read">Read the recommendation</button></li>
+          <li><button type="button" data-to="g-own">Build your own sequence</button></li>
+          <li><button type="button" data-to="g-mkt">Market assumptions</button></li>
+          <li><button type="button" data-to="g-share">Share, print and check</button></li>
+          <li><button type="button" data-to="g-try">Four things to try</button></li>
+          <li><button type="button" data-to="g-limits">What it is, and is not</button></li>
+          <li><button type="button" data-to="g-terms">Terms used</button></li>
+        </ol>
+      </nav>
+      <div class="gbody">
+        <section id="g-what">
+          <h2>What the engine does</h2>
+          <p>Once a cancer drug has a price in one country, other countries use that price to cap, floor or negotiate their own. So the order and timing of launches decide not only when patients get the drug, but what it earns everywhere. The engine models this “access mesh” for 14 markets: the US, Germany, Japan, the UK, France, Italy, Spain, Canada, Switzerland, Brazil, Australia, South Korea, the Netherlands and Belgium. Part 1 of the project explains the rules; the engine applies them to a drug you describe.</p>
+          <p>For each market the engine tries launching at approval, at later months, once the second interim analysis (IA2) is available, or not at all. It also decides which of two indications to lead with. It keeps the combination worth the most over your chosen horizon, net of launch costs. It then reruns that plan 200 times with its assumptions varied, to show how often each decision holds up.</p>
+        </section>
+
+        <section id="g-quick">
+          <h2>Quick start</h2>
+          <ol class="gsteps">
+            <li><b>Pick an archetype or enter your drug.</b> In the left panel, choose one of the three archetypes to load a ready-made profile, or type your own numbers into sections 1 to 5. The engine recalculates as you type.</li>
+            <li><b>Read the recommendation.</b> At the top right you see the plan’s value and robustness, then where to launch and in what order, what would change the plan, and a card for every market explaining its timing.</li>
+            <li><b>Try your own sequence.</b> Switch to “Build your own sequence” at the top of the results, reorder markets, set when each launches, and see how your plan compares with the recommendation.</li>
+          </ol>
+        </section>
+
+        <section id="g-drug">
+          <h2>Step 1: Describe the drug</h2>
+          <h3>Epidemiology</h3>
+          <p>Enter the number of new patients a year in the US who would be eligible for the first indication. The engine scales every other market from this figure using each country’s 2022 cancer deaths relative to the US, which tracks advanced disease more closely than incidence. You can switch to new cases instead. The note under the field shows the resulting patient numbers per market. Fewer than 1,500 US patients switches on orphan-type rules (German added benefit deemed proven, Japanese priority review, Korea’s evaluation waiver and a higher accepted price per patient). Five thousand or more switches on high-budget-impact rules (Japan’s cost-effectiveness review and harder net-price bargaining).</p>
+          <h3>Standard of care</h3>
+          <p>Choose whether the drug replaces cheap generics or a branded drug, and adjust the annual US cost of that comparator. The comparator matters twice. Its cost is the base of every value-based price, and in Germany and Brazil a drug without a convincing benefit is capped at the comparator’s cost. Against a branded incumbent, uptake is also lower because the incumbent defends its share.</p>
+          <h3>Efficacy</h3>
+          <p>Enter the PFS hazard ratio, then the OS hazard ratio and the number of deaths at IA1 and at IA2, and the months between the two analyses. The number of deaths is what makes OS convincing: the engine estimates the 95% confidence interval from it and applies IQWiG’s thresholds for all-cause mortality (upper limit below 0.85 for a major benefit, below 0.95 for considerable, below 1.00 for minor). The note under the fields shows the interval and the German category at each analysis. For example, a hazard ratio of 0.75 with 180 deaths has an upper limit just above 1.00, so no mortality benefit is proven; with 360 deaths the upper limit falls to about 0.92, which is considerable. Other markets give OS full weight once it is statistically convincing and weigh PFS more heavily than Germany does.</p>
+          <h3>Safety</h3>
+          <p>Superior safety raises Germany’s rating by one step, lifts the benefit score elsewhere and increases uptake. Worse safety does the opposite.</p>
+          <h3>Price</h3>
+          <p>Enter the US list price per patient-year. Every other market asks the same position relative to its own brand price level, shown under the field. Value-based markets pay the lower of your ask and what the drug is worth to them, so a price above value mainly slows negotiations there. In the US, a price above value triggers utilisation management that cuts uptake faster than the price rises.</p>
+        </section>
+
+        <section id="g-rules">
+          <h2>Step 2: Set the access rules and horizon</h2>
+          <p><b>EU evidence after the joint clinical assessment.</b> The default, “Fixed at the JCA”, assesses EU markets on IA1 data whenever they launch, because the JCA report is completed within 30 days of authorisation and national bodies must give it due consideration. Choose “Can be updated nationally” to let a later EU launch use IA2 data, as companies could before the JCA.</p>
+          <p><b>Reassessment after launch.</b> With this on, Germany reassesses on IA2 data and renegotiates the price, and England funds immature OS through the Cancer Drugs Fund until re-appraisal. This makes launching early on immature data less costly.</p>
+          <p><b>US most-favoured-nation pricing.</b> With this on, half of US volume is priced at the lowest purchasing-power-adjusted price among the other launched markets, so a low price anywhere can pull the US price down.</p>
+          <p><b>A second, broader indication.</b> With this on, a second indication with three times the patients follows 18 months after the first in each market, and the engine chooses which to lead with. Leading with the broader indication (B) moves every approval six months later.</p>
+          <p><b>Horizon and costs.</b> Choose a five- or ten-year horizon, an annual discount rate and a fixed launch cost per market. The launch cost is what makes small, low-price markets drop out; the longer horizon shows effects, such as a reassessed price, that a short window hides.</p>
+        </section>
+
+        <section id="g-read">
+          <h2>Step 3: Read the recommendation</h2>
+          <p><b>The headline.</b> The dark panel shows the plan’s value (net sales less launch costs) and how it compares with launching everywhere at approval. The robustness figure is how often the plan beats launching everywhere at approval across 200 sets of varied assumptions, or, if the plan is to launch everywhere at approval, how well its weakest material decision holds up. “Searching…” appears while the engine recalculates.</p>
+          <p><b>Where to launch, and in what order.</b> One sentence lists the launches by month and names any market that waits for IA2 data or is held. The blue panel says which indication to lead with and how much the other choice would earn.</p>
+          <p><b>What would change the plan.</b> For each decision that matters, the engine moves one input at a time (deaths at IA1, the OS hazard ratio, the months to IA2 and the US price) and reports where the decision flips. These tipping points are often the most useful output: they tell you which evidence or pricing assumption a launch decision really depends on.</p>
+          <p><b>Market by market: why.</b> Each card gives the market’s timing, its net sales, its rating and price after the access rules, why the engine chose that timing over the alternatives, and how its price helps or hurts other markets. The pill on the right shows robustness: the share of the 200 draws in which the chosen timing beats its best alternative of another kind (launching at approval against waiting, or launching against holding). “Close call” means the two choices are worth almost the same, so either is reasonable.</p>
+          <p><b>Charts and tables.</b> The timeline shows when each market launches, when funding is full (navy), partial access before that (light blue), the second indication (oxblood tick) and any reassessment (gold marker). The dashed line marks when IA2 data are ready. The market table lists patients, approval and launch months, the data each market sees, its rating and its prices. The price log shows, month by month, what each rule did to each price.</p>
+        </section>
+
+        <section id="g-own">
+          <h2>Step 4: Build your own sequence</h2>
+          <p>Switch to “Build your own sequence” at the top of the results, or use the button under the recommendation. The builder starts from the recommended plan, so the two values match until you change something.</p>
+          <p><b>Order.</b> Markets launch in the order listed. Use the arrows to move a market earlier or later. A market can never launch before the one above it, so moving a market up can pull it earlier, and moving it down can push it later; the note under its name says when that happens.</p>
+          <p><b>Timing.</b> For each market, choose to launch at approval, three to 24 months later, or on IA2 data. “Months between launches” spaces the launches out, as a launch team with limited capacity would.</p>
+          <p><b>Hold.</b> Hold keeps a market out of the plan for the whole horizon. This is how you test an opt-out, such as keeping a low price out of other countries’ baskets.</p>
+          <p><b>Starting points.</b> The buttons at the top load the recommendation, everyone at approval, price setters first (US, UK, Germany, Japan, France, then the rest, two months apart) or the US then low-price markets first. Each button shows that sequence’s value, so you can compare them before you start.</p>
+          <p><b>Reading the comparison.</b> The dark panel shows your value and the difference from the recommendation. The table shows, market by market, your launch month against the recommended one, both prices, and the change in value. Your own timeline and price log show what the rules did to your sequence. Occasionally a hand-built plan beats the recommendation by a little: the search changes one choice at a time and ignores gains under 0.2%.</p>
+        </section>
+
+        <section id="g-mkt">
+          <h2>Step 5: Change the market assumptions</h2>
+          <p>Open “Market assumptions (editable)” below the results to change any market’s patient ratio, the share of patients the launch can reach, its brand price level, its approval month or its funding delay, or to leave a market out altogether. Patient ratios come from 2022 cancer deaths and new cases; Brazil’s reach is limited to private-plan members, about a quarter of the population. Price levels, approval months and funding delays are illustrative, so this is where to put your own numbers. “Reset all” in the archetype box restores every default.</p>
+        </section>
+
+        <section id="g-share">
+          <h2>Share, print and check</h2>
+          <p><b>Copy summary</b> copies a plain-text summary of the profile, settings, value, sequence and tipping points, ready to paste into an email or slide. <b>Copy scenario link</b> copies a link that reopens the engine with the same inputs and market assumptions; it works on the published website. <b>Print</b> prints the recommendation without the input panel.</p>
+          <p><b>Checks against what companies have done</b> runs the engine on set profiles and tests whether it reproduces five patterns documented in Part 1, such as companies leaving Germany when no added benefit is proven. These are checks of direction, not a back-test against real launches. <b>Test yourself</b> has five questions on the rules behind the engine.</p>
+        </section>
+
+        <section id="g-try">
+          <h2>Four things to try</h2>
+          <h3>1. Watch reassessment do the work</h3>
+          <p>With the default inputs, the engine launches everywhere at approval. Open Germany’s card: on IA1 data no mortality benefit is proven, so after six months at the free price Germany pays only the comparator’s cost, until reassessment on IA2 data lifts the price. Now switch “EU evidence” to “Can be updated nationally”: France, Italy, Spain and the Netherlands start waiting for IA2 data instead. Switch reassessment off, and Germany starts waiting too.</p>
+          <h3>2. Find what Germany’s decision depends on</h3>
+          <p>Load the PFS-driven archetype. Germany now waits a few months after approval, and “What would change the plan” shows the range of OS hazard ratios over which waiting pays. Change the deaths at IA1 or the OS hazard ratio and watch the decision flip.</p>
+          <p>The flip points show which evidence the German decision depends on.</p>
+          <h3>3. Turn on most-favoured-nation pricing</h3>
+          <p>Go back to the default inputs and switch on US most-favoured-nation pricing. Germany now waits, Brazil becomes a marginal launch, and the tipping points show when holding Brazil would pay. This is the mechanism behind the drop in EU launches reported in 2026.</p>
+          <h3>4. Beat, or fail to beat, the engine</h3>
+          <p>Switch to “Build your own sequence”, start from “US, then low prices first”, and see how much it costs against the recommendation. Then try holding Germany, or moving Japan after Germany, and read the price log to see which rule moved which price.</p>
+        </section>
+
+        <section id="g-limits">
+          <h2>What the engine is, and is not</h2>
+          <p>The engine is a teaching and thinking tool. Its rules follow the sourced Project 01 cards in simplified form, and its patient ratios and several reference rules are sourced, but its price levels, uptake, approval months and funding delays are illustrative assumptions. Robustness shows how sensitive a decision is to those assumptions; it is not a probability that the plan is right in the real world. The engine does not model competitors, loss of exclusivity, supply, launch-team capacity beyond the spacing you choose, patient need or France’s re-evaluation of ASMR. A real launch decision needs each market’s epidemiology, comparator prices and payer research.</p>
+        </section>
+
+        <section id="g-terms">
+          <h2>Terms used</h2>
+          <dl class="gterms">
+            <dt>IA1, IA2</dt><dd>First and second interim analyses of the Phase 3 trial. IA2 has more deaths, so a more precise OS estimate.</dd>
+            <dt>Hazard ratio (HR)</dt><dd>The relative rate of progression (PFS) or death (OS) on the new drug against the comparator; below 1 favours the drug.</dd>
+            <dt>95% confidence interval</dt><dd>The range of plausible hazard ratios; its upper limit sets the IQWiG category.</dd>
+            <dt>JCA</dt><dd>EU joint clinical assessment under the HTA Regulation, mandatory for new cancer medicines filed since January 2025.</dd>
+            <dt>AMNOG, G-BA</dt><dd>Germany’s benefit assessment and price negotiation; the Federal Joint Committee rates added benefit.</dd>
+            <dt>ASMR</dt><dd>France’s rating of added clinical benefit, I (major) to V (none); I–III unlocks the European price guarantee.</dd>
+            <dt>Cancer Drugs Fund</dt><dd>England’s managed-access route for cancer drugs with immature data, followed by re-appraisal.</dd>
+            <dt>PMPRB11</dt><dd>The 11 countries whose highest price caps Canada’s patented-drug price.</dd>
+            <dt>CMED</dt><dd>Brazil’s drug price regulator; proven gain prices up to the lowest of 14 reference countries.</dd>
+            <dt>A7</dt><dd>Korea’s reference countries: the US, UK, Germany, France, Italy, Switzerland and Japan.</dd>
+            <dt>The lock</dt><dd>The Netherlands’ holding procedure for high-budget drugs until a price is agreed.</dd>
+            <dt>MFN</dt><dd>US most-favoured-nation pricing, which links US prices to the lowest prices paid in other wealthy countries.</dd>
+            <dt>Robustness</dt><dd>How often a decision beats its best alternative across 200 sets of varied assumptions.</dd>
+          </dl>
+          <p><a class="btn p" href="#engine" data-go="t2">Open the engine →</a></p>
+        </section>
+      </div>
+      <aside class="grail" aria-label="Quick reference">
+        <span class="k3">Quick reference</span>
+        <h3>The five inputs</h3>
+        <ol><li><b>Epidemiology:</b> US eligible patients a year; other markets scale from it.</li><li><b>Standard of care:</b> generics or branded, and its US cost.</li><li><b>Efficacy:</b> PFS hazard ratio; OS hazard ratio and deaths at IA1 and IA2; months between them.</li><li><b>Safety:</b> superior, similar or worse.</li><li><b>Price:</b> US list price per patient-year.</li></ol>
+        <h3>The four switches</h3>
+        <ul><li>EU evidence fixed at the JCA, or updatable</li><li>Reassessment after launch</li><li>US most-favoured-nation pricing</li><li>A second, broader indication</li></ul>
+        <h3>Two views</h3>
+        <p>“Recommended plan” or “Build your own sequence”, at the top of the results.</p>
+        <a class="btn p" href="#engine" data-go="t2">Open the engine →</a>
+      </aside>
+    </div>
+    <p class="disc">Drug X and every number in the engine are hypothetical. Personal project: not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist; check the cited sources before relying on anything here. Not medical, regulatory, reimbursement or investment advice. <a href="index.html#about">Full disclaimer on the portfolio home page</a>.</p>
+  </section>
+</main>
+
+<div class="tip" id="tip" hidden></div>
+
+<script>
+/* ---------------- Tabs ---------------- */
+const tabs = [['t1', 'p1'], ['t2', 'p2'], ['t3', 'p3']];
+function showTab(id) { tabs.forEach(([t, p]) => { const on = t === id; document.getElementById(t).setAttribute('aria-selected', String(on)); document.getElementById(p).hidden = !on; }); document.querySelector('.head').hidden = id === 't3'; document.querySelectorAll('.pnav [data-nav]').forEach(b => { if (b.dataset.nav === id) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); }); if (id === 't2') run(); if (id === 't3') { try { history.replaceState(null, '', '#guide'); } catch (e) { /* ignore */ } } window.scrollTo({ top: 0 }); }
+document.addEventListener('click', e => { const a = e.target.closest('[data-go]'); if (!a) return; e.preventDefault(); showTab(a.dataset.go); });
+tabs.forEach(([t]) => document.getElementById(t).addEventListener('click', () => showTab(t)));
+document.querySelector('.pnav [data-nav="t1"]').setAttribute('aria-current', 'page');
+
+/* ---------------- Part 1: mesh ---------------- */
+const NM = { us: 'United States', de: 'Germany', jp: 'Japan', uk: 'United Kingdom', fr: 'France', it: 'Italy', es: 'Spain', ca: 'Canada', ch: 'Switzerland', br: 'Brazil', au: 'Australia', kr: 'South Korea', nl: 'Netherlands', be: 'Belgium' };
+const MESH = {
+  jp: { to: ['us', 'uk', 'de', 'fr'], rule: 'New-drug prices more than 25% above or below the average of US, UK, German and French prices are adjusted. Since FY2026, only Germany’s post-AMNOG negotiated price counts.' },
+  fr: { to: ['de', 'es', 'it', 'uk'], rule: 'With ASMR I–III, the European price guarantee keeps the French price no lower than the lowest of Germany, Spain, Italy and the UK.' },
+  de: { to: ['fr', 'it', 'es', 'uk'], rule: 'AMNOG negotiations weigh the benefit rating, the comparator’s cost and actual prices in other European countries.' },
+  ca: { to: ['fr', 'de', 'it', 'jp', 'es', 'uk', 'au', 'be', 'nl'], rule: 'PMPRB: the patented price may not exceed the highest of 11 countries (PMPRB11, since Jan 2026); nine of them are shown here.' },
+  ch: { to: ['fr', 'de', 'uk', 'be', 'nl'], rule: 'Nine-country price comparison (Austria, Belgium, Denmark, Finland, France, Germany, the Netherlands, Sweden, the UK) plus a therapeutic cross-comparison; five of the nine are shown here.' },
+  br: { to: ['us', 'de', 'fr', 'it', 'es', 'uk', 'ca', 'jp', 'au'], rule: 'CMED: a drug with proven therapeutic gain may price up to the lowest of 14 reference countries; nine are shown here.' },
+  nl: { to: ['be', 'fr', 'uk'], rule: 'Medicines Prices Act: the maximum price is the average of Belgium, France, Norway and the UK (since April 2020). Drugs with high budget impact also wait in the lock until a price is agreed.' },
+  kr: { to: ['us', 'uk', 'de', 'fr', 'it', 'ch', 'jp'], rule: 'Small-population cancer and rare-disease drugs with no alternative can skip economic evaluation if listed in at least three A7 countries; the lowest A7 price is the benchmark.' },
+  us: { to: ['de', 'fr', 'uk', 'it', 'jp', 'ca', 'ch', 'es', 'au', 'kr', 'nl', 'be'], mfn: true, rule: 'Most-favoured-nation pricing (May 2025 order and company deals) links US prices to the lowest price paid in other wealthy countries.' },
+  uk: { to: [], rule: 'Sets its own price through NICE and a confidential PAS; does not reference other countries’ prices in this way.' },
+  it: { to: [], rule: 'Sets its price in AIFA’s CSE negotiation with confidential discounts; it is referenced by many markets.' },
+  es: { to: [], rule: 'Sets its price in Ministry negotiation with confidential terms; its visible price is referenced by many markets.' },
+  au: { to: [], rule: 'PBAC recommends against a comparator with no fixed ICER threshold; price and deed terms are confidential. Canada and Brazil include it in their baskets.' },
+  be: { to: [], rule: 'The CRM rates added value; FPS Economy sets the maximum price, and confidential MEA conventions are routine for oncology. The Netherlands, Switzerland and Canada include it in their baskets.' }
+};
+const MK = Object.keys(NM);
+const inbound = (k) => MK.filter(o => MESH[o].to.includes(k));
+let meshSel = 'jp';
+function drawMesh() {
+  const svg = document.getElementById('meshSvg'); const cx = 320, cy = 250, R = 200; const rOf = (k) => 20 + 1.4 * inbound(k).length;
+  const pos = {}; MK.forEach((k, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / MK.length; pos[k] = [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+  let defs = `<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>`;
+  let edges = '';
+  MK.forEach(a => MESH[a].to.forEach(b => {
+    const [x1, y1] = pos[a], [x2, y2] = pos[b]; const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy); const ux = dx / L, uy = dy / L;
+    const sx = x1 + ux * (rOf(a) + 2), sy = y1 + uy * (rOf(a) + 2), ex = x2 - ux * (rOf(b) + 5), ey = y2 - uy * (rOf(b) + 5);
+    const mx = (sx + ex) / 2 - uy * 18, my = (sy + ey) / 2 + ux * 18;
+    let cls = 'ed' + (MESH[a].mfn ? ' mfn' : '');
+    if (meshSel) cls += a === meshSel ? ' out' : (b === meshSel ? ' in' : ' dim');
+    edges += `<path class="${cls}" d="M${sx.toFixed(1)} ${sy.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}" marker-end="url(#ah)"/>`;
+  }));
+  const nodes = MK.map(k => { const [x, y] = pos[k]; let cls = 'nd'; if (k === meshSel) cls += ' on'; else if (meshSel && MESH[meshSel].to.includes(k)) cls += ' out'; else if (meshSel && MESH[k].to.includes(meshSel)) cls += ' in';
+    const n = inbound(k).length;
+    return `<g class="${cls}" data-k="${k}" tabindex="0" role="button" aria-label="${NM[k]}: its price is used by ${n} other markets"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rOf(k)}"/><text x="${x.toFixed(1)}" y="${(y - 3).toFixed(1)}">${k.toUpperCase()}</text><text class="deg" x="${x.toFixed(1)}" y="${(y + 11).toFixed(1)}">${n}</text></g>`; }).join('');
+  svg.innerHTML = defs + edges + nodes;
+  const k = meshSel, out = MESH[k].to, inn = inbound(k);
+  document.getElementById('meshPanel').innerHTML = `<span class="k3">Selected market</span><h3>${NM[k]}</h3><p>${MESH[k].rule}</p>
+    <div><p class="note" style="margin-bottom:4px">Looks at ${out.length ? '' : '(none shown here)'}</p><div class="mrow">${out.map(o => `<span class="o">${NM[o]}</span>`).join('')}</div></div>
+    <div><p class="note" style="margin-bottom:4px">Looked at by ${inn.length ? '' : '(none shown here)'}</p><div class="mrow">${inn.map(o => `<span class="i">${NM[o]}</span>`).join('')}</div></div>
+    <div class="mrank"><p class="note">How many of the other markets use each market’s price (the number in each circle; bigger circles are used more)</p><div class="mrl">${MK.map(m => [m, inbound(m).length]).sort((a, b) => b[1] - a[1] || NM[a[0]].localeCompare(NM[b[0]])).map(([m, n], i, arr) => `<button type="button" class="mr${m === k ? ' on' : ''}" data-m="${m}"><span>${NM[m]}</span><i><em style="width:${(100 * n / arr[0][1]).toFixed(0)}%"></em></i><b>${n}</b></button>`).join('')}</div></div>`;
+}
+document.getElementById('meshSvg').addEventListener('click', e => { const g = e.target.closest('.nd'); if (g) { meshSel = g.dataset.k; drawMesh(); } });
+document.getElementById('meshPanel').addEventListener('click', e => { const b = e.target.closest('.mr'); if (b) { meshSel = b.dataset.m; drawMesh(); } });
+document.getElementById('meshSvg').addEventListener('keydown', e => { const g = e.target.closest('.nd'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); meshSel = g.dataset.k; drawMesh(); document.querySelector(`.nd[data-k="${meshSel}"]`)?.focus(); } });
+drawMesh();
+
+/* ---------------- Part 2: launch engine, market assumptions ---------------- */
+// rd: patients relative to the US scaled by 2022 cancer deaths (excluding non-melanoma skin cancer); rc: by 2022 new cases.
+// Both from WCRF's country tables (2022 estimates). reach: share of those patients the launch can reach (Brazil: private plans).
+// b: brand price level ($k per patient-year), lag: months from launch to full funding, pre: access share before funding,
+// w: weight the payer or HTA body puts on OS (the rest on PFS). Unless a source is named in the method notes, values are illustrative.
+const MKT0 = {
+  us: { appr: 8, lag: 0, pre: 1, rd: 1, rc: 1, reach: 1, b: 240, grp: 'free', net: .75, ppp: 1, w: .35 },
+  de: { appr: 15, lag: 0, pre: 1, rd: .419, rc: .255, reach: 1, b: 140, grp: 'weighted', net: 1, ppp: .83, w: .85, eu: 1 },
+  jp: { appr: 14, lag: 2, pre: 0, rd: .707, rc: .422, reach: 1, b: 125, grp: 'expansion', net: 1, ppp: .65, w: .5 },
+  uk: { appr: 10, lag: 3, pre: 0, rd: .300, rc: .191, reach: 1, b: 115, grp: 'indication', net: 1, ppp: .78, w: .6, conf: 1 },
+  fr: { appr: 15, lag: 15, pre: .6, rd: .315, rc: .203, reach: 1, b: 125, grp: 'weighted', net: 1, ppp: .8, w: .8, eu: 1 },
+  it: { appr: 15, lag: 9, pre: .1, rd: .320, rc: .183, reach: 1, b: 80, grp: 'discount', net: .9, ppp: .7, w: .65, eu: 1, conf: 1 },
+  es: { appr: 15, lag: 14, pre: .5, rd: .191, rc: .117, reach: 1, b: 70, grp: 'weighted', net: .9, ppp: .64, w: .65, eu: 1, conf: 1 },
+  ca: { appr: 10, lag: 18, pre: .15, rd: .166, rc: .123, reach: 1, b: 120, grp: 'weighted', net: .95, ppp: .85, w: .6, conf: 1 },
+  ch: { appr: 12, lag: 4, pre: .3, rd: .0321, rc: .0245, reach: 1, b: 150, grp: 'indication', net: 1, ppp: 1, w: .6 },
+  br: { appr: 20, lag: 15, pre: .25, rd: .459, rc: .264, reach: .25, b: 55, grp: 'free', net: 1, ppp: .5, w: .5 },
+  au: { appr: 12, lag: 12, pre: .1, rd: .0851, rc: .0892, reach: 1, b: 110, grp: 'weighted', net: 1, ppp: .85, w: .6, conf: 1 },
+  kr: { appr: 16, lag: 8, pre: .1, rd: .162, rc: .0999, reach: 1, b: 70, grp: 'weighted', net: 1, ppp: .7, w: .55, conf: 1 },
+  nl: { appr: 15, lag: 12, pre: 0, rd: .0826, rc: .0556, reach: 1, b: 120, grp: 'weighted', net: 1, ppp: .9, w: .75, eu: 1, conf: 1 },
+  be: { appr: 15, lag: 6, pre: .2, rd: .0480, rc: .0341, reach: 1, b: 115, grp: 'weighted', net: 1, ppp: .85, w: .65, eu: 1, conf: 1 }
+};
+let MKT = JSON.parse(JSON.stringify(MKT0));
+const EK = () => MK.filter(k => MKT[k].on !== false);
+// Reference baskets (only the markets in this engine).
+const BASKET = { jp: ['us', 'uk', 'fr', 'de'], fr: ['de', 'es', 'it', 'uk'], de: ['fr', 'it', 'es', 'uk'], ca: ['fr', 'de', 'it', 'jp', 'es', 'uk', 'au', 'be', 'nl'], ch: ['fr', 'de', 'uk', 'be', 'nl'], br: ['us', 'de', 'fr', 'it', 'es', 'uk', 'ca', 'jp', 'au'], nl: ['be', 'fr', 'uk'], kr: ['us', 'uk', 'de', 'fr', 'it', 'ch', 'jp'] };
+const NEGO = ['fr', 'it', 'es', 'ca', 'ch', 'br', 'au', 'kr', 'nl', 'be'];
+const W0 = 8, SECOND = 18, DUR = .75, RAMP = 24, MFN_SHARE = .5, PREP = 2, ORPHAN_N = 1500, HIGHBI_N = 5000, USD_EUR = 1.08;
+const fmt = (v) => (v < 0 ? '−' : '') + (Math.abs(v) >= 1e9 ? '$' + (Math.abs(v) / 1e9).toFixed(2) + 'bn' : '$' + Math.round(Math.abs(v) / 1e6) + 'm');
+const fk = (v) => '$' + (v < 10 ? v.toFixed(1) : Math.round(v)) + 'k';
+const mean = (a) => a.reduce((x, y) => x + y, 0) / a.length;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const E = (o, k, d) => (o && o[k] != null ? o[k] : d);
+const DE_CAT = ['no added benefit proven', 'minor', 'considerable', 'major'];
+const W1of = (I) => W0 + 12 * I.horizon;
+
+/* ---------------- Part 2: launch engine, evidence ---------------- */
+// IQWiG: extent of added benefit for all-cause mortality from the upper 95% confidence limit of the hazard ratio
+// (major < 0.85, considerable < 0.95, minor < 1.00). Standard error of log HR ≈ 2/√deaths (1:1 randomisation).
+function osStats(hr, deaths) {
+  const se = 2 / Math.sqrt(Math.max(1, deaths)), lhr = Math.log(hr), ucl = Math.exp(lhr + 1.96 * se), lcl = Math.exp(lhr - 1.96 * se);
+  const cat = hr >= 1 ? 0 : ucl < .85 ? 3 : ucl < .95 ? 2 : ucl < 1 ? 1 : 0;
+  return { se, ucl, lcl, cat, z: hr < 1 ? -lhr / se : 0 };
+}
+function derive(I, env) {
+  env = env || {};
+  const hr2 = E(env, 'hr2', I.hr2);
+  const ev = { ia1: { hr: I.hr1, d: I.d1 }, ia2: { hr: hr2, d: Math.max(I.d2, I.d1) } };
+  ev.ia1.s = osStats(ev.ia1.hr, ev.ia1.d); ev.ia2.s = osStats(ev.ia2.hr, ev.ia2.d);
+  const sOS = (dt) => clamp((1 - ev[dt].hr) / .30, 0, 1.25), sPFS = clamp((1 - I.pfs) / .45, 0, 1.25);
+  const credit = (dt) => clamp((ev[dt].s.z - 1) / 1.5, 0, 1);
+  const safAdj = { sup: .25, sim: 0, worse: -.3 }[I.saf], safStep = { sup: 1, sim: 0, worse: -1 }[I.saf];
+  const orphan = I.usN < ORPHAN_N, highBI = I.usN >= HIGHBI_N;
+  const cF = clamp(I.socCost / 240, .01, 1.5), branded = I.soc === 'brand';
+  const clin = .5 * sOS('ia1') + .5 * sPFS;
+  const peak = (.05 + .30 * Math.min(1.25, clin)) * ({ sup: 1.25, sim: 1, worse: .7 })[I.saf] * (branded ? .85 : 1) * E(env, 'peak', 1);
+  const deCat = (dt) => { let c = clamp(ev[dt].s.cat + safStep, 0, 3); return c; };
+  const V = (k, dt) => {
+    if (k === 'de') { const c = deCat(dt); let v = [0, .35, .8, 1.1][c]; if (orphan) v = Math.max(v, .5); return v; }
+    const w = clamp(MKT[k].w + E(env.w, k, 0), 0, 1);
+    return clamp(w * sOS(dt) * credit(dt) + (1 - w) * sPFS + safAdj, 0, 1.5);
+  };
+  return { ev, sOS, sPFS, credit, safAdj, orphan, highBI, cF, branded, peak, V, deCat, pm: orphan ? 1.5 : 1, askF: I.price / 240, ia2: I.t2 + PREP };
+}
+const apprOf = (I, k, first) => MKT[k].appr - (I.usN < ORPHAN_N && k === 'jp' ? 3 : 0) + ((first || 'A') === 'B' ? 6 : 0);
+
+/* ---------------- Part 2: launch engine, simulation ---------------- */
+// plan: { first: 'A'|'B', L: {market: launch month | null}, skipB: {market: true} }
+function simulate(I, plan, env) {
+  env = env || {};
+  const D = derive(I, env), small = D.orphan, large = D.highBI, first = plan.first || 'A', second = first === 'A' ? 'B' : 'A', W1 = W1of(I);
+  const rate = I.disc / 100, df = (t) => rate > 0 ? Math.pow(1 + rate, -(t - W0) / 12) : 1;
+  const bk = (k) => MKT[k].b * E(env.b, k, 1);
+  const C = (k) => D.cF * bk(k);
+  const room = (k) => bk(k) * D.pm * (1 - .5 * Math.min(1, D.cF)) * E(env, 'room', 1);
+  const ask = (k) => k === 'us' ? I.price : D.askF * MKT[k].b;
+  const inc = EK().filter(k => plan.L[k] != null).sort((a, b) => plan.L[a] - plan.L[b] || MK.indexOf(a) - MK.indexOf(b));
+  const L = {}; inc.forEach(k => { L[k] = Math.max(apprOf(I, k, first), plan.L[k]); });
+  const fixedEU = (k) => I.jca === 'fixed' && MKT[k].eu;
+  const data = {}; inc.forEach(k => { data[k] = !fixedEU(k) && L[k] >= D.ia2 ? 'ia2' : 'ia1'; });
+  const hasB = (k) => I.second && !(plan.skipB && plan.skipB[k]);
+  const vMemo = {}, Veff = (k, ind, dt) => { const key = k + (ind || 'A') + (dt || data[k] || 'ia1'); let v = vMemo[key]; if (v === undefined) { v = D.V(k, dt || data[k] || 'ia1') * (ind === 'B' ? .75 : 1); vMemo[key] = v; } return v; };
+  const pMemo = {}, Pacc = (k, ind, dt) => { const key = k + (ind || first) + (dt || ''); let v = pMemo[key]; if (v === undefined) { v = C(k) + Veff(k, ind || first, dt) * room(k); pMemo[key] = v; } return v; };
+  const elig = (k) => (I.basis === 'cases' ? MKT[k].rc : MKT[k].rd) * MKT[k].reach * I.usN * E(env.elig, k, 1) * E(env, 'eligAll', 1);
+  // Netherlands lock: expected annual cost ≥ €20M, or ≥ €10M with ≥ €50k per patient (Zorginstituut criteria).
+  const nlLock = (() => { if (!('nl' in L)) return false; const p = Math.min(ask('nl'), Pacc('nl')), ann = elig('nl') * D.peak * p * 1000 * DUR; return ann >= 20e6 * USD_EUR || (ann >= 10e6 * USD_EUR && p * DUR >= 50 * USD_EUR); })();
+  const lagOf = (k) => { let l = MKT[k].lag * E(env.lag, k, 1); if (k === 'nl' && !nlLock) l = 1; if (NEGO.includes(k)) { const r = ask(k) / Pacc(k); if (r <= 1) l *= .7; else if (r > 1.3) l *= 1.3; } return Math.round(l); };
+  const setLag = (k) => (['fr', 'it', 'es', 'ch', 'au', 'kr', 'nl', 'be'].includes(k) ? lagOf(k) : k === 'jp' ? 2 : k === 'br' ? 3 : 0);
+  // Reassessment after launch: Germany (time-limited decision or new evidence) and England (Cancer Drugs Fund).
+  const better2 = (k) => D.V(k, 'ia2') > D.V(k, 'ia1') + .02;
+  const reDE = I.reassess && 'de' in L && data.de === 'ia1' && better2('de') ? Math.max(L.de + 12, D.ia2) + 6 : null;
+  const cdfUK = I.reassess && 'uk' in L && data.uk === 'ia1' && better2('uk') ? Math.max(L.uk, D.ia2) + 6 : null;
+  const ev = []; inc.forEach((k, i) => { ev.push({ k, t: L[k] + setLag(k), i, kind: 'set' }); if (k === 'de') ev.push({ k, t: L[k] + 6, i, kind: 'neg' }); });
+  ev.sort((a, b) => a.t - b.t || a.i - b.i || (a.kind === 'neg') - (b.kind === 'neg'));
+  const P = {}, PL = {}, setT = {}; let deFree = null, deNeg = null, deNeg2 = null, deGuard = false, deGuard2 = false, ukCdf = null; const log = [];
+  const visible = (j, t, forJapan) => {
+    if (!(j in L)) return null;
+    if (j === 'de') { if (deNeg2 !== null && t >= reDE) return deNeg2; if (deNeg !== null && t >= L.de + 6) return deNeg; if (forJapan) return null; return deFree !== null && t >= L.de ? deFree : null; }
+    return (j in PL && t >= setT[j]) ? PL[j] : null;
+  };
+  const vis = (list, t, jp) => list.filter(j => j in L).map(j => [j, visible(j, t, jp)]).filter(x => x[1] !== null);
+  const codes = (b) => b.map(x => x[0].toUpperCase()).join(', ');
+  const dl = (k) => data[k] === 'ia2' ? `IA2 data (${I.d2} deaths)` : `IA1 data (${I.d1} deaths)`;
+  const deNegotiate = (t, dt) => {
+    const k = 'de', A = ask(k), v = Math.min(A, Pacc(k, first, dt)), eu = vis(['fr', 'it', 'es', 'uk', 'nl', 'be'], t);
+    let n = eu.length ? .6 * v + .4 * mean(eu.map(x => x[1])) : v; const cat = D.deCat(dt), guard = !small && cat <= 1;
+    if (guard) n = Math.min(n, C(k)); return { n: Math.min(n, A), cat, guard, eu, v };
+  };
+  ev.forEach(e => {
+    const k = e.k, t = e.t, va = Pacc(k), A = ask(k), ve = Veff(k, first);
+    if (k === 'de' && e.kind === 'set') { deFree = A; P.de = PL.de = A; setT.de = t; log.push([t, 'Germany', `launches at your free price of <b>${fk(A)}</b>; sickness funds pay it for six months.`, '']); return; }
+    if (k === 'de' && e.kind === 'neg') {
+      const r = deNegotiate(t, data.de), u = D.ev[data.de].s; deNeg = r.n; deGuard = r.guard;
+      log.push([t, 'Germany', `on ${dl(k)} the OS hazard ratio’s upper 95% limit is ${u.ucl.toFixed(2)}, so the mortality benefit is ${DE_CAT[u.cat]}; with safety, G-BA rates the added benefit <b>${small ? 'deemed proven (orphan-type rules)' : DE_CAT[r.cat]}</b>. ${r.guard ? `With a minor or unproven benefit the price may not exceed the comparator’s ${fk(C(k))}, so AMNOG sets <b>${fk(r.n)}</b>.` : `AMNOG sets <b>${fk(r.n)}</b>${r.eu.length ? `, blending the value-based ${fk(r.v)} with prices already set in ${codes(r.eu)}` : ''}.`}${reDE ? ` A reassessment on IA2 data is planned for month ${reDE}.` : ''}`, r.n < A * .7 ? 'neg' : '']);
+      return;
+    }
+    let p = Math.min(A, va), msg = '', tone = '', listP = A;
+    if (k === 'us') { const sh = clamp(Math.pow(va / A, E(env, 'ela', 1.5)), .05, 1); msg = `free pricing: list <b>${fk(A)}</b>.${sh < .99 ? ` Payers value it nearer ${fk(va)} and manage use, so uptake is ${Math.round(100 * sh)}% of what it could be.` : ''}`; tone = sh < .99 ? 'neg' : ''; p = A; }
+    else if (k === 'jp') { const b = vis(BASKET.jp, t, true); if (b.length) { const av = mean(b.map(x => x[1])); if (p > 1.25 * av) { p = 1.25 * av; tone = 'neg'; msg = `foreign average of ${codes(b)} is ${fk(av)}, so its price is cut to <b>${fk(p)}</b> (1.25 × average).`; } else if (p < .75 * av && b.length >= 2) { const np = Math.min(.75 * av, 2 * p); tone = 'pos'; msg = `foreign average of ${codes(b)} is ${fk(av)}, so its price is raised to <b>${fk(np)}</b> (${np < .75 * av - .5 ? 'capped at twice its own calculated price' : '0.75 × average'}).`; p = np; } else if (p < .75 * av) msg = `only ${codes(b)} has a reference price, and Japan does not raise a price on one country’s price: listed at <b>${fk(p)}</b>.`; else msg = `within 25% of the foreign average of ${codes(b)} (${fk(av)}): listed at <b>${fk(p)}</b>.`; } else msg = `no reference prices set yet: listed at <b>${fk(p)}</b>.`; if (large) msg += ' High budget impact will trigger a cost-effectiveness review.'; }
+    else if (k === 'fr') { const asmr = ve >= .6; const b = vis(BASKET.fr, t); msg = `on ${dl(k)}, ` + (asmr ? 'ASMR I–III. ' : 'ASMR IV–V: no price guarantee and no liste en sus. '); if (asmr && b.length) { const lo = b.reduce((m, x) => x[1] < m[1] ? x : m); if (lo[1] > p) { const np = Math.min(A, lo[1]); tone = np > p ? 'pos' : ''; msg += `The guarantee floor is ${NM[lo[0]]} at ${fk(lo[1])}, so CEPS sets <b>${fk(np)}</b>.`; p = np; } else msg += `CEPS sets <b>${fk(p)}</b>, above the guarantee floor.`; } else { msg += `CEPS sets <b>${fk(p)}</b>.`; if (!asmr) tone = 'neg'; } }
+    else if (k === 'ca') { const b = vis(BASKET.ca, t); msg = `pERC recommends at a value-based <b>${fk(p)}</b>.`; if (b.length) { const hi = b.reduce((m, x) => x[1] > m[1] ? x : m); if (hi[1] < A) { listP = hi[1]; msg += ` The list is capped at the highest PMPRB11 price set (${NM[hi[0]]}, ${fk(hi[1])}).`; tone = 'neg'; } } else msg += ' No PMPRB11 prices are set yet, so the price sits 10% lower under review.'; }
+    else if (k === 'ch') { const b = vis(BASKET.ch, t); if (b.length) { const av = mean(b.map(x => x[1])); const np = Math.min(A, .5 * p + .5 * av); tone = np < p ? 'neg' : 'pos'; msg = `half its value-based ${fk(p)} and half the average of ${codes(b)} (${fk(av)}): <b>${fk(np)}</b>.`; p = np; } else { p *= .9; tone = 'neg'; msg = `no basket prices yet, so a provisional <b>${fk(p)}</b>.`; } }
+    else if (k === 'br') { if (ve >= .6) { const b = vis(BASKET.br, t); if (b.length) { const lo = b.reduce((m, x) => x[1] < m[1] ? x : m); if (lo[1] < p) { p = lo[1]; tone = 'neg'; msg = `proven gain: CMED cap is the lowest reference price set, ${NM[lo[0]]} at <b>${fk(p)}</b>.`; } else msg = `proven gain: <b>${fk(p)}</b>, below every reference price.`; } else { p *= .8; tone = 'neg'; msg = `no reference prices yet: CMED sets a cautious <b>${fk(p)}</b>.`; } } else { p = C(k); tone = 'neg'; msg = `no proven therapeutic gain on ${dl(k)}, so CMED caps the price at the comparator’s cost: <b>${fk(p)}</b>.`; } }
+    else if (k === 'nl') { const b = vis(BASKET.nl, t); if (b.length) { const av = mean(b.map(x => x[1])); if (av < listP) { listP = av; } msg = `maximum price is the average of ${codes(b)} (${fk(av)}); `; } else msg = 'no reference prices set yet; '; p = Math.min(p, listP); msg += nlLock ? `budget impact puts it in the lock until the Ministry agrees <b>${fk(p)}</b>.` : `below the lock thresholds, so hospitals can use it at <b>${fk(p)}</b>.`; if (nlLock) tone = 'neg'; }
+    else if (k === 'kr') { const b = vis(BASKET.kr, t); if (small && b.length >= 3) { const lo = b.reduce((m, x) => x[1] < m[1] ? x : m); p = Math.min(A, lo[1]); msg = `small population with prices in ${b.length} A7 countries: no economic evaluation, priced at the lowest A7 price (${NM[lo[0]]}): <b>${fk(p)}</b>.`; tone = p < va ? 'neg' : 'pos'; } else msg = `on ${dl(k)}, economic evaluation gives a value-based <b>${fk(p)}</b>${small ? ` (fewer than three A7 prices set, so no waiver)` : ''}.`; }
+    else { msg = `on ${dl(k)}, value-based price <b>${fk(p)}</b>${p < A - .5 ? ` (you asked ${fk(A)})` : ''}.`; if (p < A * .7) tone = 'neg'; }
+    if (k === 'uk' && cdfUK) { ukCdf = Math.min(A, C(k) + .5 * (Veff(k, first, 'ia1') + Veff(k, first, 'ia2')) * room(k)); p = ukCdf; msg = `immature OS: funded through the Cancer Drugs Fund at <b>${fk(p)}</b> until re-appraisal on IA2 data in month ${cdfUK}.`; tone = ''; }
+    if (MKT[k].conf && listP > p + .5) msg += ` The visible list stays at ${fk(listP)} behind a confidential deal.`;
+    P[k] = p; PL[k] = MKT[k].conf ? Math.max(p, listP) : p; setT[k] = t; log.push([t, NM[k], msg, tone]);
+  });
+  if (reDE && reDE < W1) { const r = deNegotiate(reDE, 'ia2'); deNeg2 = r.n; deGuard2 = r.guard; log.push([reDE, 'Germany', `reassessment on IA2 data (${I.d2} deaths): G-BA rates the added benefit <b>${DE_CAT[r.cat]}</b>, and the price is renegotiated to <b>${fk(r.n)}</b>.`, r.n > (deNeg || 0) + .5 ? 'pos' : '']); }
+  let ukAfter = null; if (cdfUK && cdfUK < W1) { ukAfter = Math.min(ask('uk'), Pacc('uk', first, 'ia2')); log.push([cdfUK, 'United Kingdom', `re-appraisal on IA2 data moves it from the Cancer Drugs Fund to routine funding at <b>${fk(ukAfter)}</b>.`, ukAfter > (ukCdf || 0) ? 'pos' : '']); }
+  const visCache = [], visAt = (t) => { let o = visCache[t]; if (!o) { o = {}; inc.forEach(j => { o[j] = visible(j, t); }); visCache[t] = o; } return o; };
+  const caB = BASKET.ca.filter(j => j in L), mfnB = inc.filter(j => j !== 'us');
+  const priceFor = (k, ind, t) => {
+    let p0 = P[k];
+    if (k === 'de') p0 = t < L.de + 6 ? deFree : (reDE && t >= reDE && deNeg2 !== null ? deNeg2 : deNeg);
+    if (k === 'uk' && ukAfter !== null && t >= cdfUK) p0 = ukAfter;
+    if (k === 'ca') { const o = visAt(t); let hi = -1; for (const j of caB) { const v = o[j]; if (v !== null && v > hi) hi = v; } p0 = hi >= 0 ? Math.min(p0, hi) : p0 * .9; }
+    if (k === 'jp' && large && t >= setT.jp + 12) p0 *= .9;
+    if (k === 'us' && I.mfn) { const o = visAt(t); let lo = Infinity; for (const j of mfnB) { const v = o[j]; if (v !== null) { const a = v / MKT[j].ppp; if (a < lo) lo = a; } } if (lo < Infinity) p0 = (1 - MFN_SHARE) * p0 + MFN_SHARE * Math.min(p0, lo); }
+    if (!hasB(k) || t < L[k] + SECOND) return p0;
+    const g = MKT[k].grp;
+    if (first === 'A') {
+      if (g === 'free') return p0;
+      if (g === 'indication') return ind === 'B' ? Math.min(p0, Pacc(k, 'B')) : p0;
+      if (g === 'weighted') { const r = Math.min(1, Pacc(k, 'B') / Pacc(k, 'A')); return p0 * (1 + r * 3) / 4; }
+      return p0 * .85;
+    }
+    if (g === 'indication' && ind === 'A') return Math.max(p0, Math.min(ask(k), Pacc(k, 'A')));
+    return p0;
+  };
+  const sales = {}, cost = {}; let total = 0, totalCost = 0;
+  const usShare = clamp(Math.pow(Pacc('us') / ask('us'), E(env, 'ela', 1.5)), .05, 1);
+  const usNet = large ? .7 : small ? .85 : .75;
+  inc.forEach(k => {
+    const m = MKT[k], lg = lagOf(k); let s = 0;
+    const frAsmr = k === 'fr' ? Veff('fr', first) >= .6 : true;
+    const pre = k === 'fr' ? (frAsmr ? m.pre : 0) : m.pre;
+    const accF = k === 'fr' && !frAsmr ? .7 : 1;
+    let net = k === 'us' ? usNet : m.net; if (large && ['fr', 'it', 'es'].includes(k)) net *= .9;
+    const el = elig(k);
+    const inds = hasB(k) ? [[first, L[k]], [second, L[k] + SECOND]] : [[first, L[k]]];
+    inds.forEach(([ind, st]) => {
+      const peak = ind === 'A' ? D.peak : D.peak * .6, mult = ind === 'A' ? 1 : 3;
+      for (let t = Math.max(W0, st); t < W1; t++) {
+        const since = t - st, acc = (since < lg ? pre : 1) * accF, share = peak * Math.min(1, (since + 1) / RAMP) * (k === 'us' ? usShare : 1);
+        s += el * mult / 12 * share * acc * priceFor(k, ind, t) * 1000 * DUR * net * df(t);
+      }
+    });
+    sales[k] = s; cost[k] = I.launchCost * 1e6 * df(Math.max(W0, L[k])); total += s; totalCost += cost[k];
+  });
+  if (I.mfn && 'us' in L && inc.length > 1) { const end = W1 - 1, pe = priceFor('us', first, end); if (pe < P.us - .5) { const adj = inc.filter(j => j !== 'us').map(j => [j, visible(j, end)]).filter(x => x[1] !== null).map(x => [x[0], x[1] / MKT[x[0]].ppp]).sort((a, b) => a[1] - b[1])[0]; log.push([end, 'United States', `by the end of the window, MFN pulls the average US price from ${fk(P.us)} to <b>${fk(pe)}</b>. The benchmark is ${NM[adj[0]]}, the lowest purchasing-power-adjusted price (${fk(adj[1])}), applied to half of US volume.`, 'neg']); } }
+  if (large && 'jp' in L && setT.jp + 12 < W1) log.push([setT.jp + 12, 'Japan', 'the cost-effectiveness review for high budget impact trims the price by <b>10%</b>.', 'neg']);
+  log.sort((a, b) => a[0] - b[0]);
+  const priceOf = (k) => k === 'de' ? (deNeg2 ?? deNeg ?? deFree) : (k === 'uk' && ukAfter !== null ? ukAfter : P[k]);
+  return { L, P, PL, deFree, deNeg, deNeg2, deGuard, deGuard2, reDE, cdfUK, ukCdf, nlLock, sales, cost, total, totalCost, value: total - totalCost, log, inc, data, setT, lagOf, Pacc, ask, C, Veff, usShare, D, priceOf, first, hasB, W1 };
+}
+
+/* ---------------- Part 2: launch engine, search ---------------- */
+const clonePlan = (p) => ({ first: p.first, L: { ...p.L }, skipB: { ...(p.skipB || {}) } });
+function planAll(I, mode, first) { const p = { first: first || 'A', L: {}, skipB: {} }; EK().forEach(k => { const a = apprOf(I, k, p.first); p.L[k] = mode === 'ia2' ? Math.max(a, I.t2 + PREP) : a; }); return p; }
+function optsFor(I, k, res, first) {
+  const a = apprOf(I, k, first), W1 = W1of(I), s = new Set([a, a + 3, a + 6, a + 9, a + 12, a + 18, a + 24]);
+  const ia2 = I.t2 + PREP; if (ia2 > a) s.add(ia2);
+  if (res) res.inc.forEach(j => { if (j === k) return; const t = j === 'de' ? res.L.de + 7 : res.setT[j] + 1; if (t > a) s.add(Math.ceil(t)); });
+  const o = [...s].filter(t => t >= a && t <= W1 - 12).sort((x, y) => x - y); o.push(null); return o;
+}
+const tolOf = (v) => Math.max(1e6, Math.abs(v) * .002);
+function climb(I, start) {
+  let plan = clonePlan(start), cur = simulate(I, plan);
+  for (let pass = 0; pass < 6; pass++) {
+    let moved = false;
+    for (const k of EK()) {
+      let bt = plan.L[k], bv = cur.value;
+      for (const t of optsFor(I, k, cur, plan.first)) { if (t === plan.L[k]) continue; const p2 = clonePlan(plan); p2.L[k] = t; const v = simulate(I, p2).value; if (v > bv + tolOf(cur.value)) { bv = v; bt = t; } }
+      if (bt !== plan.L[k]) { plan.L[k] = bt; cur = simulate(I, plan); moved = true; }
+      if (I.second && plan.L[k] != null && MKT[k].grp !== 'free') { const p2 = clonePlan(plan); p2.skipB[k] = !plan.skipB[k]; const v = simulate(I, p2).value; if (v > cur.value + tolOf(cur.value)) { plan = p2; cur = simulate(I, plan); moved = true; } }
+    }
+    if (!moved) break;
+  }
+  return { plan, res: cur };
+}
+function optimizeFirst(I, first) {
+  const a = climb(I, planAll(I, 'appr', first)), b = climb(I, planAll(I, 'ia2', first));
+  return b.res.value > a.res.value + tolOf(a.res.value) ? b : a;
+}
+function optimize(I) {
+  const A = optimizeFirst(I, 'A'), B = I.second && simulate(I, planAll(I, 'appr', 'B')).value > .9 * A.res.value ? optimizeFirst(I, 'B') : null;
+  const best = B && B.res.value > A.res.value + tolOf(A.res.value) ? B : A, other = best === A ? B : A;
+  const alts = {};
+  EK().forEach(k => { alts[k] = optsFor(I, k, best.res, best.plan.first).map(t => { if (t === best.plan.L[k]) return [t, best.res.value]; const p2 = clonePlan(best.plan); p2.L[k] = t; return [t, simulate(I, p2).value]; }); if (!alts[k].some(x => x[0] === best.plan.L[k])) alts[k].push([best.plan.L[k], best.res.value]); });
+  return { plan: best.plan, res: best.res, alts, otherFirst: other };
+}
+
+/* ---------------- Part 2: launch engine, robustness ---------------- */
+function rng(seed) { return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0; while (!u) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); }
+// The IA2 hazard ratio is drawn from its predictive distribution given IA1: log HR2 ~ N(log HR2 expected, 4/d1 − 4/d2).
+function drawEnv(I, r) {
+  const ln = (s) => Math.exp(s * gauss(r) - s * s / 2);
+  const env = { elig: {}, b: {}, lag: {}, w: {}, eligAll: ln(.2), peak: ln(.2), room: ln(.15), ela: 1.2 + .6 * r() };
+  const v = Math.max(0, 4 / Math.max(1, I.d1) - 4 / Math.max(I.d1 + 1, I.d2)); env.hr2 = Math.exp(Math.log(I.hr2) + Math.sqrt(v) * gauss(r));
+  MK.forEach(k => { env.elig[k] = ln(.15); env.b[k] = ln(.12); env.lag[k] = ln(.3); env.w[k] = (r() - .5) * .2; });
+  return env;
+}
+const kindOf = (I, k, t, first) => t == null ? 'hold' : t <= apprOf(I, k, first) ? 'now' : 'wait';
+function altOf(I, best, k) {
+  const f = best.plan.first, kd = kindOf(I, k, best.plan.L[k], f);
+  if (kd === 'wait') { const now = best.alts[k].find(x => kindOf(I, k, x[0], f) === 'now'); if (now) return now[0]; }
+  const rows = best.alts[k].filter(x => kindOf(I, k, x[0], f) !== kd && (kd !== 'hold' || x[0] != null)).sort((a, b) => b[1] - a[1]);
+  return rows.length ? rows[0][0] : undefined;
+}
+function robustness(I, best, N, tick, done) {
+  const r = rng(20261016), base = planAll(I, 'appr', 'A');
+  const same = EK().every(k => base.L[k] === best.plan.L[k]) && best.plan.first === 'A' && !Object.values(best.plan.skipB).some(Boolean);
+  const alt = {}; EK().forEach(k => { alt[k] = altOf(I, best, k); });
+  const skipKs = I.second ? EK().filter(k => best.plan.L[k] != null && MKT[k].grp !== 'free') : [];
+  const win = {}, gap = {}, sw = {}, sg = {}; EK().forEach(k => { win[k] = 0; gap[k] = []; sw[k] = 0; sg[k] = []; });
+  let n = 0, beatBase = 0, firstWin = 0, cancelled = false; const baseGap = [], firstGap = [];
+  const step = () => {
+    if (cancelled) return;
+    for (let i = 0; i < 6 && n < N; i++, n++) {
+      const env = drawEnv(I, r), tp = simulate(I, best.plan, env).value, tb = same ? tp : simulate(I, base, env).value;
+      if (tp >= tb - 1) beatBase++; baseGap.push((tp - tb) / Math.abs(tp || 1));
+      if (best.otherFirst) { const to = simulate(I, best.otherFirst.plan, env).value; if (tp >= to - 1) firstWin++; firstGap.push((tp - to) / Math.abs(tp || 1)); }
+      EK().forEach(k => {
+        if (alt[k] !== undefined) { const p2 = clonePlan(best.plan); p2.L[k] = alt[k]; const ta = simulate(I, p2, env).value; gap[k].push((tp - ta) / Math.abs(tp || 1)); if (tp >= ta - 1) win[k]++; } else win[k]++;
+        if (skipKs.includes(k)) { const p3 = clonePlan(best.plan); p3.skipB[k] = !best.plan.skipB[k]; const ts = simulate(I, p3, env).value; sg[k].push((tp - ts) / Math.abs(tp || 1)); if (tp >= ts - 1) sw[k]++; }
+      });
+    }
+    tick(n / N);
+    if (n < N) setTimeout(step, 0); else done({ N, win, gap, alt, same, beatBase, baseGap, firstWin, firstGap, sw, sg, skipKs });
+  };
+  setTimeout(step, 0);
+  return () => { cancelled = true; };
+}
+
+/* ---------------- Part 2: launch engine, tipping points ---------------- */
+// For each material decision, scan one input at a time (others fixed) for the value at which the decision type flips.
+const TIP_INPUTS = [
+  { key: 'd1', label: 'deaths at IA1', lo: 20, hi: (I) => Math.max(21, I.d2 - 5), fmt: (v) => `${Math.round(v)} deaths at IA1`, int: true },
+  { key: 'hr', label: 'OS hazard ratio', lo: .5, hi: .99, fmt: (v) => `an OS hazard ratio of ${v.toFixed(2)}`, set: (I, v) => { const d = v - I.hr1; return { ...I, hr1: v, hr2: clamp(I.hr2 + d, .3, 1.2) }; } },
+  { key: 't2', label: 'months to IA2', lo: 3, hi: 48, fmt: (v) => `IA2 ${Math.round(v)} months after IA1`, int: true },
+  { key: 'price', label: 'US price', lo: 60, hi: 600, fmt: (v) => `a US price of ${fk(v)}`, int: true }
+];
+function tippingPoints(I, best) {
+  const out = {}, f = best.plan.first;
+  const planAt = (I2, k, kind, tPlan) => { const p = clonePlan(best.plan); EK().forEach(j => { const a1 = apprOf(I, j, f), a2 = apprOf(I2, j, f); const t0 = best.plan.L[j]; if (t0 == null) return; if (t0 === Math.max(a1, I.t2 + PREP) && t0 > a1) p.L[j] = Math.max(a2, I2.t2 + PREP); else if (t0 <= a1) p.L[j] = a2; }); if (kind === 'now') p.L[k] = apprOf(I2, k, f); else if (kind === 'hold') p.L[k] = null; else p.L[k] = tPlan(I2); return p; };
+  EK().forEach(k => {
+    const t0 = best.plan.L[k], kd = kindOf(I, k, t0, f), a = altOf(I, best, k); if (a === undefined) return;
+    const ak = kindOf(I, k, a, f);
+    const tPlanOf = (I2) => (t0 != null && t0 === Math.max(apprOf(I, k, f), I.t2 + PREP)) ? Math.max(apprOf(I2, k, f), I2.t2 + PREP) : t0;
+    const tAltOf = (I2) => (a != null && a === Math.max(apprOf(I, k, f), I.t2 + PREP)) ? Math.max(apprOf(I2, k, f), I2.t2 + PREP) : a;
+    const gapAt = (I2) => simulate(I2, planAt(I2, k, kd, tPlanOf)).value - simulate(I2, planAt(I2, k, ak, tAltOf)).value;
+    const g0 = gapAt(I); if (g0 <= tolOf(best.res.value) * 1.5) return;
+    const res = [];
+    TIP_INPUTS.forEach(ti => {
+      const setI = (v) => ti.set ? ti.set(I, v) : { ...I, [ti.key]: ti.int ? Math.round(v) : v };
+      const cur = ti.key === 'hr' ? I.hr1 : I[ti.key], lo = ti.lo, hi = typeof ti.hi === 'function' ? ti.hi(I) : ti.hi;
+      [[cur, lo], [cur, hi]].forEach(([from, to]) => {
+        if (Math.abs(to - from) < 1e-9) return;
+        const n = 8; let prev = from, found = null;
+        for (let i = 1; i <= n; i++) { const v = from + (to - from) * i / n; if (gapAt(setI(v)) < 0) { found = [prev, v]; break; } prev = v; }
+        if (!found) return;
+        let [x0, x1] = found; for (let j = 0; j < 6; j++) { const m = (x0 + x1) / 2; if (gapAt(setI(m)) < 0) x1 = m; else x0 = m; }
+        res.push({ ti, v: ti.int ? Math.round(x1) : x1, dir: to > from ? 'up' : 'down' });
+      });
+    });
+    if (res.length) out[k] = { kind: kd, altKind: ak, alt: a, items: res };
+  });
+  return out;
+}
+/* ---------------- Part 2: launch engine, explanations ---------------- */
+const listJoin = (a, w) => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' ' + (w || 'and') + ' ' + a[a.length - 1];
+const THE = (k) => (['us', 'uk', 'nl'].includes(k) ? 'the ' : '') + NM[k];
+const rateName = (I, k, R) => {
+  const dt = R.data[k] || 'ia1', v = R.Veff(k, R.first);
+  if (k === 'de') return R.D.orphan ? 'deemed proven' : DE_CAT[R.D.deCat(dt)];
+  if (k === 'fr') return v >= .6 ? 'ASMR I–III' : 'ASMR IV–V';
+  if (k === 'br') return v >= .6 ? 'category 1' : 'category 2';
+  if (k === 'uk' && R.cdfUK) return 'Cancer Drugs Fund';
+  if (k === 'nl') return R.nlLock ? 'in the lock' : 'no lock';
+  if (k === 'kr' && R.D.orphan) return 'waiver if 3+ A7 prices';
+  return '';
+};
+function ratingLine(I, k, R) {
+  const dt = R.data[k] === 'ia2' ? 'IA2' : 'IA1', p = R.priceOf(k), A = R.ask(k), va = R.Pacc(k), v = R.Veff(k, R.first);
+  if (k === 'us') return `Free pricing at your ${fk(A)} list, paid from approval${R.usShare < .99 ? `; payers value it near ${fk(va)}, so utilisation management holds uptake to ${Math.round(100 * R.usShare)}% of its potential` : ''}.`;
+  if (k === 'de') { const s = R.D.ev[R.data.de].s; return `On ${dt} data the OS hazard ratio’s upper 95% limit is ${s.ucl.toFixed(2)}; with safety, the G-BA rating is “${R.D.orphan ? 'added benefit deemed proven (orphan-type rules)' : DE_CAT[R.D.deCat(R.data.de)]}”${R.deGuard ? ', so the price may not exceed the comparator’s' : ''}. ${fk(R.deFree)} for six months, then ${fk(R.deNeg)}${R.deNeg2 != null ? `, and ${fk(R.deNeg2)} after reassessment on IA2 data in month ${R.reDE}` : ''}.`; }
+  if (k === 'fr') return `On ${dt} data its French benefit score is ${v.toFixed(2)}: ${v >= .6 ? 'ASMR I–III, with early access, the European price guarantee and the liste en sus' : 'ASMR IV–V, with no price guarantee and no liste en sus'}. Price ${fk(p)}.`;
+  if (k === 'br') return `On ${dt} data its benefit score is ${v.toFixed(2)}: ${v >= .6 ? 'category 1 (proven gain), capped at the lowest reference price' : 'category 2 (no proven gain), capped at the comparator’s cost'}. Price ${fk(p)}, for private-plan patients.`;
+  if (k === 'jp') return `Listed at ${fk(R.P.jp)} after the foreign-average check; its own calculation gives ${fk(Math.min(A, va))} on ${dt} data.`;
+  if (k === 'ca') return `Value-based ${fk(va)} on ${dt} data; the list is checked against the highest PMPRB11 price. Price ${fk(p)}.`;
+  if (k === 'ch') return `Half its value-based ${fk(Math.min(A, va))} on ${dt} data, half the average of its basket: ${fk(p)}.`;
+  if (k === 'uk' && R.cdfUK) return `Immature OS, so the Cancer Drugs Fund pays ${fk(R.ukCdf)} until re-appraisal on IA2 data in month ${R.cdfUK}, then ${fk(p)}.`;
+  if (k === 'nl') return `${R.nlLock ? 'Its budget impact puts it in the lock until a price is agreed' : 'Below the lock thresholds, so hospitals can use it promptly'}; the maximum price is the average of Belgian, French and UK prices. Price ${fk(p)}.`;
+  if (k === 'kr') return `${R.D.orphan ? 'Small population: it can skip economic evaluation once three A7 countries have prices, pricing at the lowest of them.' : `Economic evaluation on ${dt} data gives a value-based ${fk(va)}.`} Price ${fk(p)}.`;
+  return `Value-based price ${fk(va)} on ${dt} data against your ${fk(A)} ask: ${fk(p)}${MKT[k].conf && A > p + .5 ? `, with the ${fk(A)} list kept visible behind a confidential deal` : ''}.`;
+}
+function explain(I, best) {
+  const R = best.res, tot = R.value, X = {}, f = best.plan.first;
+  EK().forEach(k => {
+    const a = apprOf(I, k, f), t = best.plan.L[k], kd = kindOf(I, k, t, f), lines = [];
+    const diffs = (r0) => EK().filter(j => j !== k).map(j => [j, (R.sales[j] || 0) - (r0.sales[j] || 0)]).filter(x => Math.abs(x[1]) >= Math.max(5e5, Math.abs(tot) * .001)).sort((x, y) => Math.abs(y[1]) - Math.abs(x[1]));
+    const names = (arr) => listJoin(arr.slice(0, 3).map(x => NM[x[0]]));
+    const withL = (tt) => { const p = clonePlan(best.plan); p.L[k] = tt; return p; };
+    if (kd === 'hold') {
+      const rows = best.alts[k].filter(x => x[0] != null).sort((x, y) => y[1] - x[1]);
+      if (rows.length) {
+        const rL = simulate(I, withL(rows[0][0])), d = diffs(rL), lost = d.reduce((s, x) => s + x[1], 0);
+        lines.push(`Launching in month ${rows[0][0]} would earn ${fmt(rL.sales[k])} here at a launch cost of ${fmt(rL.cost[k])}${lost > 0 ? `, and other markets would earn ${fmt(lost)} less (${names(d.filter(x => x[1] > 0))})` : ''}: a net loss of ${fmt(tot - rL.value)}.`);
+        if (I.mfn && d.some(x => x[0] === 'us' && x[1] > 0)) lines.push(`Most of that is in the US: most-favoured-nation pricing would price half of US volume at ${NM[k]}’s purchasing-power-adjusted price.`);
+      }
+    } else {
+      const own = R.sales[k];
+      const pc = 100 * own / R.total; lines.push(`Earns ${fmt(own)}${I.horizon === 10 ? ' over ten years' : ' over five years'}${I.disc > 0 ? ' (discounted)' : ''}, ${pc < .5 ? 'under 1' : Math.round(pc)}% of the plan’s net sales.`);
+      lines.push(ratingLine(I, k, R));
+      if (kd === 'wait') {
+        const r0 = simulate(I, withL(a)), parts = [];
+        if (r0.data[k] !== R.data[k]) parts.push(k === 'de' ? `IA2 data move the German rating from ${DE_CAT[R.D.deCat('ia1')]} to ${DE_CAT[R.D.deCat('ia2')]}` : `IA2 data lift its benefit score from ${r0.Veff(k, f).toFixed(2)} to ${R.Veff(k, f).toFixed(2)}`);
+        const p0 = r0.priceOf(k), p1 = R.priceOf(k); if (p0 != null && Math.abs(p1 - p0) >= .5) parts.push(`its price ${p1 > p0 ? 'rises' : 'falls'} from ${fk(p0)} to ${fk(p1)}`);
+        const d = diffs(r0), g = d.reduce((s, x) => s + x[1], 0);
+        if (Math.abs(g) >= Math.abs(tot) * .001) parts.push(g > 0 ? `other markets earn ${fmt(g)} more (${names(d.filter(x => x[1] > 0))})` : `other markets earn ${fmt(-g)} less`);
+        lines.push(`Why wait ${t - a} months after approval: ${parts.join('; ') || 'a small timing gain'}. Against launching at approval, the plan gains ${fmt(tot - r0.value)}.`);
+      } else {
+        const ws = best.alts[k].filter(x => kindOf(I, k, x[0], f) !== 'now').sort((x, y) => y[1] - x[1]);
+        if (ws.length) {
+          const [bt, bv] = ws[0], c = tot - bv, even = Math.abs(c) < tolOf(tot);
+          if (bt == null) lines.push(even ? `Holding it would come out about even, so the engine keeps the launch, which also reaches patients.` : `Holding it would cost ${fmt(c)}.`);
+          else { const rw = simulate(I, withL(bt)), ia2 = rw.data[k] !== R.data[k]; const what = ia2 ? `Waiting for IA2 data (month ${bt}) would move its price to ${fk(rw.priceOf(k))}` : `The best delay, to month ${bt},`; lines.push(even ? `${what}${ia2 ? ' and' : ''} would come out about even (${c > 0 ? '−' : '+'}${fmt(Math.abs(c))}), so the engine keeps the earlier launch, which also reaches patients sooner.` : ia2 ? `${what}, but the lost months cost more: ${fmt(c)} overall.` : `${what} would cost ${fmt(c)}.`); }
+        }
+      }
+      if (best.plan.skipB[k]) lines.push(`Leaves out indication ${f === 'A' ? 'B' : 'A'} here: adding it would lower the price of the first indication by more than it earns.`);
+      const p3 = clonePlan(best.plan); p3.L[k] = null; const rh = simulate(I, p3), d = diffs(rh), sp = d.reduce((s, x) => s + x[1], 0);
+      if (sp >= Math.abs(tot) * .003) lines.push(`Its price helps elsewhere: other markets earn ${fmt(sp)} more with it launched (${names(d.filter(x => x[1] > 0))}).`);
+      else if (sp <= -Math.abs(tot) * .003) lines.push(`Its price costs other markets ${fmt(-sp)} (${names(d.filter(x => x[1] < 0))}), less than it earns.`);
+    }
+    X[k] = { kind: kd, lines };
+  });
+  return X;
+}
+
+/* ---------------- Part 2: launch engine, page ---------------- */
+const IN0 = { usN: 10500, basis: 'deaths', soc: 'generic', socCost: 20, pfs: .55, hr1: .75, d1: 180, hr2: .75, d2: 360, t2: 18, saf: 'sim', price: 240, mfn: false, second: true, jca: 'fixed', reassess: true, horizon: 5, disc: 0, launchCost: 10 };
+const IN = { ...IN0 };
+const ARCH = {
+  adc: { name: 'PFS-driven drug against chemotherapy', note: 'Large PFS gain against cheap generic chemotherapy; OS is immature at IA1.', set: { usN: 10500, soc: 'generic', socCost: 20, pfs: .5, hr1: .82, d1: 160, hr2: .8, d2: 380, t2: 18, saf: 'sim', price: 240 } },
+  io: { name: 'Combination with mature OS', note: 'Against a branded standard; OS mature at IA1; more side effects.', set: { usN: 10500, soc: 'brand', socCost: 240, pfs: .7, hr1: .72, d1: 420, hr2: .72, d2: 560, t2: 12, saf: 'worse', price: 300 } },
+  rare: { name: 'Rare biomarker-selected drug', note: 'Small population, large effect, few events, priced high.', set: { usN: 900, soc: 'generic', socCost: 30, pfs: .4, hr1: .7, d1: 60, hr2: .7, d2: 110, t2: 24, saf: 'sup', price: 380 } }
+};
+const $ = (id) => document.getElementById(id);
+const FIELDS = [['iN', 'usN', 100, 60000], ['iC', 'socCost', 1, 500], ['iPfs', 'pfs', .2, 1.2], ['iHr1', 'hr1', .3, 1.2], ['iD1', 'd1', 10, 3000], ['iHr2', 'hr2', .3, 1.2], ['iD2', 'd2', 10, 4000], ['iT2', 't2', 3, 48], ['iP', 'price', 10, 900], ['iDisc', 'disc', 0, 20], ['iLc', 'launchCost', 0, 200]];
+const SELECTS = [['iBasis', 'basis'], ['iJca', 'jca'], ['iHz', 'horizon', true]];
+const CHECKS = [['iMfn', 'mfn'], ['iSec', 'second'], ['iRe', 'reassess']];
+const n0 = (v) => (v >= 1000 ? Math.round(v / 10) * 10 : Math.round(v)).toLocaleString('en-US');
+function syncInputs() {
+  FIELDS.forEach(([id, key]) => { if (document.activeElement !== $(id)) $(id).value = IN[key]; });
+  SELECTS.forEach(([id, key]) => { $(id).value = String(IN[key]); });
+  CHECKS.forEach(([id, key]) => { $(id).checked = !!IN[key]; });
+  document.querySelectorAll('#iSoc button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === IN.soc)));
+  document.querySelectorAll('#iSaf button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === IN.saf)));
+  document.querySelectorAll('.qp').forEach(g => { const key = FIELDS.find(f => f[0] === g.dataset.for)[1]; g.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === IN[key]))); });
+  document.querySelectorAll('#arch button[data-a]').forEach(b => { const s = ARCH[b.dataset.a].set; b.setAttribute('aria-pressed', String(Object.keys(s).every(x => IN[x] === s[x]))); });
+  derivedNotes();
+}
+function derivedNotes() {
+  const D = derive(IN), rk = IN.basis === 'cases' ? 'rc' : 'rd';
+  $('dN').innerHTML = `Other markets scale by 2022 cancer ${IN.basis === 'cases' ? 'new cases' : 'deaths'}: ${EK().filter(k => k !== 'us').map(k => `${NM[k]} ${n0(MKT[k][rk] * MKT[k].reach * IN.usN)}`).join(' · ')}. ${D.orphan ? '<b>Orphan-type rules apply</b> (under 1,500 US patients): German added benefit deemed proven, Japanese priority review, Korea’s evaluation waiver, and payers accept about 1.5 times the price per patient.' : D.highBI ? '<b>High budget impact</b> (5,000 or more US patients): Japan’s cost-effectiveness review and harder net-price bargaining in the US, France, Italy and Spain.' : 'Neither orphan-type nor high-budget-impact rules apply.'}`;
+  const s1 = D.ev.ia1.s, s2 = D.ev.ia2.s;
+  $('dE').innerHTML = `IA1: HR ${IN.hr1.toFixed(2)} (95% CI ${s1.lcl.toFixed(2)}–${s1.ucl.toFixed(2)}), German mortality benefit <b>${DE_CAT[s1.cat]}</b>. IA2 (data ready month ${IN.t2 + PREP}): HR ${IN.hr2.toFixed(2)} (${s2.lcl.toFixed(2)}–${s2.ucl.toFixed(2)}), <b>${DE_CAT[s2.cat]}</b>. With safety, Germany rates ${DE_CAT[D.deCat('ia1')]} on IA1 and ${DE_CAT[D.deCat('ia2')]} on IA2. Elsewhere, OS counts ${Math.round(100 * D.credit('ia1'))}% at IA1 and ${Math.round(100 * D.credit('ia2'))}% at IA2. PFS score ${D.sPFS.toFixed(2)}.`;
+  $('dP').innerHTML = `Other markets ask the same position against their brand level: ${EK().filter(k => k !== 'us').map(k => `${NM[k]} ${fk(D.askF * MKT[k].b)}`).join(' · ')}.`;
+}
+FIELDS.forEach(([id, key, lo, hi]) => { $(id).addEventListener('input', e => { const v = parseFloat(e.target.value); if (!isFinite(v)) return; IN[key] = clamp(v, lo, hi); syncInputs(); schedule(); }); $(id).addEventListener('change', () => { $(id).value = IN[key]; }); });
+SELECTS.forEach(([id, key, num]) => $(id).addEventListener('change', e => { IN[key] = num ? +e.target.value : e.target.value; syncInputs(); schedule(); }));
+CHECKS.forEach(([id, key]) => $(id).addEventListener('change', e => { IN[key] = e.target.checked; schedule(); }));
+document.querySelectorAll('.qp').forEach(g => g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const key = FIELDS.find(f => f[0] === g.dataset.for)[1]; IN[key] = +b.dataset.v; syncInputs(); schedule(); }));
+$('iSoc').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; IN.soc = b.dataset.v; IN.socCost = IN.soc === 'generic' ? 20 : 240; syncInputs(); schedule(); });
+$('iSaf').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; IN.saf = b.dataset.v; syncInputs(); schedule(); });
+$('arch').addEventListener('click', e => { const b = e.target.closest('button[data-a]'); if (!b) return; Object.assign(IN, ARCH[b.dataset.a].set); $('archNote').textContent = ARCH[b.dataset.a].note; syncInputs(); schedule(); });
+$('archReset').addEventListener('click', () => { Object.assign(IN, IN0); MKT = JSON.parse(JSON.stringify(MKT0)); $('archNote').textContent = ''; drawMarketEditor(); syncInputs(); schedule(); });
+
+let timer = null, cancelRob = null, tipTimer = null, BEST = null, ROB = null, TIPS = null, XPL = null;
+function schedule() { clearTimeout(timer); $('tot').classList.add('busy'); $('engBusy').hidden = false; timer = setTimeout(compute, 200); }
+function run() { if (!BEST) schedule(); }
+const tip = $('tip');
+function showTip(e, html) { tip.innerHTML = html; tip.hidden = false; const box = e.currentTarget.closest('.chart').getBoundingClientRect(); const x = e.clientX - box.left + 12, y = e.clientY - box.top + 12; tip.style.left = Math.min(x, box.width - 300) + box.left + window.scrollX + 'px'; tip.style.top = y + box.top + window.scrollY + 'px'; }
+document.addEventListener('scroll', () => { tip.hidden = true; }, { passive: true });
+
+const ia2Note = (I, k, t, f) => t >= I.t2 + PREP && apprOf(I, k, f) < I.t2 + PREP && !(I.jca === 'fixed' && MKT[k].eu);
+const altLabel = (I, k, t, f) => t == null ? 'holding it' : t <= apprOf(I, k, f) ? `launching at approval (month ${t})` : ia2Note(I, k, t, f) ? `waiting until month ${t} for IA2 data` : `waiting until month ${t}`;
+function stepLabel(I, k, R, t, f) {
+  if (t == null) return `Hold: not in the first ${I.horizon === 10 ? 'ten' : 'five'} years`;
+  const a = apprOf(I, k, f), dt = R.data[k] === 'ia2' ? 'IA2 data' : 'IA1 data';
+  if (t <= a) return `Launch at approval · month ${R.L[k]} · ${dt}`;
+  return `Wait ${t - a} months${R.data[k] === 'ia2' && t === Math.max(a, I.t2 + PREP) ? ' for IA2 data' : ''} · month ${R.L[k]} · ${dt}`;
+}
+function seqOrder(best) { const R = best.res; return R.inc.slice().sort((a, b) => R.L[a] - R.L[b] || R.sales[b] - R.sales[a]).concat(EK().filter(k => best.plan.L[k] == null)); }
+function headline(I, best) {
+  const R = best.res, f = best.plan.first, groups = [];
+  R.inc.slice().sort((a, b) => R.L[a] - R.L[b] || R.sales[b] - R.sales[a]).forEach(k => { const g = groups[groups.length - 1]; if (g && g[0] === R.L[k]) g[1].push(k); else groups.push([R.L[k], [k]]); });
+  const txt = groups.map(([m, ks], i) => { const w = ks.filter(k => best.plan.L[k] > apprOf(I, k, f) && ia2Note(I, k, best.plan.L[k], f)); return `${i === 0 ? 'Launch first in ' : ''}${listJoin(ks.map(THE))} (month ${m}${w.length && w.length === ks.length ? ', waiting for IA2 data' : w.length ? `; ${listJoin(w.map(THE))} waiting for IA2 data` : ''})`; });
+  const held = EK().filter(k => best.plan.L[k] == null);
+  return (txt[0] || 'Launch nowhere') + '.' + (txt.length > 1 ? ' Then ' + txt.slice(1).join('; ') + '.' : '') + (held.length ? ` Hold ${listJoin(held.map(THE))}.` : '');
+}
+
+function compute() {
+  if (cancelRob) cancelRob(); clearTimeout(tipTimer);
+  const I = { ...IN };
+  const best = optimize(I); BEST = best; ROB = null; TIPS = null; const R = best.res, f = best.plan.first;
+  const base = simulate(I, planAll(I, 'appr', 'A')), gain = R.value - base.value;
+  $('tot').classList.remove('busy'); $('engBusy').hidden = true;
+  $('totK').textContent = `Recommended plan · ${I.horizon === 10 ? 'ten' : 'five'}-year value${I.disc > 0 ? `, discounted at ${I.disc}%` : ''}`;
+  $('tot').textContent = fmt(R.value);
+  $('totSub').textContent = `Net sales ${fmt(R.total)} less launch costs ${fmt(R.totalCost)}. ` + (gain > tolOf(base.value) ? `+${fmt(gain)} (${(100 * gain / Math.abs(base.value)).toFixed(1)}%) against launching everywhere at approval with indication A first.` : 'Launching everywhere at approval is already the best plan for this drug.');
+  $('headline').textContent = headline(I, best);
+  if (I.second) { const o = best.otherFirst, d = o ? R.value - o.res.value : null; $('lead').innerHTML = `<b>Lead with indication ${f}</b> (${f === 'A' ? 'later-line, biomarker-selected' : 'earlier-line, three times the patients'}). ${o ? `Leading with ${f === 'A' ? 'B' : 'A'} instead would earn ${fmt(Math.abs(d))} ${d >= 0 ? 'less' : 'more'}.` : `Leading with ${f === 'A' ? 'B' : 'A'} starts more than 10% lower, so the engine did not pursue it.`} <span class="cfl" id="leadRob"></span>`; $('lead').hidden = false; } else $('lead').hidden = true;
+  XPL = explain(I, best); const order = seqOrder(best); let pos = 0;
+  $('seq').innerHTML = order.map(k => { const t = best.plan.L[k], held = t == null; if (!held) pos++; return `<li class="sq${held ? ' held' : ''}" data-k="${k}"><div class="sqh"><span class="pos">${held ? '–' : pos}</span><div><b>${NM[k]}</b><small>${stepLabel(I, k, R, t, f)}</small></div><span class="cf" data-cf="${k}">testing…</span><span class="amt">${held ? '' : fmt(R.sales[k])}</span></div><ul class="why">${XPL[k].lines.map(l => `<li>${l}</li>`).join('')}<li class="cfl" data-cfl="${k}"></li></ul></li>`; }).join('');
+  $('cAll').innerHTML = `<span class="k3">Robustness</span><div class="big">…</div><div class="sub">testing 200 assumption draws</div>`;
+  $('tips').innerHTML = '<li class="q">Finding tipping points…</li>';
+  drawTimeline(I, best); drawBars(R); drawTable(I, best);
+  $('log').innerHTML = R.log.map(([t, n, m, tone]) => `<li class="${tone}"><span>Month ${Math.round(t)}</span><span><b>${n}</b>: ${m}</span></li>`).join('');
+  if (!SEQ.dirty) seqFromBest(best); else MK.forEach(k => { if (!SEQ.order.includes(k)) SEQ.order.push(k); });
+  if (VIEW === 'own') drawSB(); writeHash();
+  cancelRob = robustness(I, best, 200, (fr) => { const el = $('cAll').querySelector('.sub'); if (el) el.textContent = `testing 200 assumption draws · ${Math.round(100 * fr)}%`; }, (res) => { ROB = res; showRobust(I, best, res); tipTimer = setTimeout(() => { if (best !== BEST) return; TIPS = tippingPoints(I, best); showTips(I, best, TIPS); }, 30); });
+}
+function showRobust(I, best, res) {
+  if (best !== BEST) return;
+  const med = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
+  const f = best.plan.first; let weakest = null;
+  EK().forEach(k => {
+    const pill = document.querySelector(`[data-cf="${k}"]`), line = document.querySelector(`[data-cfl="${k}"]`); if (!pill) return;
+    if (res.alt[k] === undefined) { pill.textContent = 'No alternative'; pill.className = 'cf'; return; }
+    const p = res.win[k] / res.N, m = med(res.gap[k]), close = Math.abs(m) < .003, tossUp = close && p < .65;
+    pill.className = 'cf ' + (p >= .85 ? 'hi' : p >= .65 || tossUp ? 'mid' : 'lo'); pill.textContent = tossUp ? 'Close call' : `${Math.round(100 * p)}% robust`;
+    let txt = `Robustness: beats ${altLabel(I, k, res.alt[k], f)} in ${res.win[k]} of ${res.N} draws; median difference ${(100 * m).toFixed(1)}% of value${tossUp ? ', so either choice is reasonable' : close ? ', a small amount either way' : ''}.${p < .5 && !tossUp ? ` Most draws favour ${altLabel(I, k, res.alt[k], f)} instead, so treat this call as uncertain.` : ''}`;
+    if (res.skipKs.includes(k) && res.sg[k].length) { const ps = res.sw[k] / res.N; if (best.plan.skipB[k] || ps < .99) txt += ` ${best.plan.skipB[k] ? 'Leaving out' : 'Filing'} the second indication here holds in ${Math.round(100 * ps)}%.`; }
+    line.innerHTML = txt;
+    if (!close && (!weakest || p < weakest[1])) weakest = [k, p];
+  });
+  if (best.otherFirst && $('leadRob')) $('leadRob').textContent = `Robustness: holds in ${res.firstWin} of ${res.N} draws.`;
+  const pb = res.beatBase / res.N, mb = med(res.baseGap);
+  const wk = !weakest ? 'Every timing call is either a close call or has no alternative.' : weakest[1] >= .995 ? `Every material timing call held in all ${res.N} draws.` : `Weakest material call: ${NM[weakest[0]]}, held in ${Math.round(100 * weakest[1])}% of draws.`;
+  $('cAll').innerHTML = res.same ? `<span class="k3">Robustness</span><div class="big">${weakest ? Math.round(100 * weakest[1]) + '%' : '—'}</div><div class="sub">${wk} Each timing is tested against its best alternative.</div>`
+    : `<span class="k3">Robustness</span><div class="big">${Math.round(100 * pb)}%</div><div class="sub">Beats launching everywhere at approval in ${res.beatBase} of ${res.N} draws${Math.abs(mb) < .003 ? `, but by a median of only ${(100 * mb).toFixed(1)}%, so the timing changes are optional` : ` (median gain ${(100 * mb).toFixed(1)}%)`}. ${wk}</div>`;
+}
+function tipText(it) {
+  const v = it.v, up = it.dir === 'up';
+  if (it.ti.key === 'hr') return `the OS hazard ratio were ${v.toFixed(2)} or ${up ? 'higher' : 'lower'}`;
+  if (it.ti.key === 'd1') return `IA1 had ${v} or ${up ? 'more' : 'fewer'} deaths`;
+  if (it.ti.key === 't2') return `IA2 came ${v} or ${up ? 'more' : 'fewer'} months after IA1`;
+  return `the US price were ${fk(v)} or ${up ? 'more' : 'less'}`;
+}
+function tipJoin(items) {
+  const by = {}; items.forEach(it => { (by[it.ti.key] = by[it.ti.key] || []).push(it); });
+  const parts = Object.values(by).map(g => {
+    if (g.length < 2) return tipText(g[0]);
+    const lo = g.find(x => x.dir === 'down'), hi = g.find(x => x.dir === 'up'), key = g[0].ti.key;
+    if (key === 'hr') return `the OS hazard ratio were outside ${lo.v.toFixed(2)}–${hi.v.toFixed(2)}`;
+    if (key === 'd1') return `IA1 had ${lo.v} or fewer, or ${hi.v} or more, deaths`;
+    if (key === 't2') return `IA2 came ${lo.v} or fewer, or ${hi.v} or more, months after IA1`;
+    return `the US price were ${fk(lo.v)} or less, or ${fk(hi.v)} or more`;
+  });
+  return 'if ' + parts.join(', or if ');
+}
+function showTips(I, best, T) {
+  if (best !== BEST) return;
+  const f = best.plan.first, kw = { now: 'launch at approval', wait: 'wait', hold: 'be held' }, now = { now: 'launches at approval', wait: 'waits', hold: 'is held' };
+  const items = seqOrder(best).filter(k => T[k]).map(k => { const x = T[k], t = best.plan.L[k]; return `<li><b>${NM[k]}</b> ${x.kind === 'wait' ? `waits until month ${t}` : now[x.kind]}. It would ${kw[x.altKind]}${x.altKind === 'wait' && x.alt != null ? ` (month ${x.alt})` : ''} instead ${tipJoin(x.items)}.</li>`; });
+  $('tips').innerHTML = items.join('') || '<li class="q">No material decision flips within the ranges tested (20 deaths to IA2’s count, OS hazard ratio 0.50–0.99, IA2 at 3–48 months, US price $60k–$600k).</li>';
+}
+
+function drawTimeline(I, best, svgId) {
+  const R = best.res, svg = $(svgId || 'tl'), rows = seqOrder(best), lw = 118, W = 720, rh = 24, top = 30, xmax = R.W1 + 6, f = best.plan.first;
+  const X = (m) => lw + (m / xmax) * (W - lw - 10), H = top + rows.length * rh + 18, ia2 = I.t2 + PREP;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.style.minWidth = '560px';
+  let g = `<rect x="${X(W0)}" y="${top - 6}" width="${X(R.W1) - X(W0)}" height="${rows.length * rh + 6}" fill="var(--strip)"/>`;
+  const step = xmax > 100 ? 24 : 12;
+  for (let m = 0; m <= xmax; m += step) g += `<line class="gl" x1="${X(m)}" x2="${X(m)}" y1="${top - 6}" y2="${top + rows.length * rh}"/><text class="ax" x="${X(m)}" y="${top - 10}" text-anchor="middle">${m === 0 ? 'IA1' : 'm' + m}</text>`;
+  if (ia2 < xmax) g += `<line x1="${X(ia2)}" x2="${X(ia2)}" y1="${top - 6}" y2="${top + rows.length * rh}" stroke="var(--ox)" stroke-dasharray="4 3" stroke-width="1.5"/><text class="ax" x="${X(ia2) + 4}" y="${H - 4}" style="fill:var(--ox-ink)">IA2 data ready</text>`;
+  rows.forEach((k, i) => {
+    const y = top + i * rh; g += `<text class="lb" x="0" y="${y + 14}">${NM[k]}</text>`;
+    if (!(k in R.L)) { g += `<text class="ax" x="${lw}" y="${y + 14}">held</text>`; return; }
+    const L = R.L[k], lg = R.lagOf(k), fu = L + lg, a = apprOf(I, k, f);
+    if (L > a) g += `<line x1="${X(a)}" x2="${X(L)}" y1="${y + 10}" y2="${y + 10}" stroke="var(--muted)" stroke-dasharray="2 3"/><circle cx="${X(a)}" cy="${y + 10}" r="2.5" fill="var(--muted)"/>`;
+    if (lg > 0) g += `<rect x="${X(L)}" y="${y + 3}" width="${Math.max(1, X(Math.min(fu, xmax)) - X(L))}" height="14" rx="2" fill="var(--navy-line)"/>`;
+    if (fu < xmax) g += `<rect x="${X(fu)}" y="${y + 3}" width="${X(xmax) - X(fu)}" height="14" rx="2" fill="var(--navy)"/>`;
+    const re = k === 'de' ? R.reDE : k === 'uk' ? R.cdfUK : null; if (re && re < xmax) g += `<path d="M${X(re)} ${y + 1}l4 -4h-8z" fill="var(--gold)"/>`;
+    const s2 = L + SECOND; if (R.hasB(k) && s2 < xmax) g += `<rect x="${X(s2) - 1.5}" y="${y}" width="3" height="20" fill="var(--ox)"/>`;
+    g += `<rect class="hit" data-k="${k}" x="${lw}" y="${y}" width="${W - lw}" height="${rh}"/>`;
+  });
+  svg.innerHTML = g;
+  svg.querySelectorAll('.hit').forEach(h => { const k = h.dataset.k; h.addEventListener('mousemove', e => showTip(e, `<b>${NM[k]}</b><br>Approval month ${apprOf(I, k, f)} · launch month ${R.L[k]} (${R.data[k] === 'ia2' ? 'IA2' : 'IA1'} data)<br>Full funding month ${R.L[k] + R.lagOf(k)}${R.hasB(k) ? `<br>Second indication month ${R.L[k] + SECOND}` : ''}${k === 'de' && R.reDE ? `<br>Reassessment month ${R.reDE}` : ''}${k === 'uk' && R.cdfUK ? `<br>Leaves the Cancer Drugs Fund month ${R.cdfUK}` : ''}`)); h.addEventListener('mouseleave', () => { tip.hidden = true; }); });
+}
+function drawBars(R) {
+  const svg = $('bars'), ks = R.inc.slice().sort((a, b) => R.sales[b] - R.sales[a]), lw = 118, W = 720, rh = 24, vw = 78;
+  const mx = Math.max(1, ...ks.map(k => R.sales[k])), H = Math.max(40, ks.length * rh + 8);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const X = (v) => (v / mx) * (W - lw - vw);
+  let g = '';
+  ks.forEach((k, i) => { const y = i * rh, w = Math.max(5, X(R.sales[k])); g += `<text class="lb" x="0" y="${y + 15}">${NM[k]}</text><path d="M${lw} ${y + 4}h${w - 4}a4 4 0 0 1 4 4v6a4 4 0 0 1 -4 4h-${w - 4}z" fill="var(--navy)"/><text class="vl" x="${lw + w + 6}" y="${y + 15}">${fmt(R.sales[k])}</text><rect class="hit" data-k="${k}" x="0" y="${y}" width="${W}" height="${rh}"/>`; });
+  svg.innerHTML = g || `<text class="ax" x="0" y="20">No markets launched.</text>`;
+  svg.querySelectorAll('.hit').forEach(h => { const k = h.dataset.k; h.addEventListener('mousemove', e => showTip(e, `<b>${NM[k]}</b> · ${fmt(R.sales[k])} net sales<br>${Math.round(100 * R.sales[k] / R.total)}% of the plan<br>Price after the mesh ${fk(R.priceOf(k))} per patient-year`)); h.addEventListener('mouseleave', () => { tip.hidden = true; }); });
+}
+function drawTable(I, best) {
+  const R = best.res, D = R.D, f = best.plan.first, rk = I.basis === 'cases' ? 'rc' : 'rd';
+  const vs = (k, dt) => k === 'de' ? DE_CAT[D.deCat(dt)].replace('no added benefit proven', 'none') : D.V(k, dt).toFixed(2);
+  $('mt').innerHTML = `<thead><tr><th>Market</th><th style="text-align:right">Patients a year</th><th>Approval</th><th>Launch</th><th>Data</th><th>Benefit IA1 / IA2</th><th>Rating</th><th style="text-align:right">Comparator</th><th style="text-align:right">Value-based</th><th style="text-align:right">Your ask</th><th style="text-align:right">Price after the mesh</th><th style="text-align:right">Net sales</th></tr></thead><tbody>${seqOrder(best).map(k => { const on = k in R.L; return `<tr><td>${NM[k]}</td><td class="n">${n0(MKT[k][rk] * MKT[k].reach * I.usN)}</td><td>${apprOf(I, k, f)}</td><td>${on ? R.L[k] : 'held'}</td><td>${on ? (R.data[k] === 'ia2' ? 'IA2' : 'IA1') : '–'}</td><td>${vs(k, 'ia1')} / ${vs(k, 'ia2')}</td><td>${on ? (rateName(I, k, R) || '–') : '–'}</td><td class="n">${fk(R.C(k))}</td><td class="n">${on ? fk(R.Pacc(k)) : '–'}</td><td class="n">${fk(R.ask(k))}</td><td class="n">${on ? fk(R.priceOf(k)) : '–'}</td><td class="n">${on ? fmt(R.sales[k]) : '–'}</td></tr>`; }).join('')}</tbody>`;
+}
+/* ---------------- Part 2: build your own sequence ---------------- */
+const SEQ = { order: MK.slice(), hold: new Set(), when: {}, gap: 0, first: 'A', skipB: {}, dirty: false, preset: 'rec' };
+const SB_PRESETS = {
+  rec: { name: 'The recommendation' },
+  appr: { name: 'Everyone at approval', gap: 0 },
+  setters: { name: 'Price setters first', order: ['us', 'uk', 'de', 'jp', 'fr', 'ch', 'nl', 'be', 'ca', 'au', 'kr', 'it', 'es', 'br'], gap: 2 },
+  low: { name: 'US, then low prices first', order: ['us', 'br', 'es', 'it', 'kr', 'ca', 'au', 'be', 'uk', 'nl', 'ch', 'fr', 'jp', 'de'], gap: 2 }
+};
+let VIEW = 'rec';
+function makeSeq(key, best) {
+  const I = IN;
+  if (key === 'rec') {
+    const f = best.plan.first, ia2r = I.t2 + PREP, order = seqOrder(best).slice(); MK.forEach(k => { if (!order.includes(k)) order.push(k); });
+    const when = {}; MK.forEach(k => { const t = best.plan.L[k], a = apprOf(I, k, f); when[k] = t == null || t <= a ? 0 : t === Math.max(a, ia2r) ? 'ia2' : t - a; });
+    return { order, hold: new Set(EK().filter(k => best.plan.L[k] == null)), when, gap: 0, first: f, skipB: { ...best.plan.skipB }, preset: 'rec' };
+  }
+  const order = key === 'appr' ? MK.slice().sort((a, b) => apprOf(I, a, 'A') - apprOf(I, b, 'A') || MK.indexOf(a) - MK.indexOf(b)) : SB_PRESETS[key].order.slice();
+  MK.forEach(k => { if (!order.includes(k)) order.push(k); });
+  return { order, hold: new Set(), when: Object.fromEntries(MK.map(k => [k, 0])), gap: SB_PRESETS[key].gap, first: 'A', skipB: {}, preset: key };
+}
+function seqFromBest(best) { Object.assign(SEQ, makeSeq('rec', best), { dirty: false }); }
+function seqPlan(I, S) {
+  S = S || SEQ; const p = { first: I.second ? S.first : 'A', L: {}, skipB: { ...(S.skipB || {}) } }, ia2r = I.t2 + PREP; let prev = -Infinity;
+  S.order.filter(k => MKT[k].on !== false).forEach(k => {
+    if (S.hold.has(k)) { p.L[k] = null; return; }
+    const a = apprOf(I, k, p.first), w = S.when[k] ?? 0; let t = w === 'ia2' ? Math.max(a, ia2r) : a + w;
+    t = Math.max(t, prev + S.gap); p.L[k] = t; prev = t;
+  });
+  return p;
+}
+function setView(v) {
+  VIEW = v; $('recView').hidden = v !== 'rec'; $('ownView').hidden = v !== 'own';
+  document.querySelectorAll('.mode button[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === v)));
+  if (v === 'own') drawSB();
+}
+function drawSB() {
+  if (!BEST) return;
+  const I = { ...IN }, R0 = BEST.res, plan = seqPlan(I), r = simulate(I, plan), f = plan.first, ia2r = I.t2 + PREP;
+  const base = simulate(I, planAll(I, 'appr', 'A')).value;
+  $('sbPresets').innerHTML = '<span class="k3">Start from</span>' + Object.keys(SB_PRESETS).map(k => { const v = simulate(I, seqPlan(I, makeSeq(k, BEST))).value; return `<button type="button" data-p="${k}" aria-pressed="${SEQ.preset === k}">${SB_PRESETS[k].name}<small>${fmt(v)}</small></button>`; }).join('');
+  $('sbGap').value = String(SEQ.gap); $('sbFirst').value = SEQ.first; $('sbFirst').disabled = !I.second;
+  const act = SEQ.order.filter(k => MKT[k].on !== false); let pos = 0;
+  $('sbList').innerHTML = act.map((k, i) => {
+    const held = SEQ.hold.has(k); if (!held) pos++;
+    const a = apprOf(I, k, f), w = SEQ.when[k] ?? 0, own = w === 'ia2' ? Math.max(a, ia2r) : a + w, L = r.L[k];
+    const opts = [[0, `At approval (month ${a})`], ...[3, 6, 9, 12, 18, 24].map(m => [m, `${m} months later (month ${a + m})`])]; if (ia2r > a) opts.push(['ia2', `On IA2 data (month ${ia2r})`]);
+    const note = held ? 'held out of the plan' : `launches month ${L} · ${r.data[k] === 'ia2' ? 'IA2' : 'IA1'} data${L > own ? ' · pushed later by the order' : ''}`;
+    return `<li class="${held ? 'off' : ''}"><span class="pos">${held ? '–' : pos}</span><span class="nm">${NM[k]}<small>${note}</small></span><span class="bt"><button type="button" data-mv="-1" data-k="${k}" ${i === 0 ? 'disabled' : ''} aria-label="Move ${NM[k]} earlier">↑</button><button type="button" data-mv="1" data-k="${k}" ${i === act.length - 1 ? 'disabled' : ''} aria-label="Move ${NM[k]} later">↓</button><select data-w="${k}" aria-label="When ${NM[k]} launches" ${held ? 'disabled' : ''}>${opts.map(([v, t]) => `<option value="${v}"${String(v) === String(w) ? ' selected' : ''}>${t}</option>`).join('')}</select><button type="button" class="hold" data-hold="${k}" aria-pressed="${held}">${held ? 'Held' : 'Hold'}</button></span></li>`;
+  }).join('');
+  const d = r.value - R0.value;
+  $('sbTot').textContent = fmt(r.value);
+  $('sbSub').textContent = `Net sales ${fmt(r.total)} less launch costs ${fmt(r.totalCost)}. Launching everywhere at approval: ${fmt(base)}.`;
+  $('sbCmp').innerHTML = `<span class="k3">Against the recommendation</span><div class="big">${Math.abs(d) < 5e5 ? 'Same' : (d > 0 ? '+' : '−') + fmt(Math.abs(d))}</div><div class="sub">${Math.abs(d) < 5e5 ? 'Your sequence matches the recommended plan’s value.' : d > 0 ? 'Better than the recommendation. The search changes one choice at a time and ignores gains under 0.2%, so a hand-built plan can sometimes edge ahead.' : `${Math.abs(100 * d / Math.abs(R0.value)).toFixed(1)}% below the recommended plan. Read the table and price log below to see which markets and rules account for the gap.`}</div>`;
+  const rows = act.map(k => { const on = k in r.L, onR = k in R0.L, dk = (r.sales[k] || 0) - (on ? r.cost[k] : 0) - ((R0.sales[k] || 0) - (onR ? R0.cost[k] : 0)); return `<tr><td>${NM[k]}</td><td>${on ? r.L[k] : 'held'}</td><td>${onR ? R0.L[k] : 'held'}</td><td>${on ? (r.data[k] === 'ia2' ? 'IA2' : 'IA1') : '–'}</td><td class="n">${on ? fk(r.priceOf(k)) : '–'}</td><td class="n">${onR ? fk(R0.priceOf(k)) : '–'}</td><td class="n">${on ? fmt(r.sales[k]) : '–'}</td><td class="n ${dk >= 0 ? 'up' : 'down'}">${Math.abs(dk) < 5e5 ? '–' : (dk > 0 ? '+' : '−') + fmt(Math.abs(dk))}</td></tr>`; }).join('');
+  $('sbT').innerHTML = `<thead><tr><th>Market</th><th>Your launch</th><th>Recommended</th><th>Data</th><th style="text-align:right">Your price</th><th style="text-align:right">Recommended price</th><th style="text-align:right">Your net sales</th><th style="text-align:right">Value change</th></tr></thead><tbody>${rows}</tbody>`;
+  drawTimeline(I, { res: r, plan }, 'tlOwn');
+  $('logOwn').innerHTML = r.log.map(([t, n, m, tone]) => `<li class="${tone}"><span>Month ${Math.round(t)}</span><span><b>${n}</b>: ${m}</span></li>`).join('');
+}
+document.querySelector('.mode').addEventListener('click', e => { const b = e.target.closest('button[data-mode]'); if (b) setView(b.dataset.mode); });
+$('toOwn').addEventListener('click', () => { setView('own'); const y = $('ownView').getBoundingClientRect().top + scrollY - 80; window.scrollTo({ top: y }); });
+$('sbPresets').addEventListener('click', e => { const b = e.target.closest('button[data-p]'); if (!b || !BEST) return; Object.assign(SEQ, makeSeq(b.dataset.p, BEST)); SEQ.dirty = b.dataset.p !== 'rec'; drawSB(); });
+$('sbGap').addEventListener('change', e => { SEQ.gap = +e.target.value; SEQ.dirty = true; SEQ.preset = ''; drawSB(); });
+$('sbFirst').addEventListener('change', e => { SEQ.first = e.target.value; SEQ.dirty = true; SEQ.preset = ''; drawSB(); });
+$('sbList').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const k = b.dataset.k || b.dataset.hold;
+  if (b.dataset.mv) { const act = SEQ.order.filter(x => MKT[x].on !== false), i = act.indexOf(k), j = i + (+b.dataset.mv); if (j < 0 || j >= act.length) return; const a1 = SEQ.order.indexOf(act[i]), a2 = SEQ.order.indexOf(act[j]); [SEQ.order[a1], SEQ.order[a2]] = [SEQ.order[a2], SEQ.order[a1]]; }
+  else if (b.dataset.hold) { SEQ.hold.has(k) ? SEQ.hold.delete(k) : SEQ.hold.add(k); }
+  else return;
+  SEQ.dirty = true; SEQ.preset = ''; drawSB();
+  const sel = b.dataset.mv ? `[data-mv="${b.dataset.mv}"][data-k="${k}"]` : `[data-hold="${k}"]`; const nb = $('sbList').querySelector(sel); if (nb && !nb.disabled) nb.focus();
+});
+$('sbList').addEventListener('change', e => { const s = e.target.closest('select[data-w]'); if (!s) return; SEQ.when[s.dataset.w] = s.value === 'ia2' ? 'ia2' : +s.value; SEQ.dirty = true; SEQ.preset = ''; drawSB(); });
+
+/* ---------------- Part 2: market assumptions editor ---------------- */
+const MCOLS = [['rd', 'Patients vs US (deaths basis)', .001], ['rc', 'Patients vs US (cases basis)', .001], ['reach', 'Share reachable', .05], ['b', 'Brand price level ($k)', 1], ['appr', 'Approval month', 1], ['lag', 'Funding delay (months)', 1]];
+function drawMarketEditor() {
+  $('mkt').innerHTML = `<thead><tr><th>Include</th><th>Market</th>${MCOLS.map(c => `<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${MK.map(k => `<tr><td><input type="checkbox" data-k="${k}" data-c="on" ${MKT[k].on === false ? '' : 'checked'} ${k === 'us' ? 'disabled' : ''} aria-label="Include ${NM[k]}"></td><td>${NM[k]}</td>${MCOLS.map(([c, , st]) => `<td><input type="number" step="${st}" data-k="${k}" data-c="${c}" value="${MKT[k][c]}" aria-label="${NM[k]} ${c}"${k === 'us' && (c === 'rd' || c === 'rc') ? ' disabled' : ''}></td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+$('mkt').addEventListener('change', e => { const el = e.target.closest('input'); if (!el) return; const k = el.dataset.k, c = el.dataset.c; if (c === 'on') MKT[k].on = el.checked; else { const v = parseFloat(el.value); if (!isFinite(v) || v < 0) { el.value = MKT[k][c]; return; } MKT[k][c] = v; } syncInputs(); schedule(); });
+$('mktReset').addEventListener('click', () => { MKT = JSON.parse(JSON.stringify(MKT0)); drawMarketEditor(); syncInputs(); schedule(); });
+
+/* ---------------- Part 2: sharing ---------------- */
+function scenarioCode() { const m = {}; MK.forEach(k => { const d = {}; Object.keys(MKT[k]).concat(['on']).forEach(c => { if (MKT[k][c] !== MKT0[k][c] && MKT[k][c] !== undefined) d[c] = MKT[k][c]; }); if (Object.keys(d).length) m[k] = d; }); return btoa(unescape(encodeURIComponent(JSON.stringify({ i: IN, m })))); }
+function writeHash() { try { history.replaceState(null, '', '#engine=' + scenarioCode()); } catch (e) { /* hash not writable here */ } }
+function readHash() { try { const h = location.hash; if (!h.startsWith('#engine=')) return false; const o = JSON.parse(decodeURIComponent(escape(atob(h.slice(8))))); Object.keys(IN0).forEach(k => { if (o.i && o.i[k] !== undefined) IN[k] = o.i[k]; }); MKT = JSON.parse(JSON.stringify(MKT0)); Object.entries(o.m || {}).forEach(([k, d]) => { if (MKT[k]) Object.assign(MKT[k], d); }); return true; } catch (e) { return false; } }
+function copyText(text, label) {
+  const done = () => { $('shareMsg').textContent = `${label} copied.`; $('shareOut').hidden = true; };
+  const fallback = () => { $('shareOut').hidden = false; $('shareOut').value = text; $('shareOut').focus(); $('shareOut').select(); $('shareMsg').textContent = 'Copy the text below.'; };
+  try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+}
+function summaryText() {
+  if (!BEST) return '';
+  const I = IN, R = BEST.res, f = BEST.plan.first, order = seqOrder(BEST); let pos = 0;
+  const lines = [`Drug X launch plan (launch sequence engine, illustrative)`, `Profile: ${n0(I.usN)} US patients a year; ${I.soc === 'generic' ? 'generic' : 'branded'} standard of care at ${fk(I.socCost)}; PFS HR ${I.pfs.toFixed(2)}; OS HR ${I.hr1.toFixed(2)} with ${I.d1} deaths at IA1 and ${I.hr2.toFixed(2)} with ${I.d2} at IA2 (month ${I.t2}); ${I.saf === 'sup' ? 'superior' : I.saf === 'worse' ? 'worse' : 'similar'} safety; US price ${fk(I.price)}.`, `Settings: EU evidence ${I.jca === 'fixed' ? 'fixed at the JCA' : 'can be updated'}; reassessment ${I.reassess ? 'on' : 'off'}; US MFN ${I.mfn ? 'on' : 'off'}; ${I.horizon} years${I.disc ? `, ${I.disc}% discount` : ''}; launch cost ${fmt(I.launchCost * 1e6)} per market.`, `${I.horizon}-year value: ${fmt(R.value)} (net sales ${fmt(R.total)}, launch costs ${fmt(R.totalCost)}).${ROB && !ROB.same ? ` Beats launching everywhere at approval in ${ROB.beatBase} of ${ROB.N} draws.` : ''}`, I.second ? `Lead with indication ${f}.` : '', 'Sequence:'];
+  order.forEach(k => { const t = BEST.plan.L[k]; if (t != null) pos++; const rb = ROB && ROB.alt[k] !== undefined ? ` (${Math.round(100 * ROB.win[k] / ROB.N)}% robust)` : ''; lines.push(`${t == null ? '–' : pos}. ${NM[k]}: ${stepLabel(I, k, R, t, f)}${t == null ? '' : `, ${fmt(R.sales[k])}`}${rb}`); });
+  if (TIPS && Object.keys(TIPS).length) { lines.push('What would change the plan:'); Object.entries(TIPS).forEach(([k, x]) => lines.push(`- ${NM[k]}: ${x.altKind === 'now' ? 'launch at approval' : x.altKind === 'hold' ? 'hold' : 'wait'} ${tipJoin(x.items)}.`)); }
+  lines.push('Illustrative model of the access rules in Project 01; not a forecast.');
+  return lines.filter(Boolean).join('\n');
+}
+$('btnLink').addEventListener('click', () => { writeHash(); copyText(location.href, 'Scenario link'); });
+$('btnSum').addEventListener('click', () => copyText(summaryText(), 'Summary'));
+$('btnPrint').addEventListener('click', () => { try { document.querySelectorAll('#p2 details').forEach(d => { d.dataset.wasOpen = d.open; }); window.print(); } catch (e) { $('shareMsg').textContent = 'Printing is not available here; use your browser’s print command.'; } });
+
+/* ---------------- Part 2: precedent checks ---------------- */
+const CHECKS_P = [
+  { src: 'Danzon, Wang and Wang 2005', pat: 'Launches follow expected price and volume: low-price, low-volume markets are skipped.', prof: 'Marginal drug (PFS HR 0.85, OS HR 0.95), $15m launch cost', I: { pfs: .85, hr1: .95, hr2: .95, d1: 300, d2: 450, launchCost: 15 },
+    test: (b, I) => { const held = EK().filter(k => b.plan.L[k] == null), on = b.res.inc; if (!held.length) return [false, 'No market held.']; const rev = (k) => MKT[k].b * (I.basis === 'cases' ? MKT[k].rc : MKT[k].rd) * MKT[k].reach; const mh = mean(held.map(rev)), mo = mean(on.map(rev)); return [mh < mo, `Held ${listJoin(held.map(THE))}; their price × patients averages ${Math.round(100 * mh / mo)}% of the launched markets’.`]; } },
+  { src: 'Staab et al. 2018', pat: 'Companies leave Germany when no added benefit is proven and a low German price would spread.', prof: 'PFS-only drug (OS HR 0.97) against generics, US MFN on, no reassessment', I: { pfs: .5, hr1: .97, hr2: .97, d1: 250, d2: 400, mfn: true, reassess: false },
+    test: (b) => { const h = b.plan.L.de == null; return [h, h ? `Germany held; its price would have been capped at the comparator’s ${fk(b.res.C('de'))}.` : `Germany launched in month ${b.res.L.de}.`]; } },
+  { src: 'LSE 2017', pat: 'Markets with low prices that others can see are launched later or not at all.', prof: 'Same PFS-only drug, US MFN on', I: { pfs: .5, hr1: .97, hr2: .97, d1: 250, d2: 400, mfn: true, reassess: false },
+    test: (b, I) => { const late = EK().filter(k => !MKT[k].conf && k !== 'us' && (b.plan.L[k] == null || b.plan.L[k] > apprOf(I, k, b.plan.first))); return [late.length > 0, late.length ? `Held or delayed: ${listJoin(late.map(THE))}, whose prices are visible to others.` : 'No visible-price market held or delayed.']; } },
+  { src: 'Mills and Kanavos 2023', pat: 'Multi-indication drugs lead with the smaller, higher-value indication.', prof: 'The three archetypes', I: null,
+    test: () => { const r = Object.entries(ARCH).map(([a, x]) => [x.name, optimize({ ...IN0, ...x.set }).plan.first]); const all = r.every(x => x[1] === 'A'); return [all ? 'part' : false, r.map(x => `${x[0]}: ${x[1]} first`).join('; ') + '. Withholding a later indication, which Mills and Kanavos also saw, does not appear: here the broader indication’s volume outweighs the price cut.']; } },
+  { src: 'EU Perspectives, Aug 2026', pat: 'US most-favoured-nation pricing delays or removes EU launches.', prof: 'Default drug, with and without US MFN', I: {},
+    test: (b, I) => { const eu = EK().filter(k => MKT[k].eu); const atAppr = (bb, II) => eu.filter(k => bb.plan.L[k] != null && bb.plan.L[k] <= apprOf(II, k, bb.plan.first)).length; const I0 = { ...I, mfn: false }, I1 = { ...I, mfn: true }; const n0b = atAppr(optimize(I0), I0), n1b = atAppr(optimize(I1), I1); return [n1b < n0b, `EU markets launched at approval: ${n0b} of ${eu.length} without MFN, ${n1b} with it.`]; } }
+];
+let valRan = false;
+$('val').addEventListener('toggle', () => { if (!$('val').open || valRan) return; valRan = true; const rows = $('valT').querySelector('tbody'); rows.innerHTML = ''; let i = 0;
+  const next = () => { if (i >= CHECKS_P.length) return; const c = CHECKS_P[i++]; const I = { ...IN0, ...(c.I || {}) }; const saved = MKT; MKT = JSON.parse(JSON.stringify(MKT0)); let ok, msg; try { const b = c.I ? optimize(I) : null; [ok, msg] = c.test(b, I); } catch (e) { ok = false; msg = 'Check failed to run.'; } MKT = saved; rows.insertAdjacentHTML('beforeend', `<tr><td><b>${c.src}</b><br>${c.pat}</td><td>${c.prof}</td><td>${msg}</td><td class="vr ${ok === 'part' ? 'part' : ok ? 'ok' : 'no'}">${ok === 'part' ? 'Partly reproduced' : ok ? 'Reproduced' : 'Not reproduced'}</td></tr>`); setTimeout(next, 20); };
+  setTimeout(next, 20); });
+
+/* ---------------- Part 2: self-check quiz ---------------- */
+const QZ = [
+  ['IQWiG rates a mortality benefit as “considerable” when the hazard ratio’s upper 95% confidence limit is below…', ['0.95', '0.85', '1.00', '0.75'], 0, 'Below 0.85 is major, below 0.95 considerable, below 1.00 minor (all-cause mortality).'],
+  ['With an OS hazard ratio of 0.80, roughly how many deaths does a trial need for the upper limit to fall below 0.95?', ['About 520', 'About 150', 'About 250', 'About 1,500'], 0, 'SE of log HR ≈ 2/√deaths; log(0.95) − log(0.80) ≈ 0.172 = 1.96 × 2/√D, so D ≈ 520.'],
+  ['Why does a low German price matter beyond Germany?', ['Japan, Switzerland, Brazil, Canada and US MFN all look at it', 'Only Germany’s sickness funds use it', 'It sets the EU joint clinical assessment price', 'It caps the US list price by law'], 0, 'Japan counts Germany’s post-AMNOG price; Switzerland and Brazil compare against it; under MFN it can pull the US price down.'],
+  ['What does the EU joint clinical assessment change for “waiting for IA2” in one EU country?', ['The clinical evidence is assessed at EU level around approval, and national bodies must give it due consideration', 'Nothing: each country still chooses its own data cut freely', 'It sets one EU price', 'It replaces national pricing'], 0, 'The JCA report is finished within 30 days of authorisation; AMNOG generally starts after it and must give it due consideration.'],
+  ['Japan raises a new drug’s price toward the foreign average only if…', ['At least two reference countries have prices, and the rise is capped at twice Japan’s own price', 'The US price is known', 'The drug is an orphan', 'Germany has a free launch price'], 0, 'MHLW rules exclude upward adjustment based on one country’s price and cap it at twice the calculated price.']
+];
+const QORD = QZ.map((q, i) => q[1].map((_, j) => j).sort((a, b) => ((a * 7 + i * 3) % 5) - ((b * 7 + i * 3) % 5)));
+function drawQuiz() { $('quiz').innerHTML = QZ.map((q, i) => `<li><p><b>${i + 1}.</b> ${q[0]}</p><div class="qo">${QORD[i].map(j => `<button type="button" data-q="${i}" data-o="${j}">${q[1][j]}</button>`).join('')}</div><p class="qx" id="qx${i}" hidden></p></li>`).join(''); }
+$('quiz').addEventListener('click', e => { const b = e.target.closest('button[data-q]'); if (!b) return; const q = QZ[+b.dataset.q], ok = +b.dataset.o === q[2]; b.closest('.qo').querySelectorAll('button').forEach(x => { x.disabled = true; if (+x.dataset.o === q[2]) x.classList.add('right'); }); if (!ok) b.classList.add('wrong'); const x = $('qx' + b.dataset.q); x.hidden = false; x.innerHTML = `<b>${ok ? 'Correct.' : 'Not quite.'}</b> ${q[3]}`; });
+
+drawQuiz(); drawMarketEditor();
+document.querySelector('.gtoc').addEventListener('click', e => { const b = e.target.closest('button[data-to]'); if (!b) return; const el = $(b.dataset.to); window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 76 }); });
+if (readHash()) { drawMarketEditor(); syncInputs(); setTimeout(() => showTab('t2'), 0); } else { syncInputs(); if (location.hash === '#guide') setTimeout(() => showTab('t3'), 0); }
+</script>
+
+</body></html>
