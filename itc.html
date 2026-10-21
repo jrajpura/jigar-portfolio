@@ -1,0 +1,562 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Indirect Comparisons Explained · Jigar Rajpura, PhD</title><meta name="description" content="Indirect treatment comparisons explained interactively: naive, Bucher, network meta-analysis, MAIC, STC and ML-NMR, with hypothetical medicines. By Jigar Rajpura, PhD."><meta name="author" content="Jigar Rajpura"><meta property="og:title" content="Indirect Comparisons Explained · Jigar Rajpura, PhD"><meta property="og:description" content="Indirect treatment comparisons explained interactively: naive, Bucher, network meta-analysis, MAIC, STC and ML-NMR, with hypothetical medicines. By Jigar Rajpura, PhD."><meta name="theme-color" content="#F3F3F1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231D2433'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='30' fill='%23F3F3F1'%3EJR%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap"><style>:root {
+  --paper: #F3F3F1; --surface: #FFFFFF; --ink: #1D2433; --ink-2: #434B5C; --muted: #6C7282; --rule: #DADBD8;
+  --navy: #2B4A6F; --navy-bg: #E3EAF2; --navy-line: #AFC0D4;
+  --ox: #7A1F2B; --ox-ink: #6E1C27; --ox-bg: #F3E4E5; --ox-line: #D7AEB3;
+  --strip: #EEEBE0; --gold: #6B5A1E; --amber: #B7791F; --amber-bg: #F6EBD6;
+  --med: #2E7A57; --med-bg: #E2EFE7; --plot: #FBFAF7;
+  --c1: #2B4A6F; --c2: #7A1F2B; --c3: #2E7A57; --c4: #B7791F; --c5: #6B4E8A; --c6: #6C7282;
+  --f-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --f-body: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 70px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+h1, h2, h3, h4, p, ul, ol, figure, dl, dd { margin: 0; }
+a { color: var(--navy); text-underline-offset: 3px; }
+button, input, select { font: inherit; color: inherit; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+@media (max-width: 640px) { .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; padding-block: 12px; }
+.brand { font-family: var(--f-display); font-weight: 600; font-size: 17px; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.brand span { color: var(--muted); font-weight: 400; }
+.bar .sp { flex: 1; }
+.back { font-weight: 600; font-size: 14.5px; color: var(--ox-ink); text-decoration: none; white-space: nowrap; }
+@media (max-width: 520px) { .brand span { display: none; } }
+main { display: flex; flex-direction: column; gap: 30px; padding-block: 26px 40px; }
+.eyebrow { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.eyebrow b { color: var(--ox-ink); }
+.eyebrow a { color: inherit; }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(30px, 3.8vw, 48px); line-height: 1.08; text-wrap: balance; }
+.lede { font-size: 17.5px; line-height: 1.6; color: var(--ink-2); }
+.lede b { color: var(--ink); }
+.intro { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px 36px; align-items: start; }
+@media (max-width: 960px) { .intro { grid-template-columns: 1fr; } }
+.intro > div { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.aside { background: var(--navy-bg); border-radius: 4px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.k3 { font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); }
+.aside p, .aside li { font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.aside ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.aside b { color: var(--ink); }
+.tabs { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--surface); }
+@media (max-width: 760px) { .tabs { grid-template-columns: 1fr; } }
+.tabs button { border: 0; border-right: 1px solid var(--rule); background: var(--surface); padding: 12px 16px; text-align: left; cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 0 12px; align-items: center; }
+.tabs button:last-child { border-right: 0; }
+@media (max-width: 760px) { .tabs button { border-right: 0; border-bottom: 1px solid var(--rule); } .tabs button:last-child { border-bottom: 0; } }
+.tabs .n { grid-row: span 2; width: 32px; height: 32px; border-radius: 999px; border: 1.5px solid var(--ink-2); display: grid; place-items: center; font-family: var(--f-display); font-size: 17px; }
+.tabs b { font-size: 16px; line-height: 1.25; }
+.tabs small { font-size: 13.5px; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
+.tabs button[aria-selected="true"] small { color: #C9CDD6; }
+.tabs button[aria-selected="true"] .n { background: #fff; color: var(--ink); border-color: #fff; }
+.tabs button:focus-visible, .btn:focus-visible, .chip:focus-visible, .seg button:focus-visible, .ms:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.panel { display: flex; flex-direction: column; gap: 18px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(300px, 1fr); gap: 16px; align-items: stretch; }
+@media (max-width: 1040px) { .grid2 { grid-template-columns: 1fr; } }
+.box { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.box > h3 { font-size: 16px; font-weight: 700; }
+.box > h2, .sec > h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(21px, 2vw, 25px); line-height: 1.2; }
+.sec { display: flex; flex-direction: column; gap: 14px; }
+.sec > h2 { border-top: 2px solid var(--ink); padding-top: 10px; }
+.sec > p, .box > p { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.box p b, .sec p b { color: var(--ink); }
+.note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.plot { background: var(--plot); border: 1px solid var(--rule); border-radius: 4px; }
+.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.ctrl { display: flex; flex-direction: column; gap: 4px; }
+.ctrl label { display: flex; justify-content: space-between; gap: 8px; font-size: 14.5px; font-weight: 600; }
+.ctrl label output { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--navy); white-space: nowrap; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--navy); }
+.ctrl .hint { font-size: 13px; color: var(--muted); line-height: 1.35; }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 18px; }
+select.sel { height: 36px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); padding: 0 8px; font-weight: 600; font-size: 14.5px; max-width: 100%; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); font-weight: 600; font-size: 14.5px; cursor: pointer; color: var(--ink); }
+.btn:hover { border-color: var(--ink); }
+.btn.pri { background: var(--ink); color: #fff; border-color: var(--ink); }
+.row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 10px 4px 6px; background: var(--surface); cursor: pointer; }
+.chip i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.chip[aria-pressed="false"] { color: var(--muted); border-style: dashed; }
+.chip[aria-pressed="false"] i { background: transparent !important; box-shadow: inset 0 0 0 2px var(--rule); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { background: var(--paper); border-radius: 4px; padding: 8px 10px; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.stat span { font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .03em; }
+.stat b { font-family: var(--f-display); font-weight: 500; font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 12.5px; color: var(--ink-2); }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); background: var(--paper); font-weight: 700; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.hl td { background: var(--amber-bg); }
+.callout { background: var(--amber-bg); border-left: 4px solid var(--amber); border-radius: 4px; padding: 10px 14px; font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); flex-wrap: wrap; }
+.seg button { border: 0; border-right: 1px solid var(--rule); background: none; padding: 7px 12px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.learn { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 960px) { .learn { grid-template-columns: 1fr; } }
+.learn > div { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.learn > div:nth-child(2) { border-top-color: var(--ox); }
+.learn > div:nth-child(3) { border-top-color: var(--amber); }
+.learn h3 { font-size: 16px; }
+.learn p { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.src { columns: 2 420px; column-gap: 32px; padding-left: 20px; margin: 0; }
+.src li { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); margin-bottom: 6px; break-inside: avoid; }
+.sitenote { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); border: 2px solid var(--ox); background: var(--surface); border-radius: 4px; padding: 9px 14px; }
+.sitenote .pill { background: var(--ox); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border-radius: 3px; padding: 2px 6px; margin-right: 8px; }
+.sitenote b { color: var(--ink); }
+svg text { font-family: var(--f-body); }
+.ax { stroke: #B9BCC2; stroke-width: 1; }
+.gridl { stroke: #E6E6E2; stroke-width: 1; }
+.tick { font-size: 13px; fill: var(--muted); }
+.axl { font-size: 13.5px; fill: var(--ink-2); font-weight: 600; }
+</style></head><body>
+<style>
+.net svg { display: block; width: 100%; height: auto; }
+.fp text { font-family: var(--f-body); }
+.tree { display: flex; flex-direction: column; gap: 10px; }
+.q { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.q.done { background: var(--paper); }
+.q p { font-size: 16px; font-weight: 600; line-height: 1.4; }
+.q small { font-size: 14px; color: var(--muted); line-height: 1.4; }
+.q .row .btn[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.ans { border: 2px solid var(--navy); border-radius: 4px; background: var(--navy-bg); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ans.warn { border-color: var(--ox); background: var(--ox-bg); }
+.ans h3 { font-family: var(--f-display); font-weight: 500; font-size: 22px; }
+.ans p, .ans li { font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.ans ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.mt td { font-size: 14px; line-height: 1.4; }
+.mt td:first-child { font-weight: 700; white-space: nowrap; }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 3px; padding: 1px 6px; }
+.tag.ok { background: var(--med-bg); color: var(--med); }
+.tag.mid { background: var(--amber-bg); color: var(--gold); }
+.tag.bad { background: var(--ox-bg); color: var(--ox-ink); }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--navy); }
+</style>
+<header class="bar"><div class="wrap"><a class="brand" href="index.html">Jigar Rajpura <span>· Portfolio</span></a><span class="sp"></span><a class="back" href="index.html#about">← All projects</a></div></header>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <p class="eyebrow"><a href="index.html#about">Portfolio</a> · <b>Project 09</b> · Evidence synthesis · October 2026</p>
+      <h1>Comparing medicines that never met</h1>
+      <p class="lede">Most new medicines are tested against one comparator, but payers and HTA bodies want to know how they compare with everything else in use. When no trial put the two side by side, analysts build an <b>indirect treatment comparison</b>. This page works through the family of methods, from the tempting shortcut that should never be used to the population-adjusted methods that HTA bodies now scrutinise most closely.</p>
+    </div>
+    <aside class="aside" aria-label="About this project">
+      <span class="k3">The running example</span>
+      <p><b>Drug Z</b> was tested against <b>Chemo A</b> in the ZEN-1 trial. <b>Immunotherapy B</b> was tested against Chemo A in B-301. Nobody has run Drug Z against Immunotherapy B, but a country’s PICO asks for exactly that comparison (see <a href="jca-pico.html">Project 08</a>).</p>
+      <p>All medicines, trials and numbers are invented. Hazard ratios below 1 favour the first-named medicine.</p>
+    </aside>
+  </section>
+
+  <nav class="tabs" style="--n:5" aria-label="Parts">
+    <button type="button" data-t="naive" aria-selected="true"><span class="n">1</span><b>Naive vs anchored</b><small>Why the shortcut fails</small></button>
+    <button type="button" data-t="bucher" aria-selected="false"><span class="n">2</span><b>Bucher method</b><small>One common comparator</small></button>
+    <button type="button" data-t="nma" aria-selected="false"><span class="n">3</span><b>Network meta-analysis</b><small>Direct and indirect together</small></button>
+    <button type="button" data-t="maic" aria-selected="false"><span class="n">4</span><b>MAIC, STC, unanchored</b><small>When populations differ</small></button>
+    <button type="button" data-t="which" aria-selected="false"><span class="n">5</span><b>Which method?</b><small>A decision guide</small></button>
+  </nav>
+
+  <!-- ================= PART 1 ================= -->
+  <section class="panel" data-panel="naive">
+    <div class="grid2">
+      <div class="box">
+        <h3>Two trials, one shared comparator</h3>
+        <div class="plot"><svg id="nvSvg" role="img" aria-label="Survival curves from two trials"></svg></div>
+        <div class="legend row" style="gap:6px 16px;font-size:13.5px;color:var(--ink-2)"><span><b style="color:#2B4A6F">━</b> ZEN-1 trial (solid)</span><span><b style="color:#7A1F2B">┅</b> B-301 trial (dashed)</span></div>
+        <div class="plot fp"><svg id="nvFp" role="img" aria-label="Naive and anchored estimates of Drug Z versus Immunotherapy B"></svg></div>
+        <div class="stats" id="nvStats"></div>
+      </div>
+      <div class="box">
+        <h3>Change the trials</h3>
+        <div class="ctrl"><label for="nvF">How sick were B-301’s patients? <output id="nvFO"></output></label><input type="range" id="nvF" min="0.6" max="1.4" step="0.05" value="0.75"><span class="hint">Risk of death on Chemo A in B-301, relative to ZEN-1. Below 1 means B-301 enrolled fitter patients, which often happens in later or differently designed trials.</span></div>
+        <div class="ctrl"><label for="nvZ">True effect, Drug Z vs Chemo A <output id="nvZO"></output></label><input type="range" id="nvZ" min="0.4" max="1.1" step="0.05" value="0.7"></div>
+        <div class="ctrl"><label for="nvB">True effect, Immunotherapy B vs Chemo A <output id="nvBO"></output></label><input type="range" id="nvB" min="0.4" max="1.1" step="0.05" value="0.8"></div>
+        <div class="callout" id="nvRead"></div>
+        <div class="tbl"><table id="nvTbl"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PART 2 ================= -->
+  <section class="panel" data-panel="bucher" hidden>
+    <div class="grid2">
+      <div class="box">
+        <h3>The Bucher indirect comparison</h3>
+        <p>Bucher and colleagues (1997) showed that if two trials share a comparator, the effect of Drug Z against Immunotherapy B can be estimated from the two effects against Chemo A, keeping each trial’s randomisation intact. On the log scale the effects subtract and their variances add.</p>
+        <div class="plot fp"><svg id="buFp" role="img" aria-label="Forest plot of the two trial results and the indirect comparison"></svg></div>
+        <div class="tbl"><table id="buTbl"></table></div>
+      </div>
+      <div class="box">
+        <h3>Enter the two trial results</h3>
+        <div class="ctrl"><label for="buZA">ZEN-1: hazard ratio, Drug Z vs Chemo A <output id="buZAO"></output></label><input type="range" id="buZA" min="0.4" max="1.2" step="0.01" value="0.7"></div>
+        <div class="ctrl"><label for="buZAd">ZEN-1: deaths observed <output id="buZAdO"></output></label><input type="range" id="buZAd" min="40" max="800" step="10" value="320"><span class="hint">More events means a narrower confidence interval.</span></div>
+        <div class="ctrl"><label for="buBA">B-301: hazard ratio, Immunotherapy B vs Chemo A <output id="buBAO"></output></label><input type="range" id="buBA" min="0.4" max="1.2" step="0.01" value="0.8"></div>
+        <div class="ctrl"><label for="buBAd">B-301: deaths observed <output id="buBAdO"></output></label><input type="range" id="buBAd" min="40" max="800" step="10" value="400"></div>
+        <div class="callout" id="buRead"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PART 3 ================= -->
+  <section class="panel" data-panel="nma" hidden>
+    <div class="grid2">
+      <div class="box">
+        <h3>Adding a small head-to-head trial closes a loop</h3>
+        <p>Suppose a small trial, <b>ZB-2</b>, did compare Drug Z with Immunotherapy B. Now there is direct evidence and indirect evidence through Chemo A. A network meta-analysis combines both, weighting each by its precision, and the closed loop lets us test whether they agree. ZEN-1 and B-301 keep the values set in Part 2.</p>
+        <div class="row" style="align-items:stretch;gap:12px">
+          <div class="plot net" style="flex:1 1 220px;min-width:0;max-width:340px"><svg id="nmNet" role="img" aria-label="Network diagram"></svg></div>
+          <div class="stats" id="nmStats" style="flex:2 1 300px;grid-template-columns:1fr 1fr;align-content:stretch"></div>
+        </div>
+        <div class="plot fp"><svg id="nmFp" role="img" aria-label="Direct, indirect and combined estimates"></svg></div>
+      </div>
+      <div class="box">
+        <h3>Change the direct trial</h3>
+        <div class="ctrl"><label for="nmD">ZB-2: hazard ratio, Drug Z vs Immunotherapy B <output id="nmDO"></output></label><input type="range" id="nmD" min="0.4" max="1.8" step="0.01" value="0.95"></div>
+        <div class="ctrl"><label for="nmDd">ZB-2: deaths observed <output id="nmDdO"></output></label><input type="range" id="nmDd" min="20" max="600" step="10" value="90"></div>
+        <div class="row"><span class="note">Model</span><div class="seg" id="nmModel"><button type="button" data-m="fe" aria-pressed="true">Fixed effect</button><button type="button" data-m="re">Random effects</button></div></div>
+        <div class="ctrl" id="nmTauC" hidden><label for="nmTau">Assumed between-trial SD, τ (log HR) <output id="nmTauO"></output></label><input type="range" id="nmTau" min="0" max="0.4" step="0.01" value="0.15"><span class="hint">With one trial per comparison, τ cannot be estimated from the data, so it must be assumed or borrowed from external evidence.</span></div>
+        <div class="callout" id="nmRead"></div>
+        <div class="tbl"><table id="nmTbl"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PART 4 ================= -->
+  <section class="panel" data-panel="maic" hidden>
+    <div class="grid2">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>Reweighting ZEN-1 to look like B-301</h3><button class="btn" type="button" id="mcNew">↻ New ZEN-1 data</button></div>
+        <p>Drug Z works better in <b>marker M-positive</b> patients (true hazard ratio 0.50, against 0.85 in M-negative), so marker M is an <b>effect modifier</b>. Performance status (ECOG 1) only changes prognosis. We hold individual patient data from ZEN-1 (400 patients) but only published summaries from B-301.</p>
+        <div class="plot fp"><svg id="mcFp" role="img" aria-label="Estimates of Drug Z versus Immunotherapy B from different methods"></svg></div>
+        <div class="tbl"><table id="mcTbl"></table></div>
+        <div class="stats" id="mcStats"></div>
+      </div>
+      <div class="box">
+        <h3>Describe B-301’s population</h3>
+        <div class="ctrl"><label for="mcP">B-301: marker M-positive <output id="mcPO"></output></label><input type="range" id="mcP" min="0.1" max="0.9" step="0.05" value="0.65"><span class="hint">ZEN-1 had 40%.</span></div>
+        <div class="ctrl"><label for="mcE">B-301: ECOG performance status 1 <output id="mcEO"></output></label><input type="range" id="mcE" min="0.15" max="0.75" step="0.05" value="0.3"><span class="hint">ZEN-1 had 45%.</span></div>
+        <label class="check"><input type="checkbox" id="mcMatchE">Also match on ECOG status</label>
+        <label class="check"><input type="checkbox" id="mcUn">Pretend B-301 had no Chemo A arm (unanchored)</label>
+        <div class="ctrl" id="mcUC" hidden><label for="mcU">Unmeasured difference in B-301 prognosis <output id="mcUO"></output></label><input type="range" id="mcU" min="0.7" max="1.3" step="0.05" value="0.85"><span class="hint">A factor nobody recorded, such as better supportive care at B-301’s sites. 1 means none.</span></div>
+        <div class="callout" id="mcRead"></div>
+        <p class="note"><b>MAIC</b> reweights the patients; <b>STC</b> instead fits an outcome model with the effect modifier and predicts the result in B-301’s mix. Both give an answer only for B-301’s population. <b>ML-NMR</b> generalises the idea across a whole network and any target population, but the 2024 EU guideline notes it cannot yet be applied to time-to-event outcomes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PART 5 ================= -->
+  <section class="panel" data-panel="which" hidden>
+    <div class="panel">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>Answer a few questions about your evidence</h3><button class="btn" type="button" id="trReset">Start again</button></div>
+        <div class="tree" id="tree"></div>
+      </div>
+      <div class="box">
+        <h3>The methods at a glance</h3>
+        <div class="tbl"><table class="mt">
+          <thead><tr><th>Method</th><th>What it needs</th><th>Key assumption</th><th>EU guideline view</th></tr></thead>
+          <tbody>
+            <tr><td>Naive</td><td>Single arms from different trials</td><td>None that holds: patients differ between trials</td><td><span class="tag bad">Not to be done</span></td></tr>
+            <tr><td>Bucher</td><td>Two trials with a common comparator</td><td>No imbalance in effect modifiers between trials</td><td><span class="tag ok">Accepted</span> for simple networks; consistency cannot be tested</td></tr>
+            <tr><td>NMA</td><td>A connected network of trials</td><td>Consistency of direct and indirect evidence; similar effect modifiers</td><td><span class="tag ok">Accepted</span> frequentist or Bayesian; check consistency and heterogeneity</td></tr>
+            <tr><td>Anchored MAIC</td><td>IPD for one trial, summaries for the other</td><td>All effect modifiers measured and reported; populations overlap</td><td><span class="tag mid">With care</span> only with sufficient overlap of populations</td></tr>
+            <tr><td>Anchored STC</td><td>IPD for one trial, an outcome model</td><td>Correct outcome model including effect modifiers</td><td><span class="tag mid">With care</span> depends on the outcome model</td></tr>
+            <tr><td>ML-NMR</td><td>IPD and summaries across a network</td><td>Correct individual-level model; covariate distributions known</td><td><span class="tag mid">With care</span> cannot yet be applied to time-to-event data</td></tr>
+            <tr><td>Unanchored</td><td>No common comparator</td><td>Every prognostic factor and effect modifier accounted for</td><td><span class="tag bad">Highly problematic</span> needs every prognostic factor and effect modifier</td></tr>
+          </tbody></table></div>
+        <p class="note">Summarised from the HTA Coordination Group’s methodological guideline on direct and indirect comparisons (2024) and NICE DSU TSD18. Anchored comparisons should always be preferred to unanchored ones.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Three ideas to take away</h2>
+    <div class="learn">
+      <div><h3>Keep the randomisation</h3><p>An anchored comparison only compares like with like: each medicine against the shared comparator, inside its own trial. Differences in prognosis between trials then cancel out. A naive comparison of single arms throws that protection away.</p></div>
+      <div><h3>Effect modifiers are the real threat</h3><p>Anchored methods survive differences in prognosis but not differences in factors that change how well a medicine works. Population-adjusted methods exist for that case, but they cost precision and depend on knowing which factors matter.</p></div>
+      <div><h3>Uncertainty only grows</h3><p>Variances add in every indirect step, and reweighting shrinks the effective sample. An indirect estimate is almost always less certain than the trials behind it, and an honest report says so.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Sources</h2>
+    <ol class="src">
+      <li>Bucher HC, Guyatt GH, Griffith LE, Walter SD. The results of direct and indirect treatment comparisons in meta-analysis of randomized controlled trials. J Clin Epidemiol 1997;50(6):683–91. <a href="https://doi.org/10.1016/s0895-4356(97)00049-8">doi:10.1016/s0895-4356(97)00049-8</a></li>
+      <li>Signorovitch JE, Sikirica V, Erder MH, et al. Matching-adjusted indirect comparisons: a new tool for timely comparative effectiveness research. Value Health 2012;15(6):940–7. <a href="https://doi.org/10.1016/j.jval.2012.05.004">doi:10.1016/j.jval.2012.05.004</a></li>
+      <li>Phillippo DM, Ades AE, Dias S, Palmer S, Abrams KR, Welton NJ. NICE DSU Technical Support Document 18: methods for population-adjusted indirect comparisons in submissions to NICE. 2016. <a href="https://sheffield.ac.uk/nice-dsu/tsds/population-adjusted">NICE DSU</a></li>
+      <li>Dias S, Welton NJ, Sutton AJ, Ades AE. NICE DSU Technical Support Document 2: a generalised linear modelling framework for pairwise and network meta-analysis of randomised controlled trials. 2011, updated 2016. <a href="https://www.ncbi.nlm.nih.gov/books/NBK310366/">NCBI Bookshelf</a></li>
+      <li>Phillippo DM, Dias S, Ades AE, et al. Multilevel network meta-regression for population-adjusted treatment comparisons. J R Stat Soc Ser A 2020;183(3):1189–1210. <a href="https://doi.org/10.1111/rssa.12579">doi:10.1111/rssa.12579</a></li>
+      <li>Phillippo DM, Remiro-Azócar A, Heath A, et al. Effect modification and non-collapsibility together may lead to conflicting treatment decisions. Res Synth Methods 2025;16(2):323–49. <a href="https://doi.org/10.1017/rsm.2025.2">doi:10.1017/rsm.2025.2</a></li>
+      <li>HTA Coordination Group. Methodological guideline for quantitative evidence synthesis: direct and indirect comparisons, adopted 8 March 2024. <a href="https://health.ec.europa.eu/document/download/4ec8288e-6d15-49c5-a490-d8ad7748578f_en?filename=hta_methodological-guideline_direct-indirect-comparisons_en.pdf">health.ec.europa.eu</a></li>
+    </ol>
+  </section>
+  <p class="sitenote"><span class="pill">Disclaimer</span><b>Personal project</b>, not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist. All medicines, trials and data are simulated. Simplified for teaching: real analyses need a statistician, a pre-specified plan and sensitivity analyses. <a href="index.html#disclaimer">Full disclaimer</a></p>
+</main>
+<script>
+// ---------- shared helpers ----------
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = (x, d = 1) => (x == null || !isFinite(x)) ? '—' : x.toLocaleString('en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmt0 = (x) => fmt(x, 0);
+// a plain SVG chart: returns scale helpers; draws grid, axes, ticks and labels
+function chart(svg, o) {
+  const W = o.w || 900, H = o.h || 460, L = o.l || 64, R = o.r || 20, T = o.t || 16, B = o.b || 54;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = '';
+  const x = (v) => L + (v - (o.x0 || 0)) / (o.x1 - (o.x0 || 0)) * (W - L - R);
+  const y = (v) => H - B - (v - (o.y0 || 0)) / (o.y1 - (o.y0 || 0)) * (H - T - B);
+  let g = '';
+  (o.yt || []).forEach((v) => { g += `<line class="gridl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="tick" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${o.yf ? o.yf(v) : v}</text>`; });
+  (o.xt || []).forEach((v) => { g += `<line class="gridl" x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H - B}"/><text class="tick" x="${x(v)}" y="${H - B + 18}" text-anchor="middle">${o.xf ? o.xf(v) : v}</text>`; });
+  g += `<line class="ax" x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}"/><line class="ax" x1="${L}" x2="${L}" y1="${T}" y2="${H - B}"/>`;
+  if (o.xl) g += `<text class="axl" x="${(L + W - R) / 2}" y="${H - 12}" text-anchor="middle">${o.xl}</text>`;
+  if (o.yl) g += `<text class="axl" transform="translate(16 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">${o.yl}</text>`;
+  svg.insertAdjacentHTML('beforeend', g);
+  return { x, y, W, H, L, R, T, B, add: (s) => svg.insertAdjacentHTML('beforeend', s) };
+}
+const pathOf = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+function stepPath(c, times, surv, tmax) { // KM step function
+  let d = `M${c.x(0)} ${c.y(1)}`; let s = 1;
+  for (let i = 0; i < times.length; i++) { if (times[i] > tmax) break; d += `H${c.x(times[i]).toFixed(1)}V${c.y(surv[i]).toFixed(1)}`; s = surv[i]; }
+  return d + `H${c.x(tmax).toFixed(1)}`;
+}
+// Kaplan–Meier from arrays of {t, e}
+function km(data) {
+  const d = [...data].sort((a, b) => a.t - b.t || b.e - a.e); let n = d.length, s = 1; const times = [], surv = [], cens = [];
+  let i = 0;
+  while (i < d.length) { const t = d[i].t; let ev = 0, c = 0; while (i < d.length && d[i].t === t) { if (d[i].e) ev++; else c++; i++; }
+    if (ev) { s *= (1 - ev / n); times.push(t); surv.push(s); } if (c) cens.push([t, s]); n -= ev + c; }
+  return { times, surv, cens, at: (t) => { let v = 1; for (let j = 0; j < times.length && times[j] <= t; j++) v = surv[j]; return v; } };
+}
+function kmMedian(k) { for (let i = 0; i < k.times.length; i++) if (k.surv[i] <= .5) return k.times[i]; return null; }
+// tabs
+function tabs(el, onShow) {
+  const btns = [...el.querySelectorAll('button[data-t]')];
+  const show = (id, push) => { btns.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === id))); document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== id; }); if (push) { try { history.replaceState(null, '', '#' + id); } catch (e) {} } onShow && onShow(id); };
+  btns.forEach((b) => b.addEventListener('click', () => show(b.dataset.t, true)));
+  const h = (location.hash || '').slice(1); show(btns.some((b) => b.dataset.t === h) ? h : btns[0].dataset.t, false);
+}
+const bindRange = (id, fn, f = (v) => v) => { const el = $(id), out = $(id + 'O'); const upd = () => { if (out) out.textContent = f(+el.value); fn(); }; el.addEventListener('input', upd); if (out) out.textContent = f(+el.value); };
+
+const Z = 1.959964;
+const lnv = Math.log;
+// normal CDF
+function pnorm(x) { const t = 1 / (1 + 0.2316419 * Math.abs(x)); const d = 0.3989423 * Math.exp(-x * x / 2); const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+// forest plot on log scale
+function forest(svg, rows, o = {}) {
+  const cm = window.innerWidth < 640; // compact: labels above each interval
+  const W = cm ? 480 : 900, rowH = cm ? 62 : 56, T = 30, B = 52, L = cm ? 14 : 300, R = cm ? 14 : 120; const H = T + B + rows.length * rowH;
+  const x0 = lnv(o.min || 0.25), x1 = lnv(o.max || 2.5);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const x = (v) => L + (lnv(Math.min(Math.max(v, Math.exp(x0)), Math.exp(x1))) - x0) / (x1 - x0) * (W - L - R);
+  let g = '';
+  [0.25, 0.5, 1, 2].filter((v) => lnv(v) >= x0 - 1e-9 && lnv(v) <= x1 + 1e-9).forEach((v) => { g += `<line class="${v === 1 ? 'ax' : 'gridl'}" x1="${x(v)}" x2="${x(v)}" y1="${T - 4}" y2="${H - B + 4}"/><text class="tick" x="${x(v)}" y="${H - B + 22}" text-anchor="middle">${v}</text>`; });
+  g += `<text class="axl" x="${x(1) - 10}" y="${H - 10}" text-anchor="end">← favours ${o.a || 'Drug Z'}</text><text class="axl" x="${x(1) + 10}" y="${H - 10}">favours ${o.b || 'Immunotherapy B'} →</text>`;
+  g += `<text class="tick" x="${W - 8}" y="${T - 12}" text-anchor="end" style="font-weight:700">HR (95% CI)</text>`;
+  if (o.truth) g += `<line x1="${x(o.truth)}" x2="${x(o.truth)}" y1="${T - 4}" y2="${H - B + 4}" stroke="#2E7A57" stroke-width="2" stroke-dasharray="6 4"/><text x="${x(o.truth) + 5}" y="${T - 12}" font-size="12.5" font-weight="700" fill="#2E7A57">truth</text>`;
+  rows.forEach((r, i) => { const y = T + rowH * i + rowH / 2 - 4; const col = r.col || '#1D2433';
+    if (cm) { g += `<text x="${L}" y="${y - 14}" font-size="15" font-weight="${r.bold ? 700 : 600}" fill="#1D2433">${r.lab}</text>`; }
+    else { g += `<text x="10" y="${y + 1}" font-size="16" font-weight="${r.bold ? 700 : 600}" fill="#1D2433">${r.lab}</text>`;
+      if (r.sub) g += `<text x="10" y="${y + 19}" font-size="13.5" fill="#6C7282">${r.sub}</text>`; }
+    if (r.lo != null) g += `<line x1="${x(r.lo)}" x2="${x(r.hi)}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="2.5"/>`;
+    g += r.diamond ? `<path d="M${x(r.lo)} ${y}L${x(r.hr)} ${y - 9}L${x(r.hi)} ${y}L${x(r.hr)} ${y + 9}Z" fill="${col}"/>` : `<rect x="${x(r.hr) - 7}" y="${y - 7}" width="14" height="14" fill="${col}"/>`;
+    g += `<text x="${W - 8}" y="${cm ? y - 14 : y + 5}" text-anchor="end" font-size="15" fill="#1D2433" style="font-variant-numeric:tabular-nums">${fmt(r.hr, 2)}${r.lo != null ? ` (${fmt(r.lo, 2)}–${fmt(r.hi, 2)})` : ''}</text>`; });
+  svg.innerHTML = g;
+}
+const ci = (lhr, se) => ({ hr: Math.exp(lhr), lo: Math.exp(lhr - Z * se), hi: Math.exp(lhr + Z * se) });
+
+// ================= PART 1 =================
+function naive() {
+  const f = +$('nvF').value, hz = +$('nvZ').value, hb = +$('nvB').value;
+  const hA1 = Math.log(2) / 10, hA2 = hA1 * f;
+  const c = chart($('nvSvg'), { w: 900, h: 380, r: 150, x0: 0, x1: 36, y0: 0, y1: 1, xt: [0, 6, 12, 18, 24, 30, 36], yt: [0, .25, .5, .75, 1], yf: (v) => Math.round(v * 100) + '%', xl: 'Months', yl: 'Alive' });
+  const curve = (h) => pathOf(Array.from({ length: 73 }, (_, i) => [c.x(i / 2), c.y(Math.exp(-h * i / 2))]));
+  const ln = [[hA1, '#2B4A6F', '', 'Chemo A (ZEN-1)'], [hA1 * hz, '#2B4A6F', '', 'Drug Z'], [hA2, '#7A1F2B', '7 5', 'Chemo A (B-301)'], [hA2 * hb, '#7A1F2B', '7 5', 'Immunotherapy B']];
+  let g = ''; ln.forEach(([h, col, da, lab], i) => { const wd = i % 2 ? 3.5 : 2; g += `<path d="${curve(h)}" fill="none" stroke="${col}" stroke-width="${wd}" stroke-dasharray="${da}" opacity="${i % 2 ? 1 : .55}"/>`; });
+  // end labels with collision avoidance
+  const lab = ln.map(([h, col, , t], i) => ({ y: c.y(Math.exp(-h * 36)), col, t, b: i % 2 })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < lab.length; i++) if (lab[i].y - lab[i - 1].y < 16) lab[i].y = lab[i - 1].y + 16;
+  // place labels inside plot near right edge
+  lab.forEach((l) => { g += `<text x="${c.x(36) + 8}" y="${l.y + 4}" text-anchor="start" font-size="13" font-weight="${l.b ? 700 : 600}" fill="${l.col}">${l.t}</text>`; });
+  c.add(g);
+  const nv = (hA1 * hz) / (hA2 * hb), an = hz / hb;
+  forest($('nvFp'), [
+    { lab: 'Naive: Drug Z arm vs B arm', sub: 'Compares patients from different trials', hr: nv, col: '#7A1F2B' },
+    { lab: 'Anchored: through Chemo A', sub: 'HR(Z vs A) ÷ HR(B vs A)', hr: an, col: '#2B4A6F', bold: true }
+  ], { truth: an, min: 0.4, max: 2.5 });
+  $('nvStats').innerHTML = `<div class="stat"><span>Median, Chemo A in ZEN-1</span><b>${fmt(10, 1)} mo</b></div><div class="stat"><span>Median, Chemo A in B-301</span><b>${fmt(10 / f, 1)} mo</b></div>` +
+    `<div class="stat"><span>Naive Z vs B</span><b>${fmt(nv, 2)}</b><small>${nv < 1 ? 'Drug Z looks better' : 'Immunotherapy B looks better'}</small></div><div class="stat"><span>Anchored Z vs B</span><b>${fmt(an, 2)}</b><small>${an < 1 ? 'Drug Z better' : an > 1 ? 'Immunotherapy B better' : 'no difference'}</small></div>`;
+  const r3 = (v) => fmt(v, 3);
+  $('nvTbl').innerHTML = `<thead><tr><th>The arithmetic</th><th class="num">Result</th></tr></thead><tbody>` +
+    `<tr><td>Naive: monthly death rate on Drug Z (ZEN-1) ÷ on Immunotherapy B (B-301)<br><span class="note">${r3(hA1 * hz)} ÷ ${r3(hA2 * hb)}</span></td><td class="num">${fmt(nv, 2)}</td></tr>` +
+    `<tr class="hl"><td>Anchored: HR(Z vs A) ÷ HR(B vs A)<br><span class="note">${fmt(hz, 2)} ÷ ${fmt(hb, 2)}</span></td><td class="num"><b>${fmt(an, 2)}</b></td></tr></tbody>`;
+  const flip = (nv < 1) !== (an < 1) && Math.abs(an - 1) > 0.005;
+  $('nvRead').innerHTML = Math.abs(f - 1) < 0.01 ? `<b>Same patients, same answer.</b> When both trials enrolled similar patients, the naive and anchored estimates agree. Now move the first slider: real trials rarely enrol identical populations.`
+    : `<b>The naive comparison is ${flip ? 'not just biased but reversed' : 'biased'}.</b> B-301’s patients were ${f < 1 ? 'fitter' : 'sicker'}: even its Chemo A arm lived ${f < 1 ? 'longer' : 'shorter'} than ZEN-1’s. Comparing single arms mixes that difference in prognosis with the drug effect, so the naive estimate is ${fmt(nv, 2)} against a true ${fmt(an, 2)}. The anchored comparison divides out each trial’s own control arm and stays on the truth. The EU guideline says naive comparisons should not be done.`;
+}
+['nvF', 'nvZ', 'nvB'].forEach((id) => bindRange(id, naive, (v) => fmt(v, 2)));
+
+// ================= PART 2 =================
+function bucherCalc() {
+  const za = +$('buZA').value, zad = +$('buZAd').value, ba = +$('buBA').value, bad = +$('buBAd').value;
+  const sZA = Math.sqrt(4 / zad), sBA = Math.sqrt(4 / bad);
+  const l = lnv(za) - lnv(ba), s = Math.sqrt(sZA ** 2 + sBA ** 2);
+  return { za, zad, ba, bad, sZA, sBA, l, s };
+}
+function bucher() {
+  const b = bucherCalc(); const r1 = ci(lnv(b.za), b.sZA), r2 = ci(lnv(b.ba), b.sBA), r3 = ci(b.l, b.s);
+  forest($('buFp'), [
+    { lab: 'ZEN-1: Drug Z vs Chemo A', sub: `${b.zad} deaths`, ...r1, col: '#2B4A6F' },
+    { lab: 'B-301: Immunotherapy B vs Chemo A', sub: `${b.bad} deaths`, ...r2, col: '#7A1F2B' },
+    { lab: 'Indirect: Drug Z vs Immunotherapy B', sub: 'Bucher method', ...r3, col: '#1D2433', bold: true, diamond: true }
+  ], { a: 'first-named', b: 'second-named', min: 0.25, max: 2.5 });
+  const dEq = 4 / (b.s ** 2); const p = 2 * (1 - pnorm(Math.abs(b.l / b.s)));
+  $('buTbl').innerHTML = `<thead><tr><th>Step</th><th class="num">log HR</th><th class="num">SE</th><th class="num">Variance</th></tr></thead><tbody>` +
+    `<tr><td>ZEN-1: ln(${fmt(b.za, 2)})</td><td class="num">${fmt(lnv(b.za), 3)}</td><td class="num">${fmt(b.sZA, 3)}</td><td class="num">${fmt(b.sZA ** 2, 4)}</td></tr>` +
+    `<tr><td>B-301: ln(${fmt(b.ba, 2)})</td><td class="num">${fmt(lnv(b.ba), 3)}</td><td class="num">${fmt(b.sBA, 3)}</td><td class="num">${fmt(b.sBA ** 2, 4)}</td></tr>` +
+    `<tr class="hl"><td><b>Indirect = difference; variances add</b></td><td class="num"><b>${fmt(b.l, 3)}</b></td><td class="num"><b>${fmt(b.s, 3)}</b></td><td class="num"><b>${fmt(b.s ** 2, 4)}</b></td></tr></tbody>`;
+  $('buRead').innerHTML = `<b>Indirect hazard ratio ${fmt(r3.hr, 2)} (95% CI ${fmt(r3.lo, 2)} to ${fmt(r3.hi, 2)}).</b> ` +
+    (r3.hi < 1 ? 'The interval sits below 1, so the indirect evidence favours Drug Z. ' : r3.lo > 1 ? 'The interval sits above 1, so the indirect evidence favours Immunotherapy B. ' : `The interval crosses 1 (p = ${fmt(p, 2)}): the data cannot tell the two medicines apart. `) +
+    `Its precision equals a head-to-head trial with only about <b>${fmt0(dEq)} deaths</b>, fewer than either trial behind it. With a single common comparator there is no second route to cross-check against, so consistency cannot be tested.`;
+  nma();
+}
+['buZA', 'buBA'].forEach((id) => bindRange(id, bucher, (v) => fmt(v, 2))); ['buZAd', 'buBAd'].forEach((id) => bindRange(id, bucher, fmt0));
+
+// ================= PART 3 =================
+let reModel = false;
+function nma() {
+  const b = bucherCalc(); const hd = +$('nmD').value, dd = +$('nmDd').value, tau = reModel ? +$('nmTau').value : 0;
+  const vD = 4 / dd + tau ** 2, vI = b.sZA ** 2 + b.sBA ** 2 + 2 * tau ** 2;
+  const lD = lnv(hd), lI = b.l;
+  const wD = 1 / vD, wI = 1 / vI, lN = (wD * lD + wI * lI) / (wD + wI), sN = Math.sqrt(1 / (wD + wI));
+  const diff = lD - lI, sDiff = Math.sqrt(vD + vI), p = 2 * (1 - pnorm(Math.abs(diff / sDiff)));
+  const rD = ci(lD, Math.sqrt(vD)), rI = ci(lI, Math.sqrt(vI)), rN = ci(lN, sN);
+  forest($('nmFp'), [
+    { lab: 'Direct (ZB-2)', ...rD, col: '#B7791F' },
+    { lab: 'Indirect (via Chemo A)', ...rI, col: '#2B4A6F' },
+    { lab: 'Network estimate', ...rN, col: '#1D2433', bold: true, diamond: true }
+  ], { min: 0.25, max: 2.5 });
+  // network diagram
+  const svg = $('nmNet'); svg.setAttribute('viewBox', '0 0 300 260');
+  const N = { Z: [60, 200], B: [240, 200], A: [150, 50] };
+  const ew = (d) => 2 + Math.sqrt(d) / 3;
+  const e = (a, c, d, lab, lx, ly, col) => `<line x1="${N[a][0]}" y1="${N[a][1]}" x2="${N[c][0]}" y2="${N[c][1]}" stroke="${col}" stroke-width="${ew(d)}" stroke-linecap="round"/><text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" font-weight="700" fill="${col}">${lab}</text>`;
+  let g = e('Z', 'A', b.zad, 'ZEN-1', 78, 118, '#2B4A6F') + e('B', 'A', b.bad, 'B-301', 222, 118, '#2B4A6F') + e('Z', 'B', dd, 'ZB-2', 150, 236, '#B7791F');
+  [['Z', 'Drug Z', '#1D2433', '#fff'], ['A', 'Chemo A', '#fff', '#1D2433'], ['B', 'Immuno B', '#fff', '#1D2433']].forEach(([k, t, f, tc]) => { g += `<circle cx="${N[k][0]}" cy="${N[k][1]}" r="38" fill="${f}" stroke="#1D2433" stroke-width="1.5"/><text x="${N[k][0]}" y="${N[k][1] + 5}" text-anchor="middle" font-size="13" font-weight="700" fill="${tc}">${t}</text>`; });
+  svg.innerHTML = g;
+  $('nmTbl').innerHTML = `<thead><tr><th>Pooling Z vs B</th><th class="num">log HR</th><th class="num">Variance</th><th class="num">Weight</th></tr></thead><tbody>` +
+    `<tr><td>Direct</td><td class="num">${fmt(lD, 3)}</td><td class="num">${fmt(vD, 4)}</td><td class="num">${fmt0(wD / (wD + wI) * 100)}%</td></tr>` +
+    `<tr><td>Indirect</td><td class="num">${fmt(lI, 3)}</td><td class="num">${fmt(vI, 4)}</td><td class="num">${fmt0(wI / (wD + wI) * 100)}%</td></tr>` +
+    `<tr class="hl"><td><b>Network</b> (weights = 1 ÷ variance)</td><td class="num"><b>${fmt(lN, 3)}</b></td><td class="num"><b>${fmt(sN * sN, 4)}</b></td><td class="num">100%</td></tr></tbody>`;
+  const share = wD / (wD + wI);
+  $('nmStats').innerHTML = `<div class="stat"><span>Network HR, Z vs B</span><b>${fmt(rN.hr, 2)}</b><small>95% CI ${fmt(rN.lo, 2)}–${fmt(rN.hi, 2)}</small></div>` +
+    `<div class="stat"><span>Weight from direct trial</span><b>${fmt0(share * 100)}%</b><small>indirect ${fmt0((1 - share) * 100)}%</small></div>` +
+    `<div class="stat"><span>Inconsistency test</span><b>p = ${fmt(p, 2)}</b><small>direct vs indirect</small></div>` +
+    `<div class="stat"><span>Ratio of the two HRs</span><b>${fmt(Math.exp(diff), 2)}</b><small>1 means they agree</small></div>`;
+  $('nmRead').innerHTML = (p < 0.1 ? `<b>Warning: direct and indirect evidence disagree</b> (p = ${fmt(p, 2)}). Pooling them would hide the conflict. The analyst should look for differences between the trials, such as populations, follow-up or definitions, before trusting the network estimate. `
+    : `<b>Direct and indirect evidence are consistent</b> (p = ${fmt(p, 2)}), so combining them is reasonable. The network estimate is more precise than either source alone. `) +
+    (reModel ? `Random effects widen every interval: with τ = ${fmt(tau, 2)}, each trial carries extra between-study uncertainty. With so few trials τ is poorly estimated, which is why the EU guideline cautions against random effects in sparse networks.` : `Try making ZB-2 disagree, or switch to random effects. Note the inconsistency test has little power: absence of evidence of inconsistency is not evidence of consistency.`);
+}
+bindRange('nmD', nma, (v) => fmt(v, 2)); bindRange('nmDd', nma, fmt0); bindRange('nmTau', nma, (v) => fmt(v, 2));
+$('nmModel').addEventListener('click', (e) => { const b = e.target.closest('button[data-m]'); if (!b) return; reModel = b.dataset.m === 're'; document.querySelectorAll('#nmModel button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); $('nmTauC').hidden = !reModel; nma(); });
+
+// ================= PART 4 =================
+const H0 = Math.log(2) / 10, bE = Math.log(1.6), bM = Math.log(0.9), HRneg = 0.85, HRpos = 0.5, HR_BA = 0.8;
+function simPop(n, pM, pE, R) {
+  const out = []; for (let i = 0; i < n; i++) { const arm = i % 2; const M = R() < pM ? 1 : 0, E = R() < pE ? 1 : 0;
+    let h = H0 * Math.exp(bE * E + bM * M); if (arm) h *= M ? HRpos : HRneg; const t = -Math.log(1 - R()) / h, fu = 18 + 18 * R();
+    out.push({ arm, M, E, t: Math.min(t, fu), d: t <= fu ? 1 : 0 }); } return out;
+}
+function rates(data, w) { const s = [[0, 0], [0, 0]]; data.forEach((p, i) => { const wi = w ? w[i] : 1; s[p.arm][0] += wi * p.d; s[p.arm][1] += wi * p.t; }); return { rA: s[0][0] / s[0][1], rZ: s[1][0] / s[1][1], dA: s[0][0], dZ: s[1][0] }; }
+function maicW(data, targets) { // method of moments, Newton
+  const k = targets.length; let a = new Array(k).fill(0);
+  const X = data.map((p) => targets.map((t) => p[t.v] - t.m));
+  for (let it = 0; it < 50; it++) { const g = new Array(k).fill(0), Hm = Array.from({ length: k }, () => new Array(k).fill(0));
+    X.forEach((x) => { const w = Math.exp(x.reduce((s, xi, j) => s + a[j] * xi, 0)); for (let j = 0; j < k; j++) { g[j] += w * x[j]; for (let l = 0; l < k; l++) Hm[j][l] += w * x[j] * x[l]; } });
+    let step; if (k === 1) step = [g[0] / Hm[0][0]]; else { const det = Hm[0][0] * Hm[1][1] - Hm[0][1] * Hm[1][0]; step = [(Hm[1][1] * g[0] - Hm[0][1] * g[1]) / det, (-Hm[1][0] * g[0] + Hm[0][0] * g[1]) / det]; }
+    a = a.map((v, j) => v - step[j]); if (Math.max(...step.map(Math.abs)) < 1e-9) break; }
+  return X.map((x) => Math.exp(x.reduce((s, xi, j) => s + a[j] * xi, 0)));
+}
+let mcSeed = 7, ipd = simPop(400, 0.4, 0.45, rng(7));
+function maic() {
+  const pT = +$('mcP').value, eT = +$('mcE').value, mE = $('mcMatchE').checked, un = $('mcUn').checked, u = +$('mcU').value;
+  $('mcUC').hidden = !un;
+  const truthPop = simPop(40000, pT, eT, rng(99)); const tr = rates(truthPop); const trueZA = tr.rZ / tr.rA, trueZB = trueZA / HR_BA;
+  const sBA = Math.sqrt(4 / 400);
+  // unadjusted Bucher
+  const r0 = rates(ipd); const l0 = lnv(r0.rZ / r0.rA) - lnv(HR_BA), s0 = Math.sqrt(1 / r0.dZ + 1 / r0.dA + sBA ** 2);
+  // weights
+  const tg = [{ v: 'M', m: pT }]; if (mE || un) tg.push({ v: 'E', m: eT });
+  const w = maicW(ipd, tg); const sw = w.reduce((a, b) => a + b, 0), sw2 = w.reduce((a, b) => a + b * b, 0), ess = sw * sw / sw2;
+  const rw = rates(ipd, w); const infl = Math.sqrt(ipd.length / ess);
+  const lM = lnv(rw.rZ / rw.rA) - lnv(HR_BA), sM = Math.sqrt((1 / r0.dZ + 1 / r0.dA) * infl ** 2 + sBA ** 2);
+  // STC: subgroup rate ratios combined at target mix
+  const sub = (m) => rates(ipd.filter((p) => p.M === m)); const sn = sub(0), sp = sub(1);
+  const lS0 = lnv(sn.rZ / sn.rA), lS1 = lnv(sp.rZ / sp.rA);
+  const lS = (1 - pT) * lS0 + pT * lS1 - lnv(HR_BA), sS = Math.sqrt((1 - pT) ** 2 * (1 / sn.dZ + 1 / sn.dA) + pT ** 2 * (1 / sp.dZ + 1 / sp.dA) + sBA ** 2);
+  const rows = [
+    { lab: 'Bucher, unadjusted', sub: 'ignores population differences', ...ci(l0, s0), col: '#6C7282' },
+    { lab: 'Anchored MAIC', sub: `reweights ZEN-1; ESS ${fmt0(ess)}`, ...ci(lM, sM), col: '#2B4A6F', bold: true },
+    { lab: 'Anchored STC', sub: 'outcome model with interaction', ...ci(lS, sS), col: '#2E7A57' }];
+  let lU = null;
+  if (un) { const rB = tr.rA * HR_BA * u; lU = lnv(rw.rZ / rB); const sU = Math.sqrt(infl ** 2 / r0.dZ + 1 / 200);
+    rows.push({ lab: 'Unanchored MAIC', sub: 'weighted Drug Z arm vs B arm', ...ci(lU, sU), col: '#7A1F2B' }); }
+  forest($('mcFp'), rows, { truth: trueZB, min: 0.4, max: 2.5 });
+  const pct = (v) => fmt0(v * 100) + '%';
+  const mean = (k, ww) => { let s = 0, t = 0; ipd.forEach((p, i) => { const wi = ww ? ww[i] : 1; s += wi * p[k]; t += wi; }); return s / t; };
+  $('mcTbl').innerHTML = `<thead><tr><th>Characteristic</th><th class="num">ZEN-1</th><th class="num">ZEN-1 reweighted</th><th class="num">B-301</th></tr></thead><tbody>` +
+    `<tr><td>Marker M-positive <span class="tag mid">effect modifier</span></td><td class="num">${pct(mean('M'))}</td><td class="num">${pct(mean('M', w))}</td><td class="num">${pct(pT)}</td></tr>` +
+    `<tr><td>ECOG 1 <span class="tag ok">prognostic only</span></td><td class="num">${pct(mean('E'))}</td><td class="num">${pct(mean('E', w))}</td><td class="num">${pct(eT)}</td></tr></tbody>`;
+  $('mcStats').innerHTML = `<div class="stat"><span>True HR in B-301’s population</span><b>${fmt(trueZB, 2)}</b><small>known only because it is simulated</small></div>` +
+    `<div class="stat"><span>Effective sample size</span><b>${fmt0(ess)}</b><small>of ${ipd.length} patients (${fmt0(ess / ipd.length * 100)}%)</small></div>`;
+  const bias0 = Math.exp(l0) - trueZB, biasM = Math.exp(lM) - trueZB;
+  let t = Math.abs(pT - 0.4) < 0.03 ? `<b>Populations match on the effect modifier</b>, so the simple Bucher comparison is already close to the truth and reweighting adds little. Move the M-positive slider away from 40%.`
+    : `<b>B-301 had ${pct(pT)} M-positive patients against ZEN-1’s 40%.</b> Because marker M changes how well Drug Z works, the unadjusted comparison is off by ${fmt(Math.abs(bias0), 2)}. Reweighting ZEN-1 to B-301’s mix brings the anchored MAIC to within ${fmt(Math.abs(biasM), 2)}, at the cost of an effective sample of ${fmt0(ess)}: wider intervals. `;
+  if (mE && !un) t += ' Matching ECOG, a purely prognostic factor, barely moves the anchored estimate but shrinks the effective sample further: in anchored comparisons only effect modifiers need adjusting.';
+  if (un) t += ` <b>Unanchored:</b> without Chemo A in B-301 the comparison rests on every prognostic factor being matched. The unrecorded difference (×${fmt(u, 2)}) passes straight into the estimate, ${fmt(Math.exp(lU), 2)} against a true ${fmt(trueZB, 2)}. That is why the EU guideline calls unanchored comparisons highly problematic.`;
+  $('mcRead').innerHTML = t;
+}
+bindRange('mcP', maic, (v) => fmt0(v * 100) + '%'); bindRange('mcE', maic, (v) => fmt0(v * 100) + '%'); bindRange('mcU', maic, (v) => '×' + fmt(v, 2));
+$('mcMatchE').addEventListener('change', maic); $('mcUn').addEventListener('change', maic);
+$('mcNew').addEventListener('click', () => { mcSeed++; ipd = simPop(400, 0.4, 0.45, rng(mcSeed)); maic(); });
+
+// ================= PART 5 =================
+const TREE = {
+  q1: { q: 'Is there a randomised trial comparing the two medicines directly?', y: 'r_direct', n: 'q2' },
+  q2: { q: 'Do the trials share a common comparator, so they connect in a network?', s: 'For example, both medicines were tested against Chemo A.', y: 'q3', n: 'r_unanch' },
+  q3: { q: 'Are known effect modifiers similarly distributed across the trials?', s: 'Factors that change how well a treatment works, such as a biomarker or line of therapy.', y: 'q4', n: 'q5' },
+  q4: { q: 'Are there more than two trials, or closed loops of evidence?', y: 'r_nma', n: 'r_bucher' },
+  q5: { q: 'Do you have individual patient data for at least one trial?', y: 'q6', n: 'r_noipd' },
+  q6: { q: 'Does the network have more than two trials, with an outcome that is not time-to-event?', s: 'Overall and progression-free survival are time-to-event outcomes.', y: 'r_mlnmr', n: 'r_maic' },
+  r_direct: { t: 'Use the head-to-head trial', w: 0, b: ['Direct randomised evidence is the strongest basis for the comparison.', 'If other trials also connect the two medicines, a network meta-analysis can combine direct and indirect evidence. Check that they agree.'] },
+  r_unanch: { t: 'Unanchored comparison: proceed with great caution', w: 1, b: ['Only an unanchored MAIC or STC is possible, comparing single arms after adjustment.', 'It is unbiased only if every prognostic factor and effect modifier is accounted for, which is rarely credible.', 'The EU guideline calls this highly problematic; expect the evidence to be judged very uncertain or an evidence gap to be reported.'] },
+  r_nma: { t: 'Network meta-analysis', w: 0, b: ['Frequentist and Bayesian approaches are both accepted.', 'Test consistency wherever loops exist, and assess heterogeneity.', 'With few trials per comparison, random-effects models are hard to estimate; justify the choice.'] },
+  r_bucher: { t: 'Bucher anchored indirect comparison', w: 0, b: ['Subtract the log effects and add the variances.', 'With a single route, consistency cannot be tested.', 'Avoid random effects: with one trial per comparison the heterogeneity cannot be estimated.'] },
+  r_noipd: { t: 'Standard methods, with the imbalance stated openly', w: 1, b: ['Without individual data, population adjustment is very limited. Meta-regression needs many trials.', 'Use published subgroup results where they exist, and report the imbalance in effect modifiers as a source of bias.', 'Expect certainty in the result to be rated lower.'] },
+  r_mlnmr: { t: 'Consider multilevel network meta-regression', w: 0, b: ['ML-NMR extends network meta-analysis to combine individual and aggregate data, adjusting for effect modifiers across the whole network.', 'It can produce estimates for a chosen target population.', 'At the time of the 2024 EU guideline it could not yet be applied to time-to-event outcomes.'] },
+  r_maic: { t: 'Anchored MAIC or anchored STC', w: 0, b: ['Adjust for effect modifiers only; prognostic factors cancel in anchored comparisons.', 'Check the overlap between populations and report the effective sample size; MAIC is only appropriate with sufficient overlap.', 'STC depends on a correctly specified outcome model.', 'Both produce an estimate for the comparator trial’s population, which may not be the population the decision is about.'] }
+};
+let path = ['q1'], answers = [];
+function drawTree() {
+  let h = '';
+  path.forEach((k, i) => { const n = TREE[k]; if (n.q) { const a = answers[i];
+      h += `<div class="q ${a != null ? 'done' : ''}"><p>${i + 1}. ${n.q}</p>${n.s ? `<small>${n.s}</small>` : ''}<div class="row"><button class="btn" type="button" data-i="${i}" data-a="y" aria-pressed="${a === 'y'}">Yes</button><button class="btn" type="button" data-i="${i}" data-a="n" aria-pressed="${a === 'n'}">No</button></div></div>`; }
+    else h += `<div class="ans ${n.w ? 'warn' : ''}"><span class="k3">Suggested approach</span><h3>${n.t}</h3><ul>${n.b.map((x) => `<li>${x}</li>`).join('')}</ul></div>`; });
+  $('tree').innerHTML = h;
+}
+$('tree').addEventListener('click', (e) => { const b = e.target.closest('button[data-a]'); if (!b) return; const i = +b.dataset.i; answers = answers.slice(0, i); answers[i] = b.dataset.a; path = path.slice(0, i + 1); path.push(TREE[path[i]][b.dataset.a]); drawTree(); });
+$('trReset').addEventListener('click', () => { path = ['q1']; answers = []; drawTree(); });
+
+naive(); bucher(); maic(); drawTree();
+let wasCm = window.innerWidth < 640; window.addEventListener('resize', () => { const cm = window.innerWidth < 640; if (cm !== wasCm) { wasCm = cm; naive(); bucher(); maic(); } });
+tabs(document.querySelector('.tabs'), () => {});
+window.__p9 = { bucherCalc, maic };
+</script>
+</body></html>

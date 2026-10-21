@@ -1,0 +1,491 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Survival to Cost-Effectiveness · Jigar Rajpura, PhD</title><meta name="description" content="Interactive Kaplan–Meier curves, survival extrapolation and a one-page cost-effectiveness model, with a hypothetical medicine. By Jigar Rajpura, PhD."><meta name="author" content="Jigar Rajpura"><meta property="og:title" content="Survival to Cost-Effectiveness · Jigar Rajpura, PhD"><meta property="og:description" content="Interactive Kaplan–Meier curves, survival extrapolation and a one-page cost-effectiveness model, with a hypothetical medicine. By Jigar Rajpura, PhD."><meta name="theme-color" content="#F3F3F1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231D2433'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='30' fill='%23F3F3F1'%3EJR%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap"><style>:root {
+  --paper: #F3F3F1; --surface: #FFFFFF; --ink: #1D2433; --ink-2: #434B5C; --muted: #6C7282; --rule: #DADBD8;
+  --navy: #2B4A6F; --navy-bg: #E3EAF2; --navy-line: #AFC0D4;
+  --ox: #7A1F2B; --ox-ink: #6E1C27; --ox-bg: #F3E4E5; --ox-line: #D7AEB3;
+  --strip: #EEEBE0; --gold: #6B5A1E; --amber: #B7791F; --amber-bg: #F6EBD6;
+  --med: #2E7A57; --med-bg: #E2EFE7; --plot: #FBFAF7;
+  --c1: #2B4A6F; --c2: #7A1F2B; --c3: #2E7A57; --c4: #B7791F; --c5: #6B4E8A; --c6: #6C7282;
+  --f-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --f-body: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 70px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+h1, h2, h3, h4, p, ul, ol, figure, dl, dd { margin: 0; }
+a { color: var(--navy); text-underline-offset: 3px; }
+button, input, select { font: inherit; color: inherit; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+@media (max-width: 640px) { .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; padding-block: 12px; }
+.brand { font-family: var(--f-display); font-weight: 600; font-size: 17px; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.brand span { color: var(--muted); font-weight: 400; }
+.bar .sp { flex: 1; }
+.back { font-weight: 600; font-size: 14.5px; color: var(--ox-ink); text-decoration: none; white-space: nowrap; }
+@media (max-width: 520px) { .brand span { display: none; } }
+main { display: flex; flex-direction: column; gap: 30px; padding-block: 26px 40px; }
+.eyebrow { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.eyebrow b { color: var(--ox-ink); }
+.eyebrow a { color: inherit; }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(30px, 3.8vw, 48px); line-height: 1.08; text-wrap: balance; }
+.lede { font-size: 17.5px; line-height: 1.6; color: var(--ink-2); }
+.lede b { color: var(--ink); }
+.intro { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px 36px; align-items: start; }
+@media (max-width: 960px) { .intro { grid-template-columns: 1fr; } }
+.intro > div { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.aside { background: var(--navy-bg); border-radius: 4px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.k3 { font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); }
+.aside p, .aside li { font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.aside ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.aside b { color: var(--ink); }
+.tabs { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--surface); }
+@media (max-width: 760px) { .tabs { grid-template-columns: 1fr; } }
+.tabs button { border: 0; border-right: 1px solid var(--rule); background: var(--surface); padding: 12px 16px; text-align: left; cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 0 12px; align-items: center; }
+.tabs button:last-child { border-right: 0; }
+@media (max-width: 760px) { .tabs button { border-right: 0; border-bottom: 1px solid var(--rule); } .tabs button:last-child { border-bottom: 0; } }
+.tabs .n { grid-row: span 2; width: 32px; height: 32px; border-radius: 999px; border: 1.5px solid var(--ink-2); display: grid; place-items: center; font-family: var(--f-display); font-size: 17px; }
+.tabs b { font-size: 16px; line-height: 1.25; }
+.tabs small { font-size: 13.5px; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
+.tabs button[aria-selected="true"] small { color: #C9CDD6; }
+.tabs button[aria-selected="true"] .n { background: #fff; color: var(--ink); border-color: #fff; }
+.tabs button:focus-visible, .btn:focus-visible, .chip:focus-visible, .seg button:focus-visible, .ms:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.panel { display: flex; flex-direction: column; gap: 18px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(300px, 1fr); gap: 16px; align-items: stretch; }
+@media (max-width: 1040px) { .grid2 { grid-template-columns: 1fr; } }
+.box { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.box > h3 { font-size: 16px; font-weight: 700; }
+.box > h2, .sec > h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(21px, 2vw, 25px); line-height: 1.2; }
+.sec { display: flex; flex-direction: column; gap: 14px; }
+.sec > h2 { border-top: 2px solid var(--ink); padding-top: 10px; }
+.sec > p, .box > p { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.box p b, .sec p b { color: var(--ink); }
+.note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.plot { background: var(--plot); border: 1px solid var(--rule); border-radius: 4px; }
+.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.ctrl { display: flex; flex-direction: column; gap: 4px; }
+.ctrl label { display: flex; justify-content: space-between; gap: 8px; font-size: 14.5px; font-weight: 600; }
+.ctrl label output { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--navy); white-space: nowrap; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--navy); }
+.ctrl .hint { font-size: 13px; color: var(--muted); line-height: 1.35; }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 18px; }
+select.sel { height: 36px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); padding: 0 8px; font-weight: 600; font-size: 14.5px; max-width: 100%; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); font-weight: 600; font-size: 14.5px; cursor: pointer; color: var(--ink); }
+.btn:hover { border-color: var(--ink); }
+.btn.pri { background: var(--ink); color: #fff; border-color: var(--ink); }
+.row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 10px 4px 6px; background: var(--surface); cursor: pointer; }
+.chip i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.chip[aria-pressed="false"] { color: var(--muted); border-style: dashed; }
+.chip[aria-pressed="false"] i { background: transparent !important; box-shadow: inset 0 0 0 2px var(--rule); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { background: var(--paper); border-radius: 4px; padding: 8px 10px; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.stat span { font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .03em; }
+.stat b { font-family: var(--f-display); font-weight: 500; font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 12.5px; color: var(--ink-2); }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); background: var(--paper); font-weight: 700; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.hl td { background: var(--amber-bg); }
+.callout { background: var(--amber-bg); border-left: 4px solid var(--amber); border-radius: 4px; padding: 10px 14px; font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); flex-wrap: wrap; }
+.seg button { border: 0; border-right: 1px solid var(--rule); background: none; padding: 7px 12px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.learn { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 960px) { .learn { grid-template-columns: 1fr; } }
+.learn > div { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.learn > div:nth-child(2) { border-top-color: var(--ox); }
+.learn > div:nth-child(3) { border-top-color: var(--amber); }
+.learn h3 { font-size: 16px; }
+.learn p { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.src { columns: 2 420px; column-gap: 32px; padding-left: 20px; margin: 0; }
+.src li { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); margin-bottom: 6px; break-inside: avoid; }
+.sitenote { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); border: 2px solid var(--ox); background: var(--surface); border-radius: 4px; padding: 9px 14px; }
+.sitenote .pill { background: var(--ox); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border-radius: 3px; padding: 2px 6px; margin-right: 8px; }
+.sitenote b { color: var(--ink); }
+svg text { font-family: var(--f-body); }
+.ax { stroke: #B9BCC2; stroke-width: 1; }
+.gridl { stroke: #E6E6E2; stroke-width: 1; }
+.tick { font-size: 13px; fill: var(--muted); }
+.axl { font-size: 13.5px; fill: var(--ink-2); font-weight: 600; }
+</style></head><body>
+<header class="bar"><div class="wrap"><a class="brand" href="index.html">Jigar Rajpura <span>· Portfolio</span></a><span class="sp"></span><a class="back" href="index.html#about">← All projects</a></div></header>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <p class="eyebrow"><a href="index.html#about">Portfolio</a> · <b>Project 07</b> · Clinical and economic evidence · October 2026</p>
+      <h1>From survival curve to cost-effectiveness</h1>
+      <p class="lede">Almost every access decision for a cancer medicine rests on three questions. <b>How much longer do patients live?</b> <b>What happens after the trial stops following them?</b> <b>Is the extra survival worth the price?</b> These three hands-on tools walk through each one with a hypothetical medicine, Drug Y, and simulated data you can change and re-run.</p>
+    </div>
+    <aside class="aside" aria-label="About this project">
+      <span class="k3">How to use it</span>
+      <ul>
+        <li><b>Part 1</b> shows how to read a Kaplan–Meier curve, a median and a hazard ratio.</li>
+        <li><b>Part 2</b> fits the standard survival models to three years of data and shows how far apart their long-term predictions land.</li>
+        <li><b>Part 3</b> turns survival into life-years, QALYs and costs, and compares the result with published thresholds.</li>
+      </ul>
+      <p>All trials, patients and prices are simulated. Drug Y does not exist.</p>
+    </aside>
+  </section>
+
+  <nav class="tabs" style="--n:3" aria-label="Parts">
+    <button type="button" data-t="km" aria-selected="true"><span class="n">1</span><b>Read a survival curve</b><small>Kaplan–Meier, medians, hazard ratio</small></button>
+    <button type="button" data-t="ex" aria-selected="false"><span class="n">2</span><b>Extrapolation playground</b><small>Five models, three years of data</small></button>
+    <button type="button" data-t="cea" aria-selected="false"><span class="n">3</span><b>Cost-effectiveness in one page</b><small>Partitioned survival model, ICER</small></button>
+  </nav>
+
+  <!-- ================= PART 1 ================= -->
+  <section class="panel" data-panel="km">
+    <div class="grid2">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>A simulated trial: Drug Y vs standard care</h3><div class="row"><span class="note" id="kmSeed"></span><button class="btn" type="button" id="kmNew">↻ Run the trial again</button></div></div>
+        <div class="plot"><svg id="kmSvg" role="img" aria-label="Kaplan–Meier curves for two arms"></svg></div>
+        <div class="stats" id="kmStats"></div>
+        <div class="tbl"><table id="kmRisk"></table></div>
+        <div class="row"><button class="chip" type="button" id="kmTrue" aria-pressed="false"><i style="background:#6C7282"></i>Show the true curves</button><span class="note">Ticks on the curves are censored patients: still alive when last seen.</span></div>
+      </div>
+      <div class="box">
+        <h3>Change the trial</h3>
+        <div class="ctrl"><label for="kmHR">True hazard ratio, Drug Y vs standard care <output id="kmHRO"></output></label><input type="range" id="kmHR" min="0.3" max="1.5" step="0.05" value="0.7"><span class="hint">Below 1 means Drug Y lowers the risk of death; 1 means no difference.</span></div>
+        <div class="ctrl"><label for="kmMed">Median survival on standard care <output id="kmMedO"></output></label><input type="range" id="kmMed" min="4" max="36" step="1" value="12"></div>
+        <div class="ctrl"><label for="kmN">Patients per arm <output id="kmNO"></output></label><input type="range" id="kmN" min="50" max="500" step="25" value="200"><span class="hint">Smaller trials bounce around more each time you re-run them.</span></div>
+        <div class="ctrl"><label for="kmCut">Data cut-off, months after the first patient enrolled <output id="kmCutO"></output></label><input type="range" id="kmCut" min="18" max="72" step="3" value="42"><span class="hint">Patients enrol over 18 months, so later patients are followed for less time.</span></div>
+        <p class="callout" id="kmRead"></p>
+      </div>
+    </div>
+    <div class="learn">
+      <div><h3>The curve</h3><p>A Kaplan–Meier curve starts at 100% and steps down each time a patient dies. Patients still alive when last seen are <b>censored</b>: they count as “at risk” until then, and are then removed, shown as ticks. The curve’s tail rests on few patients, so it is the least reliable part.</p></div>
+      <div><h3>The median</h3><p>Median survival is the time at which the curve crosses 50%. If fewer than half the patients have died by the data cut-off, the median is <b>not reached</b> (NR). Medians describe one point on the curve, not the whole curve.</p></div>
+      <div><h3>The hazard ratio</h3><p>The hazard ratio compares the risk of death at any moment among patients still alive. An HR of 0.70 means about 30% lower risk on Drug Y, at every point in time, if hazards are proportional. The same reading applies to progression-free survival, where the event is progression or death.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= PART 2 ================= -->
+  <section class="panel" data-panel="ex" hidden>
+    <div class="grid2">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>Observed data, then 20 years of prediction</h3><div class="row"><button class="btn" type="button" id="exNew">↻ New trial</button><button class="btn pri" type="button" id="exTruth" aria-pressed="false">Reveal what really happens</button></div></div>
+        <div class="plot"><svg id="exSvg" role="img" aria-label="Kaplan–Meier data with five fitted survival models extrapolated to 20 years"></svg></div>
+        <div class="row" id="exChips"></div>
+      </div>
+      <div class="box">
+        <h3>The data you have</h3>
+        <div class="ctrl"><label for="exCut">Data cut-off <output id="exCutO"></output></label><input type="range" id="exCut" min="12" max="60" step="6" value="36"><span class="hint">Move it left to see what immature data does to the predictions.</span></div>
+        <div class="stats" id="exStats"></div>
+        <p class="callout" id="exRead"></p>
+        <p class="note">Models are fitted to the simulated patient-level data by maximum likelihood, the way an analyst would. The NICE DSU list also includes the generalised gamma, not shown here.</p>
+      </div>
+    </div>
+    <div class="tbl"><table id="exTbl"></table></div>
+    <div class="learn">
+      <div><h3>Why the tails split</h3><p>Each model makes a different assumption about how the risk of death changes over time: constant (exponential), steadily rising or falling (Weibull, Gompertz), or rising then falling (log-normal, log-logistic). They can all fit three years of data well and still disagree by years about the mean.</p></div>
+      <div><h3>Why the mean matters</h3><p>Cost-effectiveness models use <b>mean</b> survival, the area under the whole curve, not the median. Most of the difference between models sits in the extrapolated tail, so the model choice can drive the ICER more than the trial result does.</p></div>
+      <div><h3>How analysts choose</h3><p>NICE DSU guidance asks analysts to fit all the standard models and compare them with statistical fit (AIC, BIC) and diagnostic plots. Crucially, it also asks them to check the tails for clinical plausibility against external data and expert opinion, since good fit to observed data says little about the tail.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= PART 3 ================= -->
+  <section class="panel" data-panel="cea" hidden>
+    <div class="grid2">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>Where patients are, month by month</h3><div class="seg" id="ceaView"><button type="button" data-v="new" aria-pressed="true">Drug Y</button><button type="button" data-v="old" aria-pressed="false">Standard care</button></div></div>
+        <div class="plot"><svg id="ceaSvg" role="img" aria-label="State occupancy over time"></svg></div>
+        <div class="row"><span class="chip" style="cursor:default"><i style="background:#9FB3CB"></i>Progression-free</span><span class="chip" style="cursor:default"><i style="background:#E0B7BD"></i>Progressed</span><span class="note">Dead = the space above both bands. Life-years are the area under the overall survival curve.</span></div>
+        <div class="tbl"><table id="ceaTbl"></table></div>
+      </div>
+      <div class="box">
+        <h3>Country and threshold</h3>
+        <select class="sel" id="ceaCountry" aria-label="Country"></select>
+        <div id="ceaCountryOpt"></div>
+        <div class="stats" id="ceaStats" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+        <div class="plot"><svg id="ceaBar" role="img" aria-label="ICER compared with thresholds"></svg></div>
+        <p class="callout" id="ceaRead"></p>
+        <p class="note" id="ceaSrc"></p>
+      </div>
+    </div>
+    <div class="box">
+      <h3>Inputs (all hypothetical)</h3>
+      <div class="ctrls">
+        <div class="ctrl"><label for="cOS">Standard care: median OS <output id="cOSO"></output></label><input type="range" id="cOS" min="6" max="36" step="1" value="14"></div>
+        <div class="ctrl"><label for="cPF">Standard care: median PFS <output id="cPFO"></output></label><input type="range" id="cPF" min="2" max="24" step="1" value="6"></div>
+        <div class="ctrl"><label for="cHRos">Drug Y: hazard ratio for OS <output id="cHRosO"></output></label><input type="range" id="cHRos" min="0.4" max="1.1" step="0.01" value="0.65"></div>
+        <div class="ctrl"><label for="cHRpf">Drug Y: hazard ratio for PFS <output id="cHRpfO"></output></label><input type="range" id="cHRpf" min="0.3" max="1.1" step="0.01" value="0.55"></div>
+        <div class="ctrl"><label for="cWane">Drug Y’s effect lasts <output id="cWaneO"></output></label><input type="range" id="cWane" min="1" max="20" step="1" value="20"><span class="hint">After this, both arms share standard care’s risk. Links to Part 2.</span></div>
+        <div class="ctrl"><label for="cPrice">Drug Y: price per month <output id="cPriceO"></output></label><input type="range" id="cPrice" min="0" max="100" step="1" value="25"><span class="hint">Given until progression.</span></div>
+        <div class="ctrl"><label for="cComp">Standard care drug cost per month <output id="cCompO"></output></label><input type="range" id="cComp" min="0" max="100" step="1" value="4"></div>
+        <div class="ctrl"><label for="cOther">Other care per month, progressed <output id="cOtherO"></output></label><input type="range" id="cOther" min="0" max="100" step="1" value="5"><span class="hint">Progression-free care is set at half this.</span></div>
+        <div class="ctrl"><label for="uPF">Quality of life, progression-free <output id="uPFO"></output></label><input type="range" id="uPF" min="0.4" max="1" step="0.01" value="0.78"></div>
+        <div class="ctrl"><label for="uPD">Quality of life, progressed <output id="uPDO"></output></label><input type="range" id="uPD" min="0.2" max="0.9" step="0.01" value="0.62"></div>
+        <div class="ctrl"><label for="cDisc">Discount rate per year <output id="cDiscO"></output></label><input type="range" id="cDisc" min="0" max="6" step="0.5" value="3.5"><span class="hint">Applied to costs and QALYs. Rates differ by country.</span></div>
+      </div>
+      <p class="note">Survival in both arms follows exponential curves with these medians, run monthly over 20 years. Prices and costs are illustrative and in the selected country’s currency; they are not converted between countries. This is a teaching model, not a submission model.</p>
+    </div>
+    <div class="learn">
+      <div><h3>Partitioned survival</h3><p>The two survival curves split the cohort into three states. Below the PFS curve: progression-free. Between PFS and OS: progressed. Above OS: dead. Each month, the time spent in each state collects costs and quality of life.</p></div>
+      <div><h3>QALYs and the ICER</h3><p>A QALY is a year of life weighted by its quality (1 = full health). The <b>incremental cost-effectiveness ratio</b> is the extra cost divided by the extra QALYs. Agencies compare it with a threshold or reference value; above it, the price usually has to come down.</p></div>
+      <div><h3>Thresholds differ</h3><p>England uses a range and a severity weighting; the Netherlands sets reference values by burden of disease; Ireland, Japan and ICER in the US each use their own figures and for different purposes. The comparison panel shows the price at which Drug Y would meet each one.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="srcH">
+    <h2 id="srcH">Sources</h2>
+    <ol class="src">
+      <li>Latimer N. NICE DSU Technical Support Document 14: Survival analysis for economic evaluations alongside clinical trials, extrapolation with patient-level data. 2011, updated 2013. <a href="https://sheffield.ac.uk/media/34225/download" target="_blank" rel="noopener">NICE DSU</a></li>
+      <li>NICE. Health technology evaluations: the manual (PMG36). <a href="https://www.nice.org.uk/process/pmg36" target="_blank" rel="noopener">nice.org.uk</a> (normally cost-effective below £20,000 per QALY).</li>
+      <li>Simon-Kucher. Updates to NICE’s methods manual (standard threshold up to £30,000 per QALY; severity modifier replaces end-of-life criteria). <a href="https://www.simon-kucher.com/en/insights/uk-nhs-4-updates-nices-manual-methods" target="_blank" rel="noopener">simon-kucher.com</a></li>
+      <li>Office of Health Economics. NICE’s severity modifier (QALY weights 1.2 and 1.7 and the shortfall cut-offs). <a href="https://www.ohe.org/insights/nices-severity-modifier-step-right-direction-still-long-way-go/" target="_blank" rel="noopener">ohe.org</a></li>
+      <li>Zorginstituut Nederland. Ziektelast in de praktijk, 7 May 2018 (reference values €20,000, €50,000 and €80,000 per QALY by burden of disease). <a href="https://berthub.eu/tkconv/getraw/2018D34267" target="_blank" rel="noopener">Parliamentary copy</a></li>
+      <li>Almajed S et al. Cost-effectiveness evidence on approved cancer drugs in Ireland. <i>Eur J Health Econ</i> 2022;23 (€20,000 and €45,000 per QALY from the 2016 agreement). <a href="https://doi.org/10.1007/s10198-021-01365-2" target="_blank" rel="noopener">doi:10.1007/s10198-021-01365-2</a></li>
+      <li>Formal implementation of cost-effectiveness evaluations in Japan. <i>Value Health</i> 2020;23(1) (¥5 million per QALY for post-listing price adjustment). <a href="https://doi.org/10.1016/j.jval.2019.10.005" target="_blank" rel="noopener">doi:10.1016/j.jval.2019.10.005</a></li>
+      <li>Institute for Clinical and Economic Review. 2019 perspectives on cost-effectiveness threshold ranges ($100,000–$150,000 per QALY for health-benefit price benchmarks). <a href="https://icer.org/wp-content/uploads/2023/08/ICER_2019_Perspectives-on-Cost-Effectiveness-Threshold-Ranges.pdf" target="_blank" rel="noopener">icer.org</a></li>
+    </ol>
+  </section>
+  <p class="sitenote"><span class="pill">Disclaimer</span><b>Personal project</b>, not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist. All data, medicines and prices on this page are hypothetical; thresholds reflect the cited sources as of October 2026 and may change. Not medical, regulatory, reimbursement or investment advice. <a href="index.html#about">Full disclaimer</a></p>
+</main>
+<script>
+// ---------- shared helpers ----------
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = (x, d = 1) => (x == null || !isFinite(x)) ? '—' : x.toLocaleString('en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmt0 = (x) => fmt(x, 0);
+// a plain SVG chart: returns scale helpers; draws grid, axes, ticks and labels
+function chart(svg, o) {
+  const W = o.w || 900, H = o.h || 460, L = o.l || 64, R = o.r || 20, T = o.t || 16, B = o.b || 54;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = '';
+  const x = (v) => L + (v - (o.x0 || 0)) / (o.x1 - (o.x0 || 0)) * (W - L - R);
+  const y = (v) => H - B - (v - (o.y0 || 0)) / (o.y1 - (o.y0 || 0)) * (H - T - B);
+  let g = '';
+  (o.yt || []).forEach((v) => { g += `<line class="gridl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="tick" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${o.yf ? o.yf(v) : v}</text>`; });
+  (o.xt || []).forEach((v) => { g += `<line class="gridl" x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H - B}"/><text class="tick" x="${x(v)}" y="${H - B + 18}" text-anchor="middle">${o.xf ? o.xf(v) : v}</text>`; });
+  g += `<line class="ax" x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}"/><line class="ax" x1="${L}" x2="${L}" y1="${T}" y2="${H - B}"/>`;
+  if (o.xl) g += `<text class="axl" x="${(L + W - R) / 2}" y="${H - 12}" text-anchor="middle">${o.xl}</text>`;
+  if (o.yl) g += `<text class="axl" transform="translate(16 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">${o.yl}</text>`;
+  svg.insertAdjacentHTML('beforeend', g);
+  return { x, y, W, H, L, R, T, B, add: (s) => svg.insertAdjacentHTML('beforeend', s) };
+}
+const pathOf = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+function stepPath(c, times, surv, tmax) { // KM step function
+  let d = `M${c.x(0)} ${c.y(1)}`; let s = 1;
+  for (let i = 0; i < times.length; i++) { if (times[i] > tmax) break; d += `H${c.x(times[i]).toFixed(1)}V${c.y(surv[i]).toFixed(1)}`; s = surv[i]; }
+  return d + `H${c.x(tmax).toFixed(1)}`;
+}
+// Kaplan–Meier from arrays of {t, e}
+function km(data) {
+  const d = [...data].sort((a, b) => a.t - b.t || b.e - a.e); let n = d.length, s = 1; const times = [], surv = [], cens = [];
+  let i = 0;
+  while (i < d.length) { const t = d[i].t; let ev = 0, c = 0; while (i < d.length && d[i].t === t) { if (d[i].e) ev++; else c++; i++; }
+    if (ev) { s *= (1 - ev / n); times.push(t); surv.push(s); } if (c) cens.push([t, s]); n -= ev + c; }
+  return { times, surv, cens, at: (t) => { let v = 1; for (let j = 0; j < times.length && times[j] <= t; j++) v = surv[j]; return v; } };
+}
+function kmMedian(k) { for (let i = 0; i < k.times.length; i++) if (k.surv[i] <= .5) return k.times[i]; return null; }
+// tabs
+function tabs(el, onShow) {
+  const btns = [...el.querySelectorAll('button[data-t]')];
+  const show = (id, push) => { btns.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === id))); document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== id; }); if (push) { try { history.replaceState(null, '', '#' + id); } catch (e) {} } onShow && onShow(id); };
+  btns.forEach((b) => b.addEventListener('click', () => show(b.dataset.t, true)));
+  const h = (location.hash || '').slice(1); show(btns.some((b) => b.dataset.t === h) ? h : btns[0].dataset.t, false);
+}
+const bindRange = (id, fn, f = (v) => v) => { const el = $(id), out = $(id + 'O'); const upd = () => { if (out) out.textContent = f(+el.value); fn(); }; el.addEventListener('input', upd); if (out) out.textContent = f(+el.value); };
+
+(() => {
+  // ================= PART 1: Kaplan–Meier =================
+  let kmSeed = 20;
+  const ACCR = 18, DROP = 0.03 / 12;
+  function simTrial(seed, n, lam0, hr, cut) {
+    const r = rng(seed), arms = [[], []];
+    for (let a = 0; a < 2; a++) for (let i = 0; i < n; i++) {
+      const uE = r(), uT = r(), uD = r(); const entry = uE * ACCR, lam = a ? lam0 * hr : lam0;
+      const T = -Math.log(uT) / lam, D = -Math.log(uD) / DROP, fu = Math.max(0, cut - entry);
+      const t = Math.min(T, D, fu); arms[a].push({ t: Math.max(t, 0.01), e: T <= Math.min(D, fu) ? 1 : 0 });
+    }
+    return arms;
+  }
+  function drawKM() {
+    const hr = +$('kmHR').value, med = +$('kmMed').value, n = +$('kmN').value, cut = +$('kmCut').value, lam0 = Math.LN2 / med;
+    const arms = simTrial(kmSeed, n, lam0, hr, cut);
+    const K = arms.map(km), tmax = Math.ceil(cut / 6) * 6;
+    const xt = []; for (let v = 0; v <= tmax; v += 6) xt.push(v);
+    const c = chart($('kmSvg'), { w: 900, h: 440, x1: tmax, y1: 1, xt, yt: [0, .25, .5, .75, 1], yf: (v) => Math.round(v * 100) + '%', xl: 'Months since joining the trial', yl: 'Alive' });
+    c.add(`<line x1="${c.x(0)}" x2="${c.x(tmax)}" y1="${c.y(.5)}" y2="${c.y(.5)}" stroke="#B7791F" stroke-dasharray="5 5"/><text class="tick" x="${c.x(tmax) - 4}" y="${c.y(.5) - 6}" text-anchor="end" style="fill:#8A5A00">50%: medians</text>`);
+    if ($('kmTrue').getAttribute('aria-pressed') === 'true') [lam0, lam0 * hr].forEach((l, a) => { const p = []; for (let t = 0; t <= tmax; t += .5) p.push([c.x(t), c.y(Math.exp(-l * t))]); c.add(`<path d="${pathOf(p)}" fill="none" stroke="${a ? '#2B4A6F' : '#7A1F2B'}" stroke-width="2" stroke-dasharray="3 5" opacity=".8"/>`); });
+    const col = ['#7A1F2B', '#2B4A6F'];
+    K.forEach((k, a) => { c.add(`<path d="${stepPath(c, k.times, k.surv, Math.max(...arms[a].map((d) => d.t)))}" fill="none" stroke="${col[a]}" stroke-width="3"/>`);
+      c.add(k.cens.map(([t, s]) => `<line x1="${c.x(t)}" x2="${c.x(t)}" y1="${c.y(s) - 5}" y2="${c.y(s) + 5}" stroke="${col[a]}" stroke-width="1.5"/>`).join(''));
+      const m = kmMedian(k); if (m != null) c.add(`<line x1="${c.x(m)}" x2="${c.x(m)}" y1="${c.y(.5)}" y2="${c.y(0)}" stroke="${col[a]}" stroke-dasharray="3 4"/><circle cx="${c.x(m)}" cy="${c.y(.5)}" r="5" fill="${col[a]}"/>`); });
+    c.add(`<g font-size="15" font-weight="700"><rect x="${c.x(tmax) - 230}" y="22" width="224" height="58" rx="5" fill="#fff" stroke="#DADBD8"/><line x1="${c.x(tmax) - 218}" x2="${c.x(tmax) - 190}" y1="42" y2="42" stroke="#2B4A6F" stroke-width="3"/><text x="${c.x(tmax) - 182}" y="47" fill="#1D2433">Drug Y</text><line x1="${c.x(tmax) - 218}" x2="${c.x(tmax) - 190}" y1="66" y2="66" stroke="#7A1F2B" stroke-width="3"/><text x="${c.x(tmax) - 182}" y="71" fill="#1D2433">Standard care</text></g>`);
+    // numbers at risk
+    const head = xt.map((v) => `<th class="num">${v}</th>`).join('');
+    const row = (a, name) => `<tr><td><b style="color:${col[a]}">${name}</b></td>${xt.map((v) => `<td class="num">${arms[a].filter((d) => d.t >= v).length}</td>`).join('')}</tr>`;
+    $('kmRisk').innerHTML = `<thead><tr><th>Numbers at risk · month</th>${head}</tr></thead><tbody>${row(1, 'Drug Y')}${row(0, 'Standard care')}</tbody>`;
+    // estimates
+    const ev = arms.map((x) => x.reduce((s, d) => s + d.e, 0)), pt = arms.map((x) => x.reduce((s, d) => s + d.t, 0));
+    const hrHat = (ev[1] / pt[1]) / (ev[0] / pt[0]), se = Math.sqrt(1 / ev[1] + 1 / ev[0]);
+    const lo = hrHat * Math.exp(-1.96 * se), hi = hrHat * Math.exp(1.96 * se);
+    const m0 = kmMedian(K[0]), m1 = kmMedian(K[1]);
+    const mf = (m) => m == null ? 'NR' : fmt(m, 1) + ' mo';
+    $('kmStats').innerHTML = `<div class="stat"><span>Median, Drug Y</span><b>${mf(m1)}</b><small>true ${fmt(med / hr, 1)} mo</small></div><div class="stat"><span>Median, standard</span><b>${mf(m0)}</b><small>true ${fmt(med, 1)} mo</small></div><div class="stat"><span>Hazard ratio from this trial</span><b>${fmt(hrHat, 2)}</b><small>95% CI ${fmt(lo, 2)}–${fmt(hi, 2)}</small></div><div class="stat"><span>Deaths observed</span><b>${ev[1] + ev[0]}</b><small>of ${2 * n} patients</small></div>`;
+    $('kmSeed').textContent = `Trial #${kmSeed - 19}`;
+    const sig = hi < 1 ? 'The confidence interval sits entirely below 1, so this trial shows a difference unlikely to be due to chance alone.' : lo > 1 ? 'The confidence interval sits entirely above 1: Drug Y looks worse.' : 'The confidence interval crosses 1, so this trial cannot rule out no difference.';
+    $('kmRead').innerHTML = `<b>Reading it:</b> the true hazard ratio is ${fmt(hr, 2)}, so at any moment a patient on Drug Y has about ${Math.abs(Math.round((1 - hr) * 100))}% ${hr <= 1 ? 'lower' : 'higher'} risk of death than one on standard care. This simulated trial estimated ${fmt(hrHat, 2)}. ${sig} Re-run the trial to see how much chance moves the result.`;
+  }
+  ['kmHR', 'kmMed', 'kmN', 'kmCut'].forEach((id) => bindRange(id, drawKM, { kmHR: (v) => fmt(v, 2), kmMed: (v) => v + ' mo', kmN: (v) => v, kmCut: (v) => v + ' mo' }[id]));
+  $('kmNew').addEventListener('click', () => { kmSeed++; drawKM(); });
+  $('kmTrue').addEventListener('click', (e) => { const b = e.currentTarget; b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); drawKM(); });
+
+  // ================= PART 2: extrapolation =================
+  const CURE = 0.2, BG = 0.02 / 12, WSH = 1.25, WSC = 18; // true process: 20% long-term survivors
+  const trueS = (t) => Math.exp(-BG * t) * (CURE + (1 - CURE) * Math.exp(-Math.pow(t / WSC, WSH)));
+  let exSeed = 5;
+  function simEx(seed, cut) {
+    const r = rng(seed * 7919), out = [];
+    for (let i = 0; i < 300; i++) { const uE = r(), uC = r(), uT = r(), uB = r(), uD = r(); const entry = uE * 12;
+      let T = uC < CURE ? Infinity : WSC * Math.pow(-Math.log(uT), 1 / WSH); const Tb = -Math.log(uB) / BG; T = Math.min(T, Tb);
+      const D = -Math.log(uD) / (0.02 / 12), fu = Math.max(0.01, cut - entry); const t = Math.min(T, D, fu); out.push({ t: Math.max(t, 0.01), e: T <= Math.min(D, fu) ? 1 : 0 }); }
+    return out;
+  }
+  // normal CDF helpers
+  const erfc = (x) => { const z = Math.abs(x), t = 1 / (1 + .5 * z); const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (.37409196 + t * (.09678418 + t * (-.18628806 + t * (.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-.82215223 + t * .17087277))))))))); return x >= 0 ? r : 2 - r; };
+  const Phi = (z) => .5 * erfc(-z / Math.SQRT2);
+  const MODELS = [
+    { id: 'exp', name: 'Exponential', col: '#6C7282', k: 1, S: (t, p) => Math.exp(-Math.exp(p[0]) * t), h: (t, p) => Math.exp(p[0]) },
+    { id: 'wei', name: 'Weibull', col: '#2B4A6F', k: 2, S: (t, p) => Math.exp(-Math.pow(t / Math.exp(p[1]), Math.exp(p[0]))), h: (t, p) => { const a = Math.exp(p[0]), b = Math.exp(p[1]); return a / b * Math.pow(t / b, a - 1); } },
+    { id: 'gom', name: 'Gompertz', col: '#2E7A57', k: 2, S: (t, p) => { const a = Math.exp(p[0]), b = p[1]; return Math.abs(b) < 1e-9 ? Math.exp(-a * t) : Math.exp(-(a / b) * (Math.exp(b * t) - 1)); }, h: (t, p) => Math.exp(p[0]) * Math.exp(p[1] * t) },
+    { id: 'lgn', name: 'Log-normal', col: '#7A1F2B', k: 2, S: (t, p) => 1 - Phi((Math.log(t) - p[0]) / Math.exp(p[1])), h: (t, p) => { const s = Math.exp(p[1]), z = (Math.log(t) - p[0]) / s; const f = Math.exp(-z * z / 2) / (Math.sqrt(2 * Math.PI) * s * t); return f / Math.max(1e-300, 1 - Phi(z)); } },
+    { id: 'llg', name: 'Log-logistic', col: '#B7791F', k: 2, S: (t, p) => 1 / (1 + Math.pow(t / Math.exp(p[1]), Math.exp(p[0]))), h: (t, p) => { const b = Math.exp(p[0]), a = Math.exp(p[1]), u = Math.pow(t / a, b); return (b / t) * u / (1 + u); } }
+  ];
+  function nelder(f, x0, step = .5, it = 600) {
+    const n = x0.length; let P = [x0.slice()]; for (let i = 0; i < n; i++) { const x = x0.slice(); x[i] += step; P.push(x); }
+    let F = P.map(f);
+    for (let k = 0; k < it; k++) {
+      const o = F.map((v, i) => i).sort((a, b) => F[a] - F[b]); P = o.map((i) => P[i]); F = o.map((i) => F[i]);
+      const c = new Array(n).fill(0); for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) c[j] += P[i][j] / n;
+      const xr = c.map((v, j) => v + (v - P[n][j])), fr = f(xr);
+      if (fr < F[0]) { const xe = c.map((v, j) => v + 2 * (v - P[n][j])), fe = f(xe); if (fe < fr) { P[n] = xe; F[n] = fe; } else { P[n] = xr; F[n] = fr; } }
+      else if (fr < F[n - 1]) { P[n] = xr; F[n] = fr; }
+      else { const xc = c.map((v, j) => v + .5 * (P[n][j] - v)), fc = f(xc); if (fc < F[n]) { P[n] = xc; F[n] = fc; } else { for (let i = 1; i <= n; i++) { P[i] = P[i].map((v, j) => P[0][j] + .5 * (v - P[0][j])); F[i] = f(P[i]); } } }
+      if (Math.abs(F[n] - F[0]) < 1e-9) break;
+    }
+    const o = F.map((v, i) => i).sort((a, b) => F[a] - F[b]); return { x: P[o[0]], f: F[o[0]] };
+  }
+  function fit(m, data) {
+    const ev = data.reduce((s, d) => s + d.e, 0), tt = data.reduce((s, d) => s + d.t, 0), lam = ev / tt;
+    const nll = (p) => { let ll = 0; for (const d of data) { const S = m.S(d.t, p); if (!(S > 0)) return 1e12; ll += Math.log(S); if (d.e) { const h = m.h(d.t, p); if (!(h > 0)) return 1e12; ll += Math.log(h); } } return isFinite(ll) ? -ll : 1e12; };
+    const starts = { exp: [[Math.log(lam)]], wei: [[0, Math.log(1 / lam)]], gom: [[Math.log(lam), 0], [Math.log(lam * 1.5), -0.02]], lgn: [[Math.log(Math.LN2 / lam), 0]], llg: [[0, Math.log(Math.LN2 / lam)]] }[m.id];
+    let best = null; starts.forEach((s) => { const r = nelder(nll, s, .4); if (!best || r.f < best.f) best = r; });
+    const r2 = nelder(nll, best.x, .1); if (r2.f < best.f) best = r2;
+    return { p: best.x, ll: -best.f };
+  }
+  const exOn = Object.fromEntries(MODELS.map((m) => [m.id, true]));
+  const HOR = 240, MEANH = 360;
+  const meanOf = (S) => { let a = 0; for (let t = 0; t < MEANH; t += .5) a += .5 * (S(t + .25)); return a / 12; };
+  function drawEx() {
+    const cut = +$('exCut').value, data = simEx(exSeed, cut), n = data.length, K = km(data), showT = $('exTruth').getAttribute('aria-pressed') === 'true';
+    const fits = MODELS.map((m) => { const f = fit(m, data); const S = (t) => t <= 0 ? 1 : m.S(t, f.p); return { m, ...f, S, aic: 2 * m.k - 2 * f.ll, bic: m.k * Math.log(n) - 2 * f.ll, s5: S(60), s10: S(120), mean: meanOf(S) }; });
+    const best = fits.reduce((a, b) => a.aic < b.aic ? a : b);
+    const xt = []; for (let v = 0; v <= HOR; v += 24) xt.push(v);
+    const c = chart($('exSvg'), { w: 900, h: 440, x1: HOR, y1: 1, xt, xf: (v) => v / 12, yt: [0, .25, .5, .75, 1], yf: (v) => Math.round(v * 100) + '%', xl: 'Years', yl: 'Alive' });
+    c.add(`<rect x="${c.x(cut)}" y="${c.T}" width="${c.x(HOR) - c.x(cut)}" height="${c.y(0) - c.T}" fill="#EEEBE0" opacity=".55"/><line x1="${c.x(cut)}" x2="${c.x(cut)}" y1="${c.T}" y2="${c.y(0)}" stroke="#1D2433" stroke-dasharray="5 4"/><text x="${c.x(cut) + 8}" y="${c.T + 18}" font-size="14" font-weight="700" fill="#1D2433">Data stop at ${cut} months · everything to the right is a prediction</text>`);
+    fits.forEach((F) => { if (!exOn[F.m.id]) return; const p = []; for (let t = 0; t <= HOR; t += 2) p.push([c.x(t), c.y(F.S(t))]); c.add(`<path d="${pathOf(p)}" fill="none" stroke="${F.m.col}" stroke-width="${F === best ? 3.4 : 2.2}"/>`); });
+    if (showT) { const p = []; for (let t = 0; t <= HOR; t += 2) p.push([c.x(t), c.y(trueS(t))]); c.add(`<path d="${pathOf(p)}" fill="none" stroke="#1D2433" stroke-width="3.5" stroke-dasharray="2 6" stroke-linecap="round"/><text x="${c.x(HOR) - 6}" y="${c.y(trueS(HOR)) - 10}" text-anchor="end" font-size="15" font-weight="700" fill="#1D2433">What really happens</text>`); }
+    c.add(`<path d="${stepPath(c, K.times, K.surv, Math.max(...data.map((d) => d.t)))}" fill="none" stroke="#1D2433" stroke-width="2.6"/>`);
+    $('exChips').innerHTML = MODELS.map((m) => `<button type="button" class="chip" data-m="${m.id}" aria-pressed="${exOn[m.id]}"><i style="background:${m.col}"></i>${m.name}</button>`).join('') + `<span class="chip" style="cursor:default"><i style="background:#1D2433"></i>Observed (Kaplan–Meier)</span>`;
+    const means = fits.map((F) => F.mean), lo = Math.min(...means), hi = Math.max(...means), ev = data.reduce((s, d) => s + d.e, 0);
+    $('exStats').innerHTML = `<div class="stat"><span>Deaths observed</span><b>${ev}</b><small>of ${n} patients</small></div><div class="stat"><span>Best fit by AIC</span><b style="font-size:19px">${best.m.name}</b><small>mean ${fmt(best.mean, 1)} years</small></div><div class="stat"><span>Mean survival range</span><b>${fmt(lo, 1)}–${fmt(hi, 1)}</b><small>years across models</small></div>${showT ? `<div class="stat"><span>True mean</span><b>${fmt(meanOf(trueS), 1)}</b><small>years</small></div>` : ''}`;
+    $('exTbl').innerHTML = `<thead><tr><th>Model</th><th class="num">AIC</th><th class="num">BIC</th><th class="num">Alive at 5 years</th><th class="num">Alive at 10 years</th><th class="num">Mean survival (years)</th></tr></thead><tbody>${fits.map((F) => `<tr${F === best ? ' class="hl"' : ''}><td><b style="color:${F.m.col}">${F.m.name}</b>${F === best ? ' · lowest AIC' : ''}</td><td class="num">${fmt(F.aic, 1)}</td><td class="num">${fmt(F.bic, 1)}</td><td class="num">${fmt(F.s5 * 100, 0)}%</td><td class="num">${fmt(F.s10 * 100, 0)}%</td><td class="num">${fmt(F.mean, 2)}</td></tr>`).join('')}${showT ? `<tr><td><b>What really happens</b></td><td class="num">—</td><td class="num">—</td><td class="num">${fmt(trueS(60) * 100, 0)}%</td><td class="num">${fmt(trueS(120) * 100, 0)}%</td><td class="num">${fmt(meanOf(trueS), 2)}</td></tr>` : ''}</tbody>`;
+    $('exRead').innerHTML = showT ? `<b>The twist:</b> in this simulation about one patient in five is a long-term survivor, so the true curve flattens into a plateau. Most standard models cannot bend that way, and a model can win on AIC while badly missing the tail. This is why guidance asks for external data and clinical judgement, and why cure and mixture models are increasingly debated.` : `<b>Same data, different futures:</b> all five models follow the observed curve closely, yet their estimates of mean survival run from ${fmt(lo, 1)} to ${fmt(hi, 1)} years, a gap of ${fmt(hi - lo, 1)} years. Move the cut-off earlier and the spread usually widens. Then reveal what really happens.`;
+  }
+  bindRange('exCut', drawEx, (v) => v + ' months');
+  $('exNew').addEventListener('click', () => { exSeed++; drawEx(); });
+  $('exTruth').addEventListener('click', (e) => { const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); b.textContent = on ? 'Hide what really happens' : 'Reveal what really happens'; drawEx(); });
+  $('exChips').addEventListener('click', (e) => { const b = e.target.closest('[data-m]'); if (!b) return; exOn[b.dataset.m] = !exOn[b.dataset.m]; drawEx(); });
+
+  // ================= PART 3: cost-effectiveness =================
+  const C = {
+    eng: { name: 'England (NICE)', cur: '£', scale: 200, lines: [[20000, '£20,000'], [30000, '£30,000']], opt: 'sev',
+      note: 'NICE: normally cost-effective below £20,000 per QALY, considered up to about £30,000. The severity modifier weights QALYs by 1.2 or 1.7 for severe conditions (based on QALY shortfall).' },
+    nl: { name: 'Netherlands (Zorginstituut)', cur: '€', scale: 230, lines: null, opt: 'burden',
+      note: 'Zorginstituut reference values depend on burden of disease: up to €20,000 (0.10–0.40), €50,000 (0.41–0.70) or €80,000 per QALY (0.71–1.00).' },
+    ie: { name: 'Ireland', cur: '€', scale: 230, lines: [[20000, '€20,000'], [45000, '€45,000']],
+      note: 'Ireland: €20,000 and €45,000 per QALY, from the 2016 industry agreement; not a hard cut-off, and drugs above it can go to further negotiation.' },
+    jp: { name: 'Japan', cur: '¥', scale: 30000, lines: [[5000000, '¥5 million']],
+      note: 'Japan: ¥5 million per QALY is the reference for adjusting price after listing; it is not used to decide coverage.' },
+    us: { name: 'United States (ICER benchmark)', cur: '$', scale: 300, lines: [[100000, '$100,000'], [150000, '$150,000']],
+      note: 'ICER: $100,000–$150,000 per QALY for its health-benefit price benchmarks. It is an independent benchmark, not a payer decision rule.' }
+  };
+  $('ceaCountry').innerHTML = Object.entries(C).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
+  let ceaV = 'new';
+  const money = (cur, v) => (v < 0 ? '−' : '') + cur + Math.round(Math.abs(v)).toLocaleString('en-GB');
+  function ceaOpt() {
+    const k = $('ceaCountry').value, o = C[k].opt;
+    $('ceaCountryOpt').innerHTML = o === 'sev' ? `<div class="ctrl"><label for="cSev">Severity QALY weight</label><select class="sel" id="cSev"><option value="1">1 (no severity weighting)</option><option value="1.2">1.2 (shortfall 0.85–0.95 or 12–18 QALYs)</option><option value="1.7">1.7 (shortfall ≥0.95 or ≥18 QALYs)</option></select></div>`
+      : o === 'burden' ? `<div class="ctrl"><label for="cBur">Burden of disease</label><select class="sel" id="cBur"><option value="20000">0.10–0.40 · up to €20,000</option><option value="50000">0.41–0.70 · up to €50,000</option><option value="80000" selected>0.71–1.00 · up to €80,000</option></select></div>` : '';
+    ['cSev', 'cBur'].forEach((id) => $(id) && $(id).addEventListener('change', drawCEA));
+  }
+  function runArm(lamOS, lamPF, hrOS, hrPF, wane, drugM, otherPD, disc, uPF, uPD) {
+    let sOS = 1, sPF = 1, LY = 0, Q = 0, cost = 0, drugT = 0; const tr = [];
+    const r = Math.pow(1 + disc, 1 / 12) - 1;
+    for (let m = 0; m < 240; m++) {
+      const on = (m / 12) < wane;
+      const nOS = sOS * Math.exp(-lamOS * (on ? hrOS : 1)), nPF = sPF * Math.exp(-lamPF * (on ? hrPF : 1));
+      const os = (sOS + nOS) / 2, pf = Math.min((sPF + nPF) / 2, os), pd = Math.max(0, os - pf), df = 1 / Math.pow(1 + r, m + .5);
+      LY += os / 12; Q += (pf * uPF + pd * uPD) / 12 * df; cost += (pf * (drugM + otherPD / 2) + pd * otherPD) * df; drugT += pf * df;
+      tr.push([m, Math.min(sPF, sOS), sOS]); sOS = nOS; sPF = Math.min(nPF, nOS);
+    }
+    return { LY, Q, cost, drugT, tr };
+  }
+  function drawCEA() {
+    const k = $('ceaCountry').value, Cn = C[k], cur = Cn.cur, sc = Cn.scale;
+    const os = +$('cOS').value, pf = Math.min(+$('cPF').value, os), hrO = +$('cHRos').value, hrP = +$('cHRpf').value, wane = +$('cWane').value;
+    const price = +$('cPrice').value * sc, comp = +$('cComp').value * sc, other = +$('cOther').value * sc, uPF = +$('uPF').value, uPD = +$('uPD').value, disc = +$('cDisc').value / 100;
+    ['cPrice', 'cComp', 'cOther'].forEach((id) => { $(id + 'O').textContent = money(cur, +$(id).value * sc); });
+    const lo = Math.LN2 / os, lp = Math.LN2 / pf;
+    const A = runArm(lo, lp, hrO, hrP, wane, price, other, disc, uPF, uPD), B = runArm(lo, lp, 1, 1, 0, comp, other, disc, uPF, uPD);
+    const w = Cn.opt === 'sev' && $('cSev') ? +$('cSev').value : 1;
+    const dQ = (A.Q - B.Q) * w, dC = A.cost - B.cost, dLY = A.LY - B.LY, icer = dQ > 0 ? dC / dQ : null;
+    const lines = Cn.opt === 'burden' ? [[+$('cBur').value, money('€', +$('cBur').value)]] : Cn.lines;
+    // state occupancy chart
+    const tr = (ceaV === 'new' ? A : B).tr, other2 = (ceaV === 'new' ? B : A).tr;
+    const c = chart($('ceaSvg'), { w: 900, h: 360, x1: 240, y1: 1, xt: [0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240], xf: (v) => v / 12, yt: [0, .25, .5, .75, 1], yf: (v) => Math.round(v * 100) + '%', xl: 'Years', yl: 'Share of patients' });
+    const area = (f, g) => { let d = `M${c.x(0)} ${c.y(f(tr[0]))}`; tr.forEach((p) => { d += `L${c.x(p[0])} ${c.y(f(p))}`; }); for (let i = tr.length - 1; i >= 0; i--) d += `L${c.x(tr[i][0])} ${c.y(g(tr[i]))}`; return d + 'Z'; };
+    c.add(`<path d="${area((p) => p[2], (p) => p[1])}" fill="#E0B7BD"/><path d="${area((p) => p[1], () => 0)}" fill="#9FB3CB"/>`);
+    const op = []; other2.forEach((p) => op.push([c.x(p[0]), c.y(p[2])])); const li = Math.max(6, other2.findIndex((p) => p[2] < .35)); c.add(`<path d="${pathOf(op)}" fill="none" stroke="#1D2433" stroke-width="2" stroke-dasharray="5 5"/><text x="${c.x(li) + 8}" y="${c.y(other2[li][2]) - 8}" font-size="14" font-weight="700" fill="#1D2433">${ceaV === 'new' ? 'Standard care OS' : 'Drug Y OS'} (for comparison)</text>`);
+    if (wane < 20) c.add(`<line x1="${c.x(wane * 12)}" x2="${c.x(wane * 12)}" y1="${c.T}" y2="${c.y(0)}" stroke="#B7791F" stroke-dasharray="4 4"/><text x="${c.x(wane * 12) + 6}" y="${c.T + 16}" font-size="13.5" font-weight="700" fill="#8A5A00">Drug Y’s effect stops</text>`);
+    // results table
+    const r = (lab, a, b, f) => `<tr><td>${lab}</td><td class="num">${f(a)}</td><td class="num">${f(b)}</td><td class="num"><b>${f(a - b)}</b></td></tr>`;
+    $('ceaTbl').innerHTML = `<thead><tr><th>Per patient, 20 years</th><th class="num">Drug Y</th><th class="num">Standard care</th><th class="num">Difference</th></tr></thead><tbody>${r('Life-years (undiscounted)', A.LY, B.LY, (v) => fmt(v, 2))}${r('QALYs (discounted' + (w !== 1 ? ', before severity weight' : '') + ')', A.Q, B.Q, (v) => fmt(v, 2))}${r('Costs (discounted)', A.cost, B.cost, (v) => money(cur, v))}</tbody>`;
+    $('ceaStats').innerHTML = `<div class="stat"><span>Extra QALYs${w !== 1 ? ' (×' + w + ')' : ''}</span><b>${fmt(dQ, 2)}</b><small>${fmt(dLY, 2)} life-years</small></div><div class="stat"><span>Extra cost</span><b>${money(cur, dC)}</b><small>per patient</small></div><div class="stat"><span>ICER</span><b>${icer == null ? (dC <= 0 ? 'Dominant' : 'Dominated') : money(cur, icer)}</b><small>per QALY gained</small></div>`;
+    // threshold comparison bar
+    const maxV = Math.max(icer || 0, ...lines.map((l) => l[0])) * 1.25;
+    const W = 420, Hh = 120 + lines.length * 0, s = $('ceaBar'); s.setAttribute('viewBox', `0 0 ${W} 120`);
+    const X = (v) => 16 + Math.min(v, maxV) / maxV * (W - 32);
+    let g = `<rect x="16" y="46" width="${W - 32}" height="18" rx="4" fill="#EEEBE0"/>`;
+    lines.forEach(([v, lab], i) => { g += `<line x1="${X(v)}" x2="${X(v)}" y1="38" y2="72" stroke="#1D2433" stroke-width="2"/><text x="${X(v)}" y="${i % 2 ? 90 : 30}" text-anchor="middle" font-size="13" font-weight="700" fill="#1D2433">${lab}</text>`; });
+    if (icer != null) g += `<circle cx="${X(icer)}" cy="55" r="9" fill="#7A1F2B"/><text x="${Math.min(Math.max(X(icer), 60), W - 60)}" y="112" text-anchor="middle" font-size="13.5" font-weight="700" fill="#6E1C27">ICER ${money(cur, icer)}${icer > maxV / 1.25 * 1.0001 && icer > lines[lines.length - 1][0] * 1.25 ? ' (off scale)' : ''}</text>`;
+    s.innerHTML = g;
+    // price needed for each threshold: cost is linear in price → p* = (thr·ΔQ − (ΔC − price·drugT)) / drugT
+    const base = dC - price * A.drugT;
+    const need = lines.map(([v, lab]) => { const p = (v * dQ - base) / A.drugT; return `${lab}: ${p <= 0 ? 'not reachable at any price' : money(cur, p) + ' per month'}`; });
+    $('ceaRead').innerHTML = icer == null ? (dC <= 0 ? '<b>Dominant:</b> Drug Y gives more QALYs and costs less.' : '<b>Dominated:</b> Drug Y gives no extra QALYs.') : `<b>Price to meet each threshold</b> (everything else unchanged): ${need.join('; ')}. Current price: ${money(cur, price)} per month.`;
+    $('ceaSrc').textContent = Cn.note;
+  }
+  $('ceaCountry').addEventListener('change', () => { ceaOpt(); drawCEA(); });
+  $('ceaView').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b) return; ceaV = b.dataset.v; $('ceaView').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); drawCEA(); });
+  const f2 = (v) => fmt(v, 2);
+  [['cOS', (v) => v + ' mo'], ['cPF', (v) => v + ' mo'], ['cHRos', f2], ['cHRpf', f2], ['cWane', (v) => v >= 20 ? 'whole horizon' : v + (v === 1 ? ' year' : ' years')], ['cPrice'], ['cComp'], ['cOther'], ['uPF', f2], ['uPD', f2], ['cDisc', (v) => fmt(v, 1) + '%']].forEach(([id, f]) => bindRange(id, drawCEA, f || ((v) => v)));
+  ceaOpt();
+
+  tabs(document.querySelector('.tabs'), (id) => { if (id === 'km') drawKM(); if (id === 'ex') drawEx(); if (id === 'cea') drawCEA(); });
+  drawKM(); drawEx(); drawCEA();
+  window.__p7 = { drawKM, drawEx, drawCEA };
+})();
+</script>
+</body></html>

@@ -1,0 +1,446 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>JCA PICO Explainer · Jigar Rajpura, PhD</title><meta name="description" content="How the EU Joint Clinical Assessment turns member states’ requests into a PICO set, explained with a hypothetical medicine. By Jigar Rajpura, PhD."><meta name="author" content="Jigar Rajpura"><meta property="og:title" content="JCA PICO Explainer · Jigar Rajpura, PhD"><meta property="og:description" content="How the EU Joint Clinical Assessment turns member states’ requests into a PICO set, explained with a hypothetical medicine. By Jigar Rajpura, PhD."><meta name="theme-color" content="#F3F3F1"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231D2433'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='30' fill='%23F3F3F1'%3EJR%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap"><style>:root {
+  --paper: #F3F3F1; --surface: #FFFFFF; --ink: #1D2433; --ink-2: #434B5C; --muted: #6C7282; --rule: #DADBD8;
+  --navy: #2B4A6F; --navy-bg: #E3EAF2; --navy-line: #AFC0D4;
+  --ox: #7A1F2B; --ox-ink: #6E1C27; --ox-bg: #F3E4E5; --ox-line: #D7AEB3;
+  --strip: #EEEBE0; --gold: #6B5A1E; --amber: #B7791F; --amber-bg: #F6EBD6;
+  --med: #2E7A57; --med-bg: #E2EFE7; --plot: #FBFAF7;
+  --c1: #2B4A6F; --c2: #7A1F2B; --c3: #2E7A57; --c4: #B7791F; --c5: #6B4E8A; --c6: #6C7282;
+  --f-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --f-body: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 70px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+h1, h2, h3, h4, p, ul, ol, figure, dl, dd { margin: 0; }
+a { color: var(--navy); text-underline-offset: 3px; }
+button, input, select { font: inherit; color: inherit; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+@media (max-width: 640px) { .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; padding-block: 12px; }
+.brand { font-family: var(--f-display); font-weight: 600; font-size: 17px; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.brand span { color: var(--muted); font-weight: 400; }
+.bar .sp { flex: 1; }
+.back { font-weight: 600; font-size: 14.5px; color: var(--ox-ink); text-decoration: none; white-space: nowrap; }
+@media (max-width: 520px) { .brand span { display: none; } }
+main { display: flex; flex-direction: column; gap: 30px; padding-block: 26px 40px; }
+.eyebrow { font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.eyebrow b { color: var(--ox-ink); }
+.eyebrow a { color: inherit; }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(30px, 3.8vw, 48px); line-height: 1.08; text-wrap: balance; }
+.lede { font-size: 17.5px; line-height: 1.6; color: var(--ink-2); }
+.lede b { color: var(--ink); }
+.intro { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px 36px; align-items: start; }
+@media (max-width: 960px) { .intro { grid-template-columns: 1fr; } }
+.intro > div { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.aside { background: var(--navy-bg); border-radius: 4px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.k3 { font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); }
+.aside p, .aside li { font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.aside ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.aside b { color: var(--ink); }
+.tabs { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--surface); }
+@media (max-width: 760px) { .tabs { grid-template-columns: 1fr; } }
+.tabs button { border: 0; border-right: 1px solid var(--rule); background: var(--surface); padding: 12px 16px; text-align: left; cursor: pointer; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 0 12px; align-items: center; }
+.tabs button:last-child { border-right: 0; }
+@media (max-width: 760px) { .tabs button { border-right: 0; border-bottom: 1px solid var(--rule); } .tabs button:last-child { border-bottom: 0; } }
+.tabs .n { grid-row: span 2; width: 32px; height: 32px; border-radius: 999px; border: 1.5px solid var(--ink-2); display: grid; place-items: center; font-family: var(--f-display); font-size: 17px; }
+.tabs b { font-size: 16px; line-height: 1.25; }
+.tabs small { font-size: 13.5px; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; }
+.tabs button[aria-selected="true"] small { color: #C9CDD6; }
+.tabs button[aria-selected="true"] .n { background: #fff; color: var(--ink); border-color: #fff; }
+.tabs button:focus-visible, .btn:focus-visible, .chip:focus-visible, .seg button:focus-visible, .ms:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.panel { display: flex; flex-direction: column; gap: 18px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(300px, 1fr); gap: 16px; align-items: stretch; }
+@media (max-width: 1040px) { .grid2 { grid-template-columns: 1fr; } }
+.box { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.box > h3 { font-size: 16px; font-weight: 700; }
+.box > h2, .sec > h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(21px, 2vw, 25px); line-height: 1.2; }
+.sec { display: flex; flex-direction: column; gap: 14px; }
+.sec > h2 { border-top: 2px solid var(--ink); padding-top: 10px; }
+.sec > p, .box > p { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.box p b, .sec p b { color: var(--ink); }
+.note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.plot { background: var(--plot); border: 1px solid var(--rule); border-radius: 4px; }
+.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.ctrl { display: flex; flex-direction: column; gap: 4px; }
+.ctrl label { display: flex; justify-content: space-between; gap: 8px; font-size: 14.5px; font-weight: 600; }
+.ctrl label output { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--navy); white-space: nowrap; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--navy); }
+.ctrl .hint { font-size: 13px; color: var(--muted); line-height: 1.35; }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 18px; }
+select.sel { height: 36px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); padding: 0 8px; font-weight: 600; font-size: 14.5px; max-width: 100%; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); font-weight: 600; font-size: 14.5px; cursor: pointer; color: var(--ink); }
+.btn:hover { border-color: var(--ink); }
+.btn.pri { background: var(--ink); color: #fff; border-color: var(--ink); }
+.row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 10px 4px 6px; background: var(--surface); cursor: pointer; }
+.chip i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.chip[aria-pressed="false"] { color: var(--muted); border-style: dashed; }
+.chip[aria-pressed="false"] i { background: transparent !important; box-shadow: inset 0 0 0 2px var(--rule); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.stat { background: var(--paper); border-radius: 4px; padding: 8px 10px; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.stat span { font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .03em; }
+.stat b { font-family: var(--f-display); font-weight: 500; font-size: 22px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 12.5px; color: var(--ink-2); }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); background: var(--paper); font-weight: 700; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.hl td { background: var(--amber-bg); }
+.callout { background: var(--amber-bg); border-left: 4px solid var(--amber); border-radius: 4px; padding: 10px 14px; font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--surface); flex-wrap: wrap; }
+.seg button { border: 0; border-right: 1px solid var(--rule); background: none; padding: 7px 12px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.learn { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 960px) { .learn { grid-template-columns: 1fr; } }
+.learn > div { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--navy); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.learn > div:nth-child(2) { border-top-color: var(--ox); }
+.learn > div:nth-child(3) { border-top-color: var(--amber); }
+.learn h3 { font-size: 16px; }
+.learn p { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.src { columns: 2 420px; column-gap: 32px; padding-left: 20px; margin: 0; }
+.src li { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); margin-bottom: 6px; break-inside: avoid; }
+.sitenote { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); border: 2px solid var(--ox); background: var(--surface); border-radius: 4px; padding: 9px 14px; }
+.sitenote .pill { background: var(--ox); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border-radius: 3px; padding: 2px 6px; margin-right: 8px; }
+.sitenote b { color: var(--ink); }
+svg text { font-family: var(--f-body); }
+.ax { stroke: #B9BCC2; stroke-width: 1; }
+.gridl { stroke: #E6E6E2; stroke-width: 1; }
+.tick { font-size: 13px; fill: var(--muted); }
+.axl { font-size: 13.5px; fill: var(--ink-2); font-weight: 600; }
+</style></head><body>
+<style>
+.msgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 1240px) and (min-width: 1041px) { .msgrid { grid-template-columns: 1fr; } }
+@media (max-width: 680px) { .msgrid { grid-template-columns: 1fr; } }
+.ms { border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface); min-width: 0; }
+.ms header { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ms header b { font-family: var(--f-display); font-size: 18px; font-weight: 500; }
+.ms .pr { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 6px 10px; align-items: start; }
+.ms .pr > span { font-size: 13px; font-weight: 700; color: var(--muted); padding-top: 5px; line-height: 1.25; }
+.ms .seg button { padding: 4px 9px; font-size: 13px; }
+@media (max-width: 680px) { .ms .pr { grid-template-columns: 1fr; } .ms .pr > span { padding-top: 0; } .ms .pr .row { display: grid !important; grid-template-columns: 1fr 1fr; } .ms .pr .chip { justify-content: flex-start; border-radius: 6px; text-align: left; font-size: 12.5px; line-height: 1.2; padding: 4px 6px; } .ms { padding: 8px 10px; } }
+.chip[disabled] { opacity: .35; cursor: not-allowed; }
+.chip.sm { font-size: 13px; padding: 3px 9px 3px 5px; }
+.picos { display: flex; flex-wrap: wrap; gap: 10px; }
+.picos > .pico { flex: 1 1 270px; }
+#pStats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#pStats .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.pico { background: var(--surface); border: 1px solid var(--rule); border-left: 5px solid var(--navy); border-radius: 4px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.pico.sub { border-left-color: var(--navy-line); }
+.pico.itc { border-left-color: var(--amber); }
+.pico.gap { border-left-color: var(--ox); }
+.pico h4 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.pico dl { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 2px 8px; font-size: 14.5px; }
+.pico dt { font-family: var(--f-display); font-weight: 600; color: var(--ox-ink); }
+.pico dd { color: var(--ink); }
+.pico .who { display: flex; flex-wrap: wrap; gap: 4px; }
+.pico .who span { font-size: 12px; font-weight: 700; background: var(--paper); border-radius: 3px; padding: 1px 6px; color: var(--ink-2); }
+.badge { font-size: 12.5px; font-weight: 700; border-radius: 3px; padding: 2px 7px; align-self: flex-start; }
+.badge.direct { background: var(--navy-bg); color: var(--navy); }
+.badge.sub { background: var(--navy-bg); color: var(--navy); }
+.badge.itc { background: var(--amber-bg); color: var(--gold); }
+.badge.gap { background: var(--ox-bg); color: var(--ox-ink); }
+.pico p { font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.scen p { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.scen p b { color: var(--ink); }
+.phase { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--surface); }
+@media (max-width: 760px) { .phase { grid-template-columns: 1fr 1fr; } }
+.phase > div { padding: 12px 14px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.phase > div:last-child { border-right: 0; }
+.phase b { font-family: var(--f-display); font-weight: 500; font-size: 22px; }
+.phase span { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+.phase p { font-size: 14.5px; color: var(--ink-2); line-height: 1.4; }
+.phase .now { background: var(--amber-bg); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 22px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+</style>
+<header class="bar"><div class="wrap"><a class="brand" href="index.html">Jigar Rajpura <span>· Portfolio</span></a><span class="sp"></span><a class="back" href="index.html#about">← All projects</a></div></header>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <p class="eyebrow"><a href="index.html#about">Portfolio</a> · <b>Project 08</b> · EU HTA · October 2026</p>
+      <h1>How a JCA PICO gets built</h1>
+      <p class="lede">Since January 2025, every new cancer medicine seeking EU marketing authorisation also goes through a <b>Joint Clinical Assessment</b>. Before the company writes a word of its dossier, member states say what they need to see: which <b>P</b>atients, compared with which <b>C</b>omparators, on which <b>O</b>utcomes. Their requests are merged into a set of PICOs, and that set decides how much evidence the company must produce and how much of it can come from its own trial.</p>
+    </div>
+    <aside class="aside" aria-label="About this project">
+      <span class="k3">How to use it</span>
+      <ul>
+        <li><b>Part 1</b>: play eight member states. Set each one’s standard of care and watch the PICO set and the evidence it demands change.</li>
+        <li><b>Part 2</b>: see how the JCA clock runs alongside the EMA review, and when the dossier is due.</li>
+      </ul>
+      <p>Drug Z, Tumour X, marker M and every trial here are invented. Member states are anonymised as MS A to MS H.</p>
+    </aside>
+  </section>
+
+  <nav class="tabs" style="--n:2" aria-label="Parts">
+    <button type="button" data-t="pico" aria-selected="true"><span class="n">1</span><b>Build the PICO set</b><small>Member state requests, consolidation, evidence</small></button>
+    <button type="button" data-t="clock" aria-selected="false"><span class="n">2</span><b>The JCA clock</b><small>Scoping, dossier and report against the EMA review</small></button>
+  </nav>
+
+  <!-- ================= PART 1 ================= -->
+  <section class="panel" data-panel="pico">
+    <div class="grid2">
+      <div class="box">
+        <div class="row" style="justify-content:space-between"><h3>What each member state asks for</h3>
+          <div class="row"><span class="note">Try:</span><div class="seg" id="preset"><button type="button" data-p="aligned">Aligned</button><button type="button" data-p="typical" aria-pressed="true">Typical</button><button type="button" data-p="split">Fragmented</button></div></div></div>
+        <p class="note">For each country, pick whether treatment differs by marker M status, then tick the comparators used there today. Targeted drug C is only used in marker M-positive disease, so it can only be asked for in that population.</p>
+        <div class="msgrid" id="msGrid"></div>
+      </div>
+      <div class="box scen">
+        <h3>The case: Drug Z in advanced Tumour X</h3>
+        <p><b>Drug Z</b> is a new oral medicine for adults with advanced Tumour X that has progressed after one prior therapy. Its pivotal trial, <b>ZEN-1</b>, randomised patients to Drug Z or <b>Chemo A</b>. About 40% of patients were <b>marker M-positive</b>; marker status was a stratification factor, but the trial was not powered for subgroups.</p>
+        <p>Two other published trials exist: <b>B-301</b> (Immunotherapy B vs Chemo A, all patients, with marker M subgroups reported) and <b>C-201</b> (Targeted drug C vs Chemo A, marker M-positive patients only). No trial includes best supportive care.</p>
+        <div class="plot"><svg id="netSvg" role="img" aria-label="Network of available trial evidence"></svg></div>
+        <div class="legend"><span><i style="background:var(--navy)"></i>Link used by the current PICO set</span><span><i style="background:#D3D5D9"></i>Not needed</span></div>
+        <p class="note">Every PICO is assessed on the same outcomes: overall survival, progression-free survival, health-related quality of life and serious adverse events.</p>
+        <h3>What the requests add up to</h3>
+        <div class="stats" id="pStats"></div>
+        <div class="callout" id="pRead"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>The consolidated PICO set</h2>
+      <div class="picos" id="picoList"></div>
+    </div>
+  </section>
+
+  <!-- ================= PART 2 ================= -->
+  <section class="panel" data-panel="clock" hidden>
+    <div class="box">
+      <div class="row" style="justify-content:space-between"><h3>Two clocks, one medicine</h3><div class="seg" id="route"><button type="button" data-r="std" aria-pressed="true">Standard EMA review</button><button type="button" data-r="acc">Accelerated assessment</button></div></div>
+      <div class="ctrls">
+        <div class="ctrl"><label for="stop1">Clock stop after the list of questions <output id="stop1O"></output></label><input type="range" id="stop1" min="0" max="6" step="0.5" value="3"><span class="hint">Time the company takes to answer EMA’s first questions. The assessment clock pauses meanwhile.</span></div>
+        <div class="ctrl"><label for="stop2">Clock stop after outstanding issues <output id="stop2O"></output></label><input type="range" id="stop2" min="0" max="3" step="0.5" value="1"><span class="hint">A second, usually shorter, pause before the opinion.</span></div>
+      </div>
+      <div class="plot"><svg id="tlSvg" role="img" aria-label="Timeline of EMA review and Joint Clinical Assessment"></svg></div>
+      <div class="legend"><span><i style="background:var(--navy)"></i>EMA assessment running</span><span><i style="background:#D3D5D9"></i>Clock stop: company answers questions</span><span><i style="background:#AFC0D4"></i>Commission decision-making</span><span><i style="background:var(--amber)"></i>JCA scoping</span><span><i style="background:var(--ox)"></i>Company writes the JCA dossier</span><span><i style="background:var(--med)"></i>Assessment and report</span></div>
+      <div class="stats" id="tStats"></div>
+      <div class="callout" id="tRead"></div>
+      <p class="note">EMA days are active assessment days: list of questions at day 120, outstanding issues at day 180, opinion at day 210 (accelerated: 90, 120 and 150). The European Commission usually decides within 67 days of the opinion. The JCA deadlines come from Implementing Regulation (EU) 2024/1381; real procedures can differ, for example when an accelerated assessment reverts to the standard timetable.</p>
+    </div>
+    <div class="sec">
+      <h2>Who is in scope, and when</h2>
+      <div class="phase">
+        <div><span>12 January 2025</span><b>Cancer medicines</b><p>New active substances in oncology, and all advanced therapy medicinal products.</p></div>
+        <div class="now"><span>2026 · we are here</span><b>High-risk devices</b><p>Selected high-risk medical devices begin to be assessed.</p></div>
+        <div><span>13 January 2028</span><b>Orphan medicines</b><p>Medicines designated for rare diseases join.</p></div>
+        <div><span>13 January 2030</span><b>All new medicines</b><p>Every new medicine authorised through the EU centralised procedure.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>What a JCA report does, and what it does not</h2>
+    <div class="learn">
+      <div><h3>It describes, it does not judge</h3><p>The report sets out the relative effects of the new medicine against each PICO’s comparator and how certain those effects are. By law it contains no value judgement or conclusion on the medicine’s overall added clinical value.</p></div>
+      <div><h3>Countries still decide</h3><p>Member states must give the report due consideration in their own assessments, then draw their own conclusions and handle pricing, reimbursement and cost-effectiveness nationally. This is why each country’s comparator matters.</p></div>
+      <div><h3>Gaps are reported, not filled</h3><p>When there is no robust evidence for a PICO, the report says so. Comparators without a shared link to the trial often fall back on indirect comparisons, which <a href="itc.html">Project 09</a> explains.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Sources</h2>
+    <ol class="src">
+      <li>Regulation (EU) 2021/2282 on health technology assessment. <a href="https://eur-lex.europa.eu/eli/reg/2021/2282">EUR-Lex</a></li>
+      <li>Commission Implementing Regulation (EU) 2024/1381 of 23 May 2024 on joint clinical assessments of medicinal products. <a href="https://eur-lex.europa.eu/eli/reg_impl/2024/1381/oj/eng">EUR-Lex</a></li>
+      <li>Cencora. HTAQ Summer 2024: the first six implementing acts (scope finalised at latest 10 days after the CHMP list of questions; dossier within 100 days of the request, 60 days in accelerated procedures; report endorsed no later than 30 days after the Commission decision). <a href="https://www.cencora.com/resources/pharma/htaq-summer-2024-first-six-implementing-acts">cencora.com</a></li>
+      <li>Baker McKenzie. The first implementing act of the EU HTA Regulation on joint clinical assessment, 29 May 2024. <a href="https://healthcarelifesciences.bakermckenzie.com/2024/05/29/the-first-implementing-act-of-the-eu-hta-regulation-on-joint-clinical-assessment-foresees-limited-involvement-of-health-technology-developers-and-short-timelines/">bakermckenzie.com</a></li>
+      <li>Cuatrecasas. EU Regulation 2021/2282, applicable as of January 12, 2025 (phase-in dates; reports contain no value judgements). <a href="https://cuatrecasas.com/en/global/life-sciences-healthcare/art/eu-regulation-2021-2282-health-technologies-eu">cuatrecasas.com</a></li>
+      <li>EUnetHTA 21. D4.2 Practical guideline on the scoping process, 2023. <a href="https://www.eunethta.eu/wp-content/uploads/2023/10/EUnetHTA-21-D4.2-practical-guideline-on-scoping-process.pdf">eunethta.eu</a></li>
+      <li>EFPIA. From guidance to implementation: EFPIA’s reflections on EU HTA scoping PICO exercises. <a href="https://www.efpia.eu/news-events/the-efpia-view/blog-articles/from-guidance-to-implementation-efpia-s-reflections-on-eu-hta-scoping-pico-exercises/">efpia.eu</a></li>
+      <li>European Medicines Agency. The evaluation of medicines, step by step. <a href="https://www.ema.europa.eu/en/human-regulatory/marketing-authorisation/evaluation-medicines-step-step">ema.europa.eu</a>; EUPATI. Accelerated assessment. <a href="https://learning.eupati.eu/mod/page/view.php?id=896">eupati.eu</a></li>
+      <li>HTA Coordination Group. Methodological guideline for quantitative evidence synthesis: direct and indirect comparisons, adopted 8 March 2024. <a href="https://health.ec.europa.eu/document/download/4ec8288e-6d15-49c5-a490-d8ad7748578f_en?filename=hta_methodological-guideline_direct-indirect-comparisons_en.pdf">health.ec.europa.eu</a></li>
+    </ol>
+  </section>
+  <p class="sitenote"><span class="pill">Disclaimer</span><b>Personal project</b>, not sponsored by or affiliated with Genmab, any former employer or any university I attended; views are my own. Developed with AI assistance, so errors or outdated details may exist. All medicines, trials, member state requests and dates in the simulation are hypothetical. The rules described reflect the cited sources as of October 2026. Not regulatory, legal or market access advice. <a href="index.html#disclaimer">Full disclaimer</a></p>
+</main>
+<script>
+// ---------- shared helpers ----------
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const fmt = (x, d = 1) => (x == null || !isFinite(x)) ? '—' : x.toLocaleString('en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmt0 = (x) => fmt(x, 0);
+// a plain SVG chart: returns scale helpers; draws grid, axes, ticks and labels
+function chart(svg, o) {
+  const W = o.w || 900, H = o.h || 460, L = o.l || 64, R = o.r || 20, T = o.t || 16, B = o.b || 54;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = '';
+  const x = (v) => L + (v - (o.x0 || 0)) / (o.x1 - (o.x0 || 0)) * (W - L - R);
+  const y = (v) => H - B - (v - (o.y0 || 0)) / (o.y1 - (o.y0 || 0)) * (H - T - B);
+  let g = '';
+  (o.yt || []).forEach((v) => { g += `<line class="gridl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="tick" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${o.yf ? o.yf(v) : v}</text>`; });
+  (o.xt || []).forEach((v) => { g += `<line class="gridl" x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H - B}"/><text class="tick" x="${x(v)}" y="${H - B + 18}" text-anchor="middle">${o.xf ? o.xf(v) : v}</text>`; });
+  g += `<line class="ax" x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}"/><line class="ax" x1="${L}" x2="${L}" y1="${T}" y2="${H - B}"/>`;
+  if (o.xl) g += `<text class="axl" x="${(L + W - R) / 2}" y="${H - 12}" text-anchor="middle">${o.xl}</text>`;
+  if (o.yl) g += `<text class="axl" transform="translate(16 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">${o.yl}</text>`;
+  svg.insertAdjacentHTML('beforeend', g);
+  return { x, y, W, H, L, R, T, B, add: (s) => svg.insertAdjacentHTML('beforeend', s) };
+}
+const pathOf = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+function stepPath(c, times, surv, tmax) { // KM step function
+  let d = `M${c.x(0)} ${c.y(1)}`; let s = 1;
+  for (let i = 0; i < times.length; i++) { if (times[i] > tmax) break; d += `H${c.x(times[i]).toFixed(1)}V${c.y(surv[i]).toFixed(1)}`; s = surv[i]; }
+  return d + `H${c.x(tmax).toFixed(1)}`;
+}
+// Kaplan–Meier from arrays of {t, e}
+function km(data) {
+  const d = [...data].sort((a, b) => a.t - b.t || b.e - a.e); let n = d.length, s = 1; const times = [], surv = [], cens = [];
+  let i = 0;
+  while (i < d.length) { const t = d[i].t; let ev = 0, c = 0; while (i < d.length && d[i].t === t) { if (d[i].e) ev++; else c++; i++; }
+    if (ev) { s *= (1 - ev / n); times.push(t); surv.push(s); } if (c) cens.push([t, s]); n -= ev + c; }
+  return { times, surv, cens, at: (t) => { let v = 1; for (let j = 0; j < times.length && times[j] <= t; j++) v = surv[j]; return v; } };
+}
+function kmMedian(k) { for (let i = 0; i < k.times.length; i++) if (k.surv[i] <= .5) return k.times[i]; return null; }
+// tabs
+function tabs(el, onShow) {
+  const btns = [...el.querySelectorAll('button[data-t]')];
+  const show = (id, push) => { btns.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === id))); document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== id; }); if (push) { try { history.replaceState(null, '', '#' + id); } catch (e) {} } onShow && onShow(id); };
+  btns.forEach((b) => b.addEventListener('click', () => show(b.dataset.t, true)));
+  const h = (location.hash || '').slice(1); show(btns.some((b) => b.dataset.t === h) ? h : btns[0].dataset.t, false);
+}
+const bindRange = (id, fn, f = (v) => v) => { const el = $(id), out = $(id + 'O'); const upd = () => { if (out) out.textContent = f(+el.value); fn(); }; el.addEventListener('input', upd); if (out) out.textContent = f(+el.value); };
+
+// ================= PART 1: PICO builder =================
+const COMP = { A: 'Chemo A', B: 'Immunotherapy B', C: 'Targeted drug C', S: 'Best supportive care' };
+const CCOL = { A: '#2B4A6F', B: '#7A1F2B', C: '#2E7A57', S: '#B7791F' };
+const POP = { all: 'All patients', pos: 'Marker M-positive', neg: 'Marker M-negative' };
+const MS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+const allowed = (pop, c) => c !== 'C' || pop === 'pos';
+const PRESETS = {
+  aligned: MS.map(() => ({ split: false, all: ['A'], pos: [], neg: [] })),
+  typical: [
+    { split: false, all: ['A'] }, { split: false, all: ['A', 'B'] }, { split: true, pos: ['C'], neg: ['A'] }, { split: false, all: ['B'] },
+    { split: true, pos: ['C'], neg: ['B'] }, { split: false, all: ['A'] }, { split: false, all: ['A', 'S'] }, { split: true, pos: ['C', 'A'], neg: ['A'] }],
+  split: [
+    { split: true, pos: ['C'], neg: ['B'] }, { split: false, all: ['A', 'B'] }, { split: true, pos: ['C', 'B'], neg: ['A', 'B'] }, { split: false, all: ['B', 'S'] },
+    { split: true, pos: ['C'], neg: ['S'] }, { split: false, all: ['A'] }, { split: true, pos: ['A'], neg: ['A', 'S'] }, { split: false, all: ['S'] }]
+};
+let st;
+function loadPreset(k) {
+  st = PRESETS[k].map((p) => ({ split: p.split, all: new Set(p.all || []), pos: new Set(p.pos || []), neg: new Set(p.neg || []) }));
+  document.querySelectorAll('#preset button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.p === k)));
+  drawMS(); update();
+}
+function chipRow(i, pop) {
+  return `<div class="pr"><span>${pop === 'all' ? 'All patients' : pop === 'pos' ? 'M-positive' : 'M-negative'}</span><div class="row" style="gap:5px">` +
+    Object.keys(COMP).map((c) => { const ok = allowed(pop, c); const on = ok && st[i][pop].has(c);
+      return `<button type="button" class="chip sm" data-i="${i}" data-pop="${pop}" data-c="${c}" aria-pressed="${on}" ${ok ? '' : 'disabled title="Only used in marker M-positive disease"'}><i style="background:${CCOL[c]}"></i>${COMP[c]}</button>`; }).join('') + '</div></div>';
+}
+function drawMS() {
+  $('msGrid').innerHTML = st.map((s, i) => `<div class="ms"><header><b>MS ${MS[i]}</b><div class="seg"><button type="button" data-i="${i}" data-split="0" aria-pressed="${!s.split}">One population</button><button type="button" data-i="${i}" data-split="1" aria-pressed="${s.split}">Split by marker M</button></div></header>` +
+    (s.split ? chipRow(i, 'pos') + chipRow(i, 'neg') : chipRow(i, 'all')) + '</div>').join('');
+}
+$('msGrid').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return; const i = +b.dataset.i;
+  if (b.dataset.split != null) { const sp = b.dataset.split === '1'; if (st[i].split !== sp) { st[i].split = sp;
+      if (sp) { if (!st[i].pos.size) st[i].all.forEach((c) => allowed('pos', c) && st[i].pos.add(c)); if (!st[i].neg.size) st[i].all.forEach((c) => allowed('neg', c) && st[i].neg.add(c)); }
+      else if (!st[i].all.size) { [...st[i].pos, ...st[i].neg].forEach((c) => allowed('all', c) && st[i].all.add(c)); } }
+  } else { const set = st[i][b.dataset.pop]; const c = b.dataset.c; set.has(c) ? set.delete(c) : set.add(c); }
+  document.querySelectorAll('#preset button').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+  drawMS(); update();
+});
+$('preset').addEventListener('click', (e) => { const b = e.target.closest('button[data-p]'); if (b) loadPreset(b.dataset.p); });
+
+function route(pop, c) {
+  if (c === 'A') return pop === 'all'
+    ? { k: 'direct', t: 'Direct: ZEN-1 main analysis', d: 'Randomised head-to-head evidence in the full trial population. The strongest evidence in the set.' }
+    : { k: 'sub', t: 'Direct: ZEN-1 subgroup', d: 'Still randomised, and marker M was a stratification factor, but the subgroup is smaller and the trial was not powered for it, so certainty is lower.' };
+  if (c === 'B') return pop === 'all'
+    ? { k: 'itc', t: 'Anchored indirect comparison', d: 'ZEN-1 and B-301 share Chemo A, so Drug Z and Immunotherapy B can be compared through it, with a Bucher comparison or network meta-analysis.' }
+    : { k: 'itc', t: 'Anchored indirect comparison, subgroup', d: 'Needs marker M subgroup results from both ZEN-1 and B-301. B-301 published them, so the comparison is possible, with wide uncertainty.' };
+  if (c === 'C') return { k: 'itc', t: 'Anchored, population-adjusted', d: 'C-201 enrolled only M-positive patients whose baseline characteristics differ from ZEN-1’s, so a population-adjusted method such as an anchored MAIC may be needed.' };
+  return { k: 'gap', t: 'No common comparator', d: 'No trial in the network includes best supportive care. Only an unanchored comparison is possible, which the EU methods guideline calls highly problematic; expect the report to state an evidence gap.' };
+}
+const OUTCOMES = 4;
+function update() {
+  const map = new Map();
+  st.forEach((s, i) => { const pops = s.split ? ['pos', 'neg'] : ['all']; pops.forEach((p) => s[p].forEach((c) => { if (!allowed(p, c)) return; const k = p + '|' + c; if (!map.has(k)) map.set(k, []); map.get(k).push(MS[i]); })); });
+  const ord = { all: 0, pos: 1, neg: 2 }, cord = { A: 0, B: 1, C: 2, S: 3 };
+  const list = [...map.entries()].map(([k, who]) => { const [p, c] = k.split('|'); return { p, c, who, r: route(p, c) }; }).sort((a, b) => ord[a.p] - ord[b.p] || cord[a.c] - cord[b.c]);
+  const n = list.length, nd = list.filter((x) => x.r.k === 'direct' || x.r.k === 'sub').length, ni = list.filter((x) => x.r.k === 'itc').length, ng = list.filter((x) => x.r.k === 'gap').length;
+  // states fully served by randomised ZEN-1 evidence
+  const direct = MS.filter((m, i) => { const s = st[i]; const pops = s.split ? ['pos', 'neg'] : ['all']; let any = false, ok = true; pops.forEach((p) => s[p].forEach((c) => { any = true; if (c !== 'A') ok = false; })); return any && ok; }).length;
+  const asked = st.filter((s) => (s.split ? s.pos.size + s.neg.size : s.all.size) > 0).length;
+  $('pStats').innerHTML = `<div class="stat"><span>PICOs in the scope</span><b>${n}</b><small>from ${asked} member state${asked === 1 ? '' : 's'}</small></div>` +
+    `<div class="stat"><span>Answered by ZEN-1</span><b>${nd}</b><small>randomised, direct</small></div>` +
+    `<div class="stat"><span>Need an indirect comparison</span><b>${ni}</b><small>anchored via Chemo A</small></div>` +
+    `<div class="stat"><span>Likely evidence gap</span><b>${ng}</b><small>no common comparator</small></div>` +
+    `<div class="stat"><span>Results to report</span><b>${n * OUTCOMES}</b><small>${n} PICOs × ${OUTCOMES} outcomes</small></div>`;
+  let r;
+  if (n === 0) r = 'No member state has asked for anything yet. Tick at least one comparator.';
+  else if (n === 1 && nd === 1) r = `<b>The ideal case.</b> Everyone uses the trial’s comparator in the whole population, so a single PICO answered by the randomised trial covers all ${asked} countries.`;
+  else r = `<b>${asked} member states, ${n} PICOs.</b> Only ${direct} of ${asked} countries get an answer purely from the randomised trial. ` +
+    (ni ? `${ni} PICO${ni > 1 ? 's' : ''} rely on indirect comparisons, each with its own assumptions. ` : '') +
+    (ng ? `${ng} cannot be answered robustly at all. ` : '') +
+    `The scoping process tries to merge requests into the lowest possible number of PICOs, but it cannot merge different comparators or different populations, and splitting by a biomarker roughly doubles the work.`;
+  $('pRead').innerHTML = r;
+  $('picoList').innerHTML = list.map((x, j) => `<article class="pico ${x.r.k}"><h4><span>PICO ${j + 1}</span><span>${x.who.length} of 8 states</span></h4>` +
+    `<dl><dt>P</dt><dd>${POP[x.p]} with advanced Tumour X after one prior therapy</dd><dt>I</dt><dd>Drug Z</dd><dt>C</dt><dd>${COMP[x.c]}</dd><dt>O</dt><dd>OS, PFS, quality of life, serious adverse events</dd></dl>` +
+    `<div class="who">${x.who.map((w) => `<span>MS ${w}</span>`).join('')}</div><span class="badge ${x.r.k}">${x.r.t}</span><p>${x.r.d}</p></article>`).join('');
+  drawNet(list);
+}
+function drawNet(list) {
+  const svg = $('netSvg'); svg.setAttribute('viewBox', '0 0 460 212');
+  const used = new Set(); list.forEach((x) => { used.add('ZA'); if (x.c === 'B') used.add('AB'); if (x.c === 'C') used.add('AC'); if (x.c === 'S') used.add('S'); });
+  const N = { Z: [80, 105, 'Drug Z'], A: [235, 105, 'Chemo A'], B: [385, 45, 'Immunotherapy B'], C: [385, 165, 'Targeted drug C'], S: [80, 185, 'Best supportive care'] };
+  const edge = (a, b, k, lab, lx, ly) => { const on = used.has(k); return `<line x1="${N[a][0]}" y1="${N[a][1]}" x2="${N[b][0]}" y2="${N[b][1]}" stroke="${on ? '#2B4A6F' : '#D3D5D9'}" stroke-width="${on ? 5 : 3}" stroke-linecap="round"/><text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" font-weight="700" fill="${on ? '#2B4A6F' : '#9A9EA8'}">${lab}</text>`; };
+  let g = edge('Z', 'A', 'ZA', 'ZEN-1', 157, 96) + edge('A', 'B', 'AB', 'B-301', 300, 62) + edge('A', 'C', 'AC', 'C-201 (M+ only)', 385, 200);
+  const sOn = used.has('S');
+  g += `<line x1="80" y1="128" x2="80" y2="166" stroke="${sOn ? '#7A1F2B' : '#D3D5D9'}" stroke-width="2.5" stroke-dasharray="5 5"/><text x="92" y="152" font-size="12.5" font-weight="700" fill="${sOn ? '#7A1F2B' : '#9A9EA8'}">no trial</text>`;
+  Object.entries(N).forEach(([k, [x, y, lab]]) => { const w = lab.length * 7.4 + 22; const fill = k === 'Z' ? '#1D2433' : '#FFFFFF'; const tc = k === 'Z' ? '#FFFFFF' : '#1D2433';
+    g += `<rect x="${x - w / 2}" y="${y - 15}" width="${w}" height="30" rx="15" fill="${fill}" stroke="#1D2433" stroke-width="1.5"/><text x="${x}" y="${y + 5}" text-anchor="middle" font-size="13.5" font-weight="600" fill="${tc}">${lab}</text>`; });
+  svg.innerHTML = g;
+}
+
+// ================= PART 2: the clock =================
+let acc = false;
+function clock() {
+  const s1 = +$('stop1').value * 30.4, s2 = +$('stop2').value * 30.4;
+  const D = acc ? { q: 90, oi: 120, op: 150 } : { q: 120, oi: 180, op: 210 };
+  const q = D.q, oi = q + s1 + (D.oi - D.q), op = oi + s2 + (D.op - D.oi), ec = op + 67;
+  const scope = q + 10, dos = scope + (acc ? 60 : 100), rep = ec + 30;
+  const tmax = Math.max(rep + 30, 480);
+  const svg = $('tlSvg'); const W = 900, H = 300, L = 92, R = 20;
+  const xm = Math.ceil(tmax / 30.4);
+  const c = chart(svg, { w: W, h: H, l: L, r: R, t: 18, b: 52, x0: 0, x1: xm * 30.4, y0: 0, y1: 1, xt: Array.from({ length: Math.floor(xm / 2) + 1 }, (_, i) => i * 2 * 30.4), xf: (v) => Math.round(v / 30.4), xl: 'Months after EMA starts its review' });
+  const bar = (a, b, y, col, h = 26) => b > a ? `<rect x="${c.x(a)}" y="${y - h / 2}" width="${Math.max(1, c.x(b) - c.x(a))}" height="${h}" fill="${col}" rx="2"/>` : '';
+  const yE = 72, yJ = 178;
+  let g = `<text x="10" y="${yE + 5}" font-size="14" font-weight="700" fill="#1D2433">EMA</text><text x="10" y="${yJ + 5}" font-size="14" font-weight="700" fill="#1D2433">JCA</text>`;
+  g += bar(0, q, yE, '#2B4A6F') + bar(q, q + s1, yE, '#D3D5D9') + bar(q + s1, oi, yE, '#2B4A6F') + bar(oi, oi + s2, yE, '#D3D5D9') + bar(oi + s2, op, yE, '#2B4A6F') + bar(op, ec, yE, '#AFC0D4');
+  g += bar(0, scope, yJ, '#B7791F') + bar(scope, dos, yJ, '#7A1F2B') + bar(dos, rep, yJ, '#2E7A57');
+  const mk = (t, y, lab, up, anchor = 'middle') => { const ty = up ? y - 22 : y + 30; return `<line x1="${c.x(t)}" x2="${c.x(t)}" y1="${y - 15}" y2="${y + 15}" stroke="#1D2433" stroke-width="2"/><text x="${c.x(t)}" y="${ty}" text-anchor="${anchor}" font-size="12.5" font-weight="600" fill="#1D2433">${lab}</text>`; };
+  g += mk(q, yE, 'List of questions', true) + mk(op, yE, 'CHMP opinion', true) + mk(ec, yE, 'EC decision', false, 'middle');
+  g += mk(scope, yJ, 'Scope final', true) + mk(dos, yJ, 'Dossier due', true) + mk(rep, yJ, 'Report endorsed', false, 'end');
+  // link from list of questions to scope
+  g += `<path d="M${c.x(q)} ${yE + 15} L${c.x(scope)} ${yJ - 15}" stroke="#B7791F" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>`;
+  c.add(g);
+  const mo = (d) => fmt(d / 30.4, 1);
+  const gap = op - dos;
+  $('tStats').innerHTML = `<div class="stat"><span>Scope final by</span><b>${mo(scope)} mo</b><small>10 days after the list of questions</small></div>` +
+    `<div class="stat"><span>Dossier due</span><b>${mo(dos)} mo</b><small>${acc ? 60 : 100} days after the request</small></div>` +
+    `<div class="stat"><span>CHMP opinion</span><b>${mo(op)} mo</b><small>${gap >= 0 ? fmt0(gap) + ' days after the dossier' : fmt0(-gap) + ' days before the dossier'}</small></div>` +
+    `<div class="stat"><span>JCA report by</span><b>${mo(rep)} mo</b><small>30 days after the EC decision</small></div>`;
+  $('tRead').innerHTML = gap > 0
+    ? `<b>The dossier is due about ${mo(gap)} months before the CHMP opinion.</b> The company must submit its full evidence for every PICO while the label is still being negotiated with EMA, so indirect comparisons and subgroup analyses have to be planned long before the first request arrives. Lengthen the first clock stop and the gap grows.`
+    : `<b>Here the dossier is due ${mo(-gap)} months after the CHMP opinion</b>, because the regulatory review ran without long clock stops. Even so, the scope arrives only weeks before the work must start, so the evidence plan has to exist in advance.`;
+}
+bindRange('stop1', clock, (v) => v + ' mo'); bindRange('stop2', clock, (v) => v + ' mo');
+$('route').addEventListener('click', (e) => { const b = e.target.closest('button[data-r]'); if (!b) return; acc = b.dataset.r === 'acc';
+  document.querySelectorAll('#route button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  $('stop1').value = acc ? 1 : 3; $('stop2').value = acc ? 0 : 1; $('stop1O').textContent = $('stop1').value + ' mo'; $('stop2O').textContent = $('stop2').value + ' mo'; clock(); });
+
+loadPreset('typical'); clock();
+tabs(document.querySelector('.tabs'), (id) => { if (id === 'clock') clock(); });
+window.__p8 = { st, clock };
+</script>
+</body></html>

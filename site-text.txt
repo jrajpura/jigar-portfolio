@@ -129,6 +129,33 @@ Build a targeted literature review skill in Claude
 [project-06-text]
 A reusable review workflow with a human checkpoint at every stage, built from the evidence on where AI fails.
 
+[project-07-label]
+Project 07 · Interactive tools
+
+[project-07-title]
+From survival curve to cost-effectiveness
+
+[project-07-text]
+Read a Kaplan–Meier curve, extrapolate it five ways, and turn it into an ICER, with a hypothetical medicine.
+
+[project-08-label]
+Project 08 · EU HTA explainer
+
+[project-08-title]
+How a JCA PICO gets built
+
+[project-08-text]
+Play eight member states, watch their requests become a PICO set, and see when the dossier falls due.
+
+[project-09-label]
+Project 09 · Methods explainer
+
+[project-09-title]
+Comparing medicines that never met
+
+[project-09-text]
+Naive, Bucher, network meta-analysis, MAIC, STC and unanchored comparisons, each one you can break.
+
 
 # ---------- IN THE COMMUNITY ----------
 
